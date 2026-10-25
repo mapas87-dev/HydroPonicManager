@@ -79,7 +79,7 @@ input[type=checkbox]{accent-color:var(--ac);min-height:0;width:22px;height:22px}
 .kv:last-child{border:0}.kv span:first-child{color:var(--mu)}.kv span:last-child{text-align:right;font-weight:700}
 .tabs{display:flex;gap:6px;margin-bottom:10px;padding:4px;background:var(--bg);border-radius:var(--r-pill)}
 .tabs:empty{display:none}
-.tabs button{flex:1;min-height:40px;padding:6px;border:0;background:none;color:var(--mu);border-radius:var(--r-pill);font:600 14px var(--f-body);cursor:pointer}
+.tabs button{flex:1;min-height:44px;padding:6px;border:0;background:none;color:var(--mu);border-radius:var(--r-pill);font:600 14px var(--f-body);cursor:pointer}
 .tabs button.on{background:var(--sf);color:var(--ac);font-weight:700;box-shadow:var(--sh)}
 .tip{background:var(--ac2);color:var(--tx);border:0;border-radius:6px var(--r-md) var(--r-md) var(--r-md);padding:12px 14px;font-size:14px;margin-top:10px;position:relative;padding-left:40px}
 .tip::before{content:"";position:absolute;left:13px;top:13px;width:18px;height:18px;background:var(--ac);
@@ -104,7 +104,9 @@ ul.ck label{font-weight:500}
 .ev>b{min-width:92px;color:var(--ac);font-weight:700}
 .ev>b small{display:inline-block;margin-top:3px;padding:1px 8px;border-radius:var(--r-pill);background:var(--ac);color:var(--on-ac);font-size:12px}
 .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;box-shadow:0 0 0 2px var(--sf)}
-details summary{min-height:32px;display:flex;align-items:center}
+.pl{display:flex;align-items:center;gap:12px;min-height:44px;margin:-4px 0;color:var(--tx);font-size:16px;cursor:pointer}
+.pl input{width:24px;height:24px;flex:0 0 auto}
+details summary{min-height:44px;display:flex;align-items:center}
 
 /* Miniserra */
 .lid{position:relative;border:3px solid #9cc3d6;border-bottom:0;border-radius:28px 28px 6px 6px;background:linear-gradient(160deg,rgba(190,225,240,.45),rgba(190,225,240,.1));padding:24px 10px 8px;overflow:hidden}
@@ -116,8 +118,9 @@ details summary{min-height:32px;display:flex;align-items:center}
 .fl div{flex:1;display:grid;gap:5px;justify-items:center}
 .fl i{width:100%;max-width:44px;aspect-ratio:1;border-radius:40% 40% 30% 30%;display:grid;place-items:center;color:#fff;font:700 12px var(--f-body);font-style:normal;box-shadow:inset 0 -3px 0 rgba(0,0,0,.18)}
 .fl i.e{background:#e9dfc9;border:1.5px dashed #b9a97f;box-shadow:none}
-.sg{display:grid;grid-template-columns:30px 1fr 132px;gap:8px;margin-top:8px;align-items:center}
+.sg{display:grid;grid-template-columns:40px minmax(0,1fr) 150px;gap:8px;margin-top:8px;align-items:center}
 .sg b{font-size:13px;color:var(--mu)}
+.sg input[type=date],#sD{padding:8px;font-size:15px}
 
 /* Torre */
 .tw{width:min(100%,300px);margin:0 auto}
@@ -127,7 +130,7 @@ details summary{min-height:32px;display:flex;align-items:center}
 .tbody{background:linear-gradient(90deg,transparent 34%,#c4bba4 34%,#e6dfcc 50%,#c4bba4 66%,transparent 66%);padding:0 4px 2px}
 .tl{display:flex;align-items:center;gap:4px;padding:14px 6px 6px;margin:4px 0;background:linear-gradient(#fffdf7,#ebe3cf);border:1.5px solid #d3c7a9;border-radius:20px;box-shadow:0 2px 4px rgba(83,66,30,.16)}
 .bd{font-size:12px;font-weight:700;margin:8px 6px 0;text-align:left;background:var(--sf);display:inline-block;padding:2px 10px;border-radius:var(--r-pill);position:relative}
-.tl>b{width:18px;font-size:11px;flex:0 0 auto}
+.tl>b{width:20px;font-size:13px;flex:0 0 auto}
 .ps{flex:1;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;justify-items:center}
 .tp{position:relative;width:100%;max-width:40px;min-width:32px;aspect-ratio:1;border-radius:50%;border:3px solid #fff;background:#fff;box-shadow:0 0 0 1.5px #b8ab8c,0 2px 3px rgba(0,0,0,.22);color:#fff;font:700 12px var(--f-body);cursor:pointer;padding:0}
 .tp:not(.e)::before,.tp:not(.e)::after{content:"";position:absolute;bottom:68%;width:52%;height:62%;background:inherit;pointer-events:none}
@@ -174,7 +177,7 @@ details summary{min-height:32px;display:flex;align-items:center}
 <div class="row"><div><label>Numero di serre</label><input type="number" id="sN" min="1" max="4"></div><div></div></div><div id="sTab" class="tabs" style="margin-top:10px"></div>
 <div class="row"><div><label>File di pot</label><input type="number" id="sR" min="1" max="8"></div><div><label>Pot per fila</label><input type="number" id="sC" min="1" max="12"></div></div>
 <div class="lid" id="sT" style="margin-top:14px"></div><div class="base"></div>
-<div class="sg" style="grid-template-columns:1fr 126px;margin-bottom:4px"><span style="font-size:13px">Data semina per tutta la serra</span><input type="date" id="sD" aria-label="Data semina di tutta la serra"></div>
+<div class="sg" style="grid-template-columns:1fr 150px;margin-bottom:4px"><span style="font-size:13px">Data semina per tutta la serra</span><input type="date" id="sD" aria-label="Data semina di tutta la serra"></div>
 <label style="margin-top:12px">Pianta e data di semina per fila</label><div id="sCtl"></div>
 <div id="sSum" style="margin-top:10px"></div></div>
 <div class="card"><h2>Regole di germinazione</h2><label>Scheda specie</label><select id="gSp"></select><div id="gRules"></div></div>
@@ -212,7 +215,7 @@ details summary{min-height:32px;display:flex;align-items:center}
 <div><label>EC min</label><input type="number" id="xE0" value="1.2" step="0.1"></div><div><label>EC max</label><input type="number" id="xE1" value="1.8" step="0.1"></div>
 <div><label>pH min</label><input type="number" id="xP0" value="5.8" step="0.1"></div><div><label>pH max</label><input type="number" id="xP1" value="6.2" step="0.1"></div>
 <div><label>Temperatura germinazione</label><input id="xT" placeholder="18–22 °C"></div><div><label>Raccolta (giorni)</label><input id="xD" placeholder="40–60"></div></div>
-<button id="xB" style="margin-top:12px;width:100%;border:0;background:var(--ac);color:#fff;padding:11px;border-radius:10px;cursor:pointer">Aggiungi all’archivio</button><p id="xM" style="color:var(--wa);font-size:13px;margin:6px 0 0"></p></div>
+<button id="xB" style="margin-top:12px;width:100%;border:0;background:var(--ac);color:#fff;padding:11px;border-radius:10px;cursor:pointer">Aggiungi all’archivio</button><p id="xM" role="status" style="color:var(--wa);font-size:13px;margin:6px 0 0"></p></div>
 </section>
 
 <section id="nut">
@@ -255,7 +258,7 @@ details summary{min-height:32px;display:flex;align-items:center}
 <label class="sw"><input type="checkbox" id="aOn">Attiva notifiche</label>
 <div class="row"><div><label>Orario dell’avviso</label><input type="time" id="aH"></div><div><label>Avviso il giorno prima</label><select id="aPre"><option value="1">Sì</option><option value="0">No</option></select></div></div>
 <label class="sw"><input type="checkbox" id="aRou">Promemoria di routine (rotazione torre, correzione pH)</label>
-<div id="aMsg"></div></div>
+<div id="aMsg" role="status"></div></div>
 <div class="card"><h2>Prossimi avvisi</h2><div id="aList"></div></div>
 </section>
 
@@ -319,9 +322,9 @@ let h=a.map(n=>{const s=SP[n];return `<div class="kv"><span><i class="dot" style
 if(a.length>1){const e0=Math.max(...a.map(k=>SP[k].ec[0])),e1=Math.min(...a.map(k=>SP[k].ec[1])),p0=Math.max(...a.map(k=>SP[k].ph[0])),p1=Math.min(...a.map(k=>SP[k].ph[1]));
 h+=e0<=e1&&p0<=p1?`<div class="tip">Valori comuni a tutte le colture: EC ${f(e0)}–${f(e1)} mS/cm, pH ${f(p0)}–${f(p1)}.</div>`:`<div class="tip" style="border-color:var(--wa)">Le colture scelte non hanno EC o pH in comune (EC ${f(e0)}–${f(e1)}, pH ${f(p0)}–${f(p1)}): meglio due torri o serbatoi separati.</div>`}
 $('cLv').innerHTML=h}
-function plR(){const a=act();$('plL').innerHTML=Object.keys(SP).map(k=>{const s=SP[k],e=esc(k);return `<div class="card"><div style="display:flex;align-items:center;gap:10px"><input type="checkbox" style="width:22px;height:22px;flex:0 0 auto" data-k="${e}" ${a.includes(k)?'checked':''} aria-label="In coltivazione"><b style="flex:1">${e}</b><span style="font-size:12px;color:var(--ac);font-weight:600">${s.lv}</span></div><details style="margin-top:6px"><summary style="color:var(--mu);font-size:13px;cursor:pointer">${s.cat} · scheda</summary>${kv('Germinazione',s.ger[0]+'–'+s.ger[1]+' giorni')+kv('Temperatura',esc(s.t))+kv('EC',f(s.ec[0])+'–'+f(s.ec[1])+' mS/cm')+kv('pH',f(s.ph[0])+'–'+f(s.ph[1]))+kv('Raccolta',esc(s.d))+kv('Semina',esc(s.sem))}<div class="tip">${esc(s.note)}</div>${s.c?`<button data-del="${e}" style="margin-top:8px;border:1px solid var(--wa);background:none;color:var(--wa);padding:6px 12px;border-radius:8px;font:inherit;cursor:pointer">Elimina</button>`:''}</details></div>`}).join('')}
+function plR(){const a=act();$('plL').innerHTML=Object.keys(SP).map(k=>{const s=SP[k],e=esc(k);return `<div class="card"><label class="pl"><input type="checkbox" data-k="${e}" ${a.includes(k)?'checked':''}><b style="flex:1">${e}</b><span style="font-size:13px;color:var(--ac);font-weight:700">${s.lv}</span></label><details style="margin-top:6px"><summary style="color:var(--mu);font-size:13px;cursor:pointer">${s.cat} · scheda</summary>${kv('Germinazione',s.ger[0]+'–'+s.ger[1]+' giorni')+kv('Temperatura',esc(s.t))+kv('EC',f(s.ec[0])+'–'+f(s.ec[1])+' mS/cm')+kv('pH',f(s.ph[0])+'–'+f(s.ph[1]))+kv('Raccolta',esc(s.d))+kv('Semina',esc(s.sem))}<div class="tip">${esc(s.note)}</div>${s.c?`<button data-del="${e}" style="margin-top:8px;border:1px solid var(--wa);background:none;color:var(--wa);padding:6px 12px;border-radius:8px;font:inherit;cursor:pointer">Elimina</button>`:''}</details></div>`}).join('')}
 $('plL').onchange=e=>{const k=e.target.dataset.k;if(k===undefined)return;const a=act().filter(x=>x!==k);if(e.target.checked)a.push(k);setAct(a);lvR();spOpt();gerR()};
-$('plL').onclick=e=>{const k=e.target.dataset.del;if(k===undefined)return;delete SP[k];const c=JSON.parse(ld('cust','{}'));delete c[k];sv('cust',JSON.stringify(c));setAct(act().filter(x=>x!==k));plR();lvR();spOpt();gerR()};
+$('plL').onclick=e=>{const k=e.target.dataset.del;if(k===undefined)return;if(!confirm('Eliminare "'+k+'" dall’archivio?'))return;delete SP[k];const c=JSON.parse(ld('cust','{}'));delete c[k];sv('cust',JSON.stringify(c));setAct(act().filter(x=>x!==k));plR();lvR();spOpt();gerR()};
 function addPl(){const n=$('xN').value.trim(),m=$('xM'),v=id=>+$(id).value,r=(a,b)=>a<=b?[a,b]:[b,a];
 if(!n){m.textContent='Inserisci un nome.';return}if(SP[n]){m.textContent='Esiste già una pianta con questo nome.';return}
 const d=$('xD').value.trim(),s={cat:$('xC').value,ger:r(v('xG0')||0,v('xG1')||0),t:$('xT').value.trim()||'—',ec:r(v('xE0')||0,v('xE1')||0),ph:r(v('xP0')||0,v('xP1')||0),lv:$('xV').value,d:d?d+' giorni':'—',sem:'Secondo la bustina',note:'Pianta personalizzata: verifica i valori sulla bustina dei semi.',um:'90–95% iniziale',lvn:'',c:1};
@@ -332,12 +335,12 @@ ST.n=Math.min(4,Math.max(1,ST.n|0));while(ST.s.length<ST.n)ST.s.push({rows:3,col
 SR.rows=Math.min(8,Math.max(1,SR.rows|0));SR.cols=Math.min(12,Math.max(1,SR.cols|0));
 while(SR.r.length<SR.rows)SR.r.push({p:'',d:today()});
 sv('serra',JSON.stringify(ST));
-const R=SR.r.slice(0,SR.rows),C=['#2f8f5b','#e87722','#3b82c4','#a05bc4','#c9a227','#d0526a','#2aa3a3','#7a8b2f'],g=`repeat(${SR.cols},minmax(0,1fr))`,a=act().filter(k=>SP[k]),
+const R=SR.r.slice(0,SR.rows),C=['#2a7a4e','#b35512','#2f6ea6','#8746aa','#86690f','#b03c55','#1d7a7a','#5d6b1d'],g=`repeat(${SR.cols},minmax(0,1fr))`,a=act().filter(k=>SP[k]),
 o1=(k,sel)=>`<option value="${esc(k)}"${k===sel?' selected':''}>${esc(k)}</option>`,
 opt=sel=>'<option value="">Vuota</option><optgroup label="In coltivazione">'+a.map(k=>o1(k,sel)).join('')+'</optgroup><optgroup label="Archivio">'+Object.keys(SP).filter(k=>!a.includes(k)).map(k=>o1(k,sel)).join('')+'</optgroup>';
 $('sR').value=SR.rows;$('sC').value=SR.cols;$('sN').value=ST.n;$('sTab').innerHTML=ST.s.slice(0,ST.n).map((_,k)=>`<button data-k="${k}" class="${k==ST.i?'on':''}">Serra ${k+1}</button>`).join('');
 $('sT').innerHTML=R.map((x,i)=>{const s=SP[x.p];return `<div class="fl"><b>F${i+1}</b><div style="grid-template-columns:${g}">`+Array.from({length:SR.cols},()=>s?`<i style="background:${C[i%8]}">${SR.cols<=8?esc(x.p[0]):''}</i>`:'<i class="e"></i>').join('')+'</div></div>'}).join('');
-$('sCtl').innerHTML=R.map((x,i)=>`<div class="sg"><b style="color:${C[i%8]}">F${i+1}</b><select data-i="${i}" data-f="p" aria-label="Pianta fila ${i+1}">${opt(x.p)}</select><input type="date" data-i="${i}" data-f="d" value="${x.d}" aria-label="Data semina fila ${i+1}"></div>`).join('');
+$('sCtl').innerHTML=R.map((x,i)=>`<div class="sg"><b><i class="dot" style="background:${C[i%8]};margin-right:5px"></i>F${i+1}</b><select data-i="${i}" data-f="p" aria-label="Pianta fila ${i+1}">${opt(x.p)}</select><input type="date" data-i="${i}" data-f="d" value="${x.d}" aria-label="Data semina fila ${i+1}"></div>`).join('');
 const used=R.filter(x=>SP[x.p]);
 let h=used.map(x=>{const s=SP[x.p],i=R.indexOf(x);return x.d?kv(`<i class="dot" style="background:${C[i%8]}"></i>F${i+1} · ${esc(x.p)}`,`${SR.cols} pot<br><small style="font-weight:400;color:var(--mu)">emergenza ${fd(addD(x.d,s.ger[0]))} → ${fd(addD(x.d,s.ger[1]))}</small>`):''}).join('');
 h=h?kv('Serra '+(ST.i+1)+' · pot occupati',used.length*SR.cols+' su '+SR.rows*SR.cols)+h:'<div class="tip">Scegli una pianta per ogni fila per vedere le date di emergenza.</div>';
@@ -354,8 +357,8 @@ a(3,'controlla l’umidità; spruzza acqua a pH bilanciato se la superficie si a
 a(s.ger[0],'inizio emergenza: appena spuntano, luce 14–16 h e bocchette aperte.');
 a(s.ger[1],'fine finestra: se non è spuntato nulla, verifica temperatura e umidità.')}));return ev}
 function calR(){
-const C=['#2f8f5b','#e87722','#3b82c4','#a05bc4','#c9a227','#d0526a','#2aa3a3','#7a8b2f'],ev=gerEvents().map(e=>({dt:e.dt,w:esc(e.w),c:C[e.ri%8],txt:e.txt}));
-const t0=+addD(today(),0),g={};rotPlan().forEach(sl=>{const x=sl.s[0];if(x)ev.push({dt:addD(x.sow<today()?today():x.sow,0),w:`Suggerito · L${sl.l+1}`,c:'#e87722',txt:`${x.sow<today()?'semina subito':'semina'} ${esc(x.k)} per il livello che si libera il ${fdi(sl.F)} (trapianto ${fdi(x.T)})`})});ev.forEach(e=>{(g[+e.dt]=g[+e.dt]||[]).push(e)});
+const C=['#2a7a4e','#b35512','#2f6ea6','#8746aa','#86690f','#b03c55','#1d7a7a','#5d6b1d'],ev=gerEvents().map(e=>({dt:e.dt,w:esc(e.w),c:C[e.ri%8],txt:e.txt}));
+const t0=+addD(today(),0),g={};rotPlan().forEach(sl=>{const x=sl.s[0];if(x)ev.push({dt:addD(x.sow<today()?today():x.sow,0),w:`Suggerito · L${sl.l+1}`,c:'#b35512',txt:`${x.sow<today()?'semina subito':'semina'} ${esc(x.k)} per il livello che si libera il ${fdi(sl.F)} (trapianto ${fdi(x.T)})`})});ev.forEach(e=>{(g[+e.dt]=g[+e.dt]||[]).push(e)});
 $('gOut').innerHTML=Object.keys(g).sort((a,b)=>a-b).map(k=>`<div class="ev" style="${k<t0?'opacity:.5':''}"><b>${fd(new Date(+k))}${k==t0?'<br><small>oggi</small>':''}</b><span>`+g[k].map(e=>`<i class="dot" style="background:${e.c}"></i><b style="min-width:0;color:var(--tx)">${e.w}</b>: ${e.txt}`).join('<br>')+'</span></div>').join('')||'<div class="tip">Imposta pianta e data di semina nelle file delle serre: le scadenze compaiono qui.</div>';
 notify()}
 $('sR').onchange=()=>{SR.rows=+$('sR').value||1;serraR()};
@@ -364,21 +367,21 @@ $('sN').onchange=()=>{ST.n=+$('sN').value||1;serraR()};
 $('sD').onchange=()=>{const v=$('sD').value;if(!v)return;SR.r.forEach(x=>x.d=v);serraR()};
 $('sTab').onclick=e=>{const k=e.target.dataset.k;if(k===undefined)return;ST.i=+k;serraR()};
 $('sCtl').onchange=e=>{const i=e.target.dataset.i;if(i===undefined)return;SR.r[i][e.target.dataset.f]=e.target.value;serraR()};
-const PAL8=['#2f8f5b','#e87722','#3b82c4','#a05bc4','#c9a227','#d0526a','#2aa3a3','#7a8b2f'],BC={Alto:'var(--lv-hi)',Medio:'var(--lv-mid)',Basso:'var(--lv-lo)'},RG={Alto:'1–3',Medio:'4–7',Basso:'8–10'},band=l=>l<3?'Alto':l<7?'Medio':'Basso',tCol=k=>PAL8[Math.max(0,Object.keys(SP).indexOf(k))%8],twNew=()=>Array.from({length:10},()=>Array(5).fill(''));
+const PAL8=['#2a7a4e','#b35512','#2f6ea6','#8746aa','#86690f','#b03c55','#1d7a7a','#5d6b1d'],BC={Alto:'var(--lv-hi)',Medio:'var(--lv-mid)',Basso:'var(--lv-lo)'},RG={Alto:'1–3',Medio:'4–7',Basso:'8–10'},band=l=>l<3?'Alto':l<7?'Medio':'Basso',tCol=k=>PAL8[Math.max(0,Object.keys(SP).indexOf(k))%8],twNew=()=>Array.from({length:10},()=>Array(5).fill(''));
 let TW=(()=>{try{const v=JSON.parse(ld('torre','null'));if(v&&v.p&&v.p.length==10){if(!v.d)v.d=twNew();return v}}catch(e){}return{p:twNew(),d:twNew(),s:[0,0]}})();
 function twUsed(){return[...new Set(TW.p.flat().filter(k=>SP[k]))]}
 function twR(){sv('torre',JSON.stringify(TW));
 $('tB').innerHTML=TW.p.map((r,l)=>([0,3,7].includes(l)?`<div class="bd" style="color:${BC[band(l)]}">${band(l)} · livelli ${RG[band(l)]} · ${{Alto:'insalata',Medio:'spinaci',Basso:'bieta'}[band(l)]}</div>`:'')+`<div class="tl"><b style="color:${BC[band(l)]}">${l+1}</b><div class="ps">`+r.map((k,c)=>{const s=SP[k];return `<button class="tp${s?'':' e'}${TW.s[0]==l&&TW.s[1]==c?' on':''}" data-l="${l}" data-c="${c}" aria-label="Livello ${l+1} pot ${c+1}: ${s?esc(k):'vuoto'}" style="${s?'background:'+tCol(k):''}">${s?esc(k[0]):''}</button>`}).join('')+'</div></div>').join('');
 $('tR').textContent='Serbatoio '+ld('nl','30')+' L · pompa';
 const l=TW.s[0],c=TW.s[1],k=TW.p[l][c],s=SP[k];
-$('tSel').innerHTML=kv('Pot selezionato','Livello '+(l+1)+' · Pot '+(c+1))+'<label>Cosa cresce in questo pot</label><select id="tP"><option value="">Vuoto</option>'+Object.keys(SP).map(n=>`<option value="${esc(n)}"${n===k?' selected':''}>${esc(n)}</option>`).join('')+'</select><label>Data di trapianto</label><input type="date" id="tD" value="'+(TW.d[l][c]||'')+'">'+(s?(s.lv===band(l)?`<div class="tip">${esc(k)}: posizione adatta (${s.lv.toLowerCase()}).</div>`:`<div class="tip" style="border-color:var(--wa)">${esc(k)}: consigliato livello ${s.lv.toLowerCase()} (${RG[s.lv]}).</div>`):'')+'<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"><button class="bt" data-a="row">Applica a tutto il livello</button><button class="bt" data-a="all">Applica a tutta la torre</button></div>';
+$('tSel').innerHTML=kv('Pot selezionato','Livello '+(l+1)+' · Pot '+(c+1))+'<label for="tP">Cosa cresce in questo pot</label><select id="tP"><option value="">Vuoto</option>'+Object.keys(SP).map(n=>`<option value="${esc(n)}"${n===k?' selected':''}>${esc(n)}</option>`).join('')+'</select><label for="tD">Data di trapianto</label><input type="date" id="tD" value="'+(TW.d[l][c]||'')+'">'+(s?(s.lv===band(l)?`<div class="tip">${esc(k)}: posizione adatta (${s.lv.toLowerCase()}).</div>`:`<div class="tip" style="border-color:var(--wa)">${esc(k)}: consigliato livello ${s.lv.toLowerCase()} (${RG[s.lv]}).</div>`):'')+'<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"><button class="bt" data-a="row">Applica a tutto il livello</button><button class="bt" data-a="all">Applica a tutta la torre</button></div>';
 const u=twUsed(),n=TW.p.flat().filter(x=>SP[x]).length;
 $('tLg').innerHTML=kv('Pot occupati',n+' su 50')+u.map(x=>kv(`<i class="dot" style="background:${tCol(x)}"></i>${esc(x)}`,'× '+TW.p.flat().filter(y=>y===x).length)).join('');rotR()}
 $('tB').onclick=e=>{const b=e.target.closest('button');if(!b)return;TW.s=[+b.dataset.l,+b.dataset.c];twR()};
 $('tSel').onchange=e=>{const l=TW.s[0],c=TW.s[1];if(e.target.id==='tD')TW.d[l][c]=e.target.value;else if(e.target.id==='tP'){TW.p[l][c]=e.target.value;TW.d[l][c]=e.target.value?(TW.d[l][c]||today()):''}else return;twR();lvR()};
 $('tSel').onclick=e=>{const a=e.target.dataset.a;if(!a)return;const v=$('tP').value,dv=v?($('tD').value||today()):'';if(a==='row'){TW.p[TW.s[0]].fill(v);TW.d[TW.s[0]].fill(dv)}else{TW.p.forEach(r=>r.fill(v));TW.d.forEach(r=>r.fill(dv))}twR();lvR()};
 $('tAuto').onclick=()=>{const a=act().filter(k=>SP[k]);TW.p=TW.p.map((r,l)=>{const L=a.filter(k=>SP[k].lv===band(l));return r.map((_,c)=>L.length?L[c%L.length]:'')});TW.d=TW.p.map((r,i)=>r.map((k,c)=>k?(TW.d[i][c]||today()):''));twR();lvR()};
-$('tClr').onclick=()=>{TW.p=twNew();TW.d=twNew();twR();lvR()};
+$('tClr').onclick=()=>{if(!confirm('Svuotare tutta la torre? Piante e date dei 50 pot verranno cancellate.'))return;TW.p=twNew();TW.d=twNew();twR();lvR()};
 const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'),ad=(s,n)=>iso(addD(s,n)),am=(s,m)=>{const d=new Date(s+'T12:00:00');d.setMonth(d.getMonth()+m);return iso(d)},fdi=s=>fd(addD(s,0)),rn=s=>{const m=String(s||'').match(/\d+/g);return m?(m.map(Number).reduce((a,b)=>a+b,0)/m.length)|0:0};
 let WN=[],ROT=(()=>{try{const v=JSON.parse(ld('rot','null'));if(v&&v.s)return v}catch(e){}return{s:ad(today(),60),dur:7,m:3,sd:10}})();
 function wins(){const w=[],t=today();let s=ROT.s;for(let i=0;i<40&&ad(s,ROT.dur)<t;i++)s=am(s,ROT.m);for(let i=0;i<4;i++){w.push({s,e:ad(s,ROT.dur)});s=am(s,ROT.m)}return w}
@@ -433,6 +436,13 @@ function phR(){
 }
 ['pL0','pV0','pA0','pB0','pL','pA','pT'].forEach(i=>$(i).oninput=phR);
 plR();lvR();serraR();twR();gerR();creR();nutR();ecR();phR();
+</script>
+<script>
+// Collega ogni etichetta al campo che la segue (lettori di schermo, tocco sull'etichetta)
+document.querySelectorAll('label:not([for])').forEach(l=>{const n=l.nextElementSibling;if(n&&n.matches('input,select')&&n.id)l.htmlFor=n.id});
+// Navigazione: scheda corrente annunciata e sempre visibile nella barra
+function navSync(){document.querySelectorAll('#nav button').forEach(b=>{const on=b.classList.contains('on');if(on){b.setAttribute('aria-current','page');b.scrollIntoView({block:'nearest',inline:'nearest'})}else b.removeAttribute('aria-current')})}
+new MutationObserver(navSync).observe($('nav'),{subtree:true,attributes:true,attributeFilter:['class']});navSync();
 </script>
 <script src="notifiche.js"></script>
 </body></html>
