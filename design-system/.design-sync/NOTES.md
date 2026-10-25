@@ -8,7 +8,7 @@
 - Gruppi: stub `.design-sync/groups/<Gruppo>.md` collegati via `docsMap` (solo `category`; il `.prompt.md` viene sintetizzato da `.d.ts` + anteprime).
 - `cardMode: "column"` per i componenti larghi (DataTable, KeyValue, Tip, Card, FieldGrid, NavTabs, SegmentedTabs) — segnalati da `[GRID_OVERFLOW]`.
 - Playwright: nella sandbox cloud è globale; collegalo con `ln -sfn $(npm root -g)/playwright .ds-sync/node_modules/playwright` dopo aver ricopiato `.ds-sync/`.
-- Le anteprime che contengono testo libero (es. Dot) devono impostare `fontFamily: 'var(--hp-font)'` nel contenitore, altrimenti il testo cade nel serif del browser.
+- Le anteprime con testo libero (es. Dot) vanno avvolte in `<AppShell style={{ padding: 0 }}>`, come dicono le convenzioni; altrimenti il testo cade nel serif del browser.
 
 ## Known render warns
 - Nessuno.

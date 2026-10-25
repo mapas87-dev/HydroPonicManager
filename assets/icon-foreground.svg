@@ -2,8 +2,7 @@
   <!-- Icona Torre Idroponica (da design Canva MAHZBpD5e9E): torre NFT, piantine, goccia -->
   <defs>
     <g id="leafL"><path d="M0 0 C -30 -60 -110 -70 -130 -20 C -110 30 -40 40 0 0 Z" fill="#8fd1a6"/><path d="M0 0 C -40 -12 -80 -20 -112 -22" stroke="#5fa97c" stroke-width="7" fill="none" stroke-linecap="round"/></g>
-    <g id="leafR"><use href="#leafL" transform="scale(-1,1)"/></g>
-    <g id="pair"><use href="#leafL" transform="rotate(22)"/><use href="#leafR" transform="rotate(-22)"/><circle r="22" fill="#e6f2ea" stroke="#b4c5bc" stroke-width="5"/></g>
+    <g id="pair"><use href="#leafL" transform="rotate(22)"/><use href="#leafL" transform="rotate(-22) scale(-1,1)"/><circle r="22" fill="#e6f2ea" stroke="#b4c5bc" stroke-width="5"/></g>
   </defs>
   <!-- goccia -->
   <path d="M512 196 C 494 226 480 244 480 262 A 32 32 0 0 0 544 262 C 544 244 530 226 512 196 Z" fill="#e87722"/>

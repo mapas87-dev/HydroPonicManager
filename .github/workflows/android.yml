@@ -2,6 +2,14 @@ name: APK Android
 
 on:
   push:
+    paths:
+      - 'www/**'
+      - 'android/**'
+      - 'assets/**'
+      - 'capacitor.config.json'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/android.yml'
   workflow_dispatch:
 
 jobs:
@@ -17,11 +25,12 @@ jobs:
         with:
           distribution: temurin
           java-version: 21
+          cache: gradle
       - run: npm ci
       - run: npx cap sync android
       - name: Compila APK di debug
         working-directory: android
-        run: chmod +x gradlew && ./gradlew assembleDebug
+        run: ./gradlew assembleDebug
       - uses: actions/upload-artifact@v4
         with:
           name: torre-idroponica-debug

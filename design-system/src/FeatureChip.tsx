@@ -11,7 +11,7 @@ export interface FeatureChipProps extends React.HTMLAttributes<HTMLSpanElement> 
 export function FeatureChip({ icon, className, children, ...rest }: FeatureChipProps) {
   return (
     <span className={cx('hp-chip', className)} {...rest}>
-      <i className="hp-chip__icon" style={{ fontStyle: 'normal' }}>{icon}</i>{children}
+      <i className="hp-chip__icon">{icon}</i>{children}
     </span>
   );
 }

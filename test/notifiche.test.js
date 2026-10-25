@@ -19,14 +19,14 @@ const addDays = n => { const d = new Date(); d.setDate(d.getDate() + n); return 
   };
   await page.addInitScript(seed => {
     for (const k in seed) localStorage.setItem('ti_' + k, seed[k]);
-    const log = window.__ln = { scheduled: [], cancelled: [], perm: 0 };
+    const log = window.__ln = { scheduled: [], perm: 0 };
     window.Capacitor = {
       isNativePlatform: () => true,
       Plugins: { LocalNotifications: {
         checkPermissions: async () => ({ display: 'prompt' }),
         requestPermissions: async () => { log.perm++; return { display: 'granted' }; },
         getPending: async () => ({ notifications: log.scheduled.map(n => ({ id: n.id })) }),
-        cancel: async ({ notifications }) => { log.cancelled.push(...notifications); log.scheduled = []; },
+        cancel: async () => { log.scheduled = []; },
         schedule: async ({ notifications }) => { log.scheduled = notifications; return { notifications }; },
         createChannel: async () => {},
         addListener: () => {},
@@ -34,9 +34,11 @@ const addDays = n => { const d = new Date(); d.setDate(d.getDate() + n); return 
     };
   }, seed);
   await page.goto('file://' + path.resolve(__dirname, '../www/index.html'));
-  await page.waitForTimeout(1200);
+  const scheduled = () => page.evaluate(() => window.__ln.scheduled.map(n => ({ id: n.id, at: new Date(n.schedule.at).toISOString(), title: n.title, body: n.body })));
+  await page.waitForFunction(() => window.__ln.scheduled.length > 0);
 
-  let s = await page.evaluate(() => window.__ln.scheduled.map(n => ({ id: n.id, at: new Date(n.schedule.at).toISOString(), title: n.title, body: n.body, tab: n.extra.tab })));
+  let s = await scheduled();
+  assert.equal(await page.evaluate(() => window.__ln.perm), 1, 'permesso richiesto una volta');
   assert.ok(s.length > 0 && s.length <= 60, 'notifiche programmate: ' + s.length);
   assert.ok(s.every(n => new Date(n.at) > new Date()), 'nessuna notifica nel passato');
   const all = s.map(n => n.title + ' ' + n.body).join('\n');
@@ -48,17 +50,13 @@ const addDays = n => { const d = new Date(); d.setDate(d.getDate() + n); return 
 
   // Disattivando le routine spariscono rotazione e pH
   await page.click('#nav button[data-t="avv"]');
+  assert.ok(await page.locator('#aList .ev').count() > 0, 'elenco Avvisi vuoto');
   await page.uncheck('#aRou');
-  await page.waitForTimeout(900);
-  s = await page.evaluate(() => window.__ln.scheduled.map(n => n.body));
-  assert.ok(!s.join('\n').includes('ruota la torre'), 'rotazione ancora presente');
+  await page.waitForFunction(() => window.__ln.scheduled.length > 0 && !window.__ln.scheduled.some(n => n.body.includes('ruota la torre')));
 
   // Disattivando le notifiche si cancella tutto
   await page.uncheck('#aOn');
-  await page.waitForTimeout(900);
-  s = await page.evaluate(() => window.__ln.scheduled);
-  assert.equal(s.length, 0, 'notifiche non cancellate');
+  await page.waitForFunction(() => window.__ln.scheduled.length === 0);
   console.log('OK impostazioni (routine, disattivazione)');
-  await page.screenshot({ path: process.env.SHOT || '/dev/null', fullPage: true }).catch(() => {});
   await browser.close();
 })().catch(e => { console.error(e); process.exit(1); });

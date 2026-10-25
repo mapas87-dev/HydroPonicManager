@@ -9,13 +9,14 @@ const NT_CHANNEL = 'scadenze';
 
 const NT = (() => {
   const def = { on: true, h: '09:00', pre: true, rou: true };
-  try { return Object.assign(def, JSON.parse(ld('nt', 'null')) || {}); } catch (e) { return def; }
+  try { return Object.assign(def, JSON.parse(ld('nt', 'null'))); } catch (e) { return def; }
 })();
 
-function ntPlugin() {
+// Il bridge nativo inietta window.Capacitor prima degli script: basta leggerlo una volta.
+const NT_P = (() => {
   const C = window.Capacitor;
   return C && C.isNativePlatform && C.isNativePlatform() && C.Plugins ? C.Plugins.LocalNotifications || null : null;
-}
+})();
 
 // Raccoglie gli eventi futuri (entro NT_HORIZON giorni), raggruppati per giorno.
 // pre:false = evento di routine, senza avviso il giorno prima.
@@ -23,18 +24,10 @@ function ntEvents() {
   const t = today(), end = ad(t, NT_HORIZON), ev = [];
   const push = (d, w, txt, tab, pre = true) => { if (d && d >= t && d <= end) ev.push({ d, w, txt, tab, pre }); };
 
-  // Germinazione: per ogni fila delle miniserre
-  ST.s.slice(0, ST.n).forEach((z, si) => z.r.slice(0, z.rows).forEach((x, ri) => {
-    const s = SP[x.p]; if (!s || !x.d) return;
-    const w = `Serra ${si + 1} · F${ri + 1} · ${x.p}`;
-    push(x.d, w, 'giorno di semina: spugne idratate (pH 5,5–6,0), coperchio chiuso', 'ger');
-    push(ad(x.d, 3), w, 'controlla l’umidità, spruzza se la superficie è asciutta', 'ger', false);
-    push(ad(x.d, s.ger[0]), w, 'inizio emergenza: luce 14–16 h e bocchette aperte', 'ger');
-    push(ad(x.d, s.ger[1]), w, 'fine finestra di germinazione: se non è spuntato nulla verifica temperatura e umidità', 'ger');
-  }));
+  gerEvents().forEach(e => push(e.d, e.w, e.txt, 'ger', e.pre));
 
   // Crescita: dalla data di trasferimento in torre
-  const d = $('cDt').value;
+  const d = ld('cd', '');
   if (d) {
     push(d, 'Crescita', 'trasferimento in torre: spugna nel net pot, base a contatto col velo d’acqua', 'cre');
     for (let i = 1; i <= 3; i++) {
@@ -64,59 +57,58 @@ function ntEvents() {
 }
 
 // Trasforma gli eventi in notifiche: una per giorno all'orario scelto,
-// più (opzionale) un avviso la sera prima per gli eventi non di routine.
+// più (opzionale) un avviso il giorno prima per gli eventi non di routine.
 function ntList() {
   const [hh, mm] = (NT.h || '09:00').split(':').map(Number), now = Date.now(), out = [];
   const at = day => { const x = new Date(day + 'T00:00:00'); x.setHours(hh || 0, mm || 0, 0, 0); return x; };
-  const lines = items => items.map(e => `${e.w}: ${e.txt}`).join('\n');
+  const note = (id, when, its, prefix) => {
+    if (+when > now) out.push({
+      id, at: when, tab: its[0].tab,
+      title: its.length > 1 ? `${prefix}: ${its.length} scadenze` : `${prefix} · ${its[0].w}`,
+      body: its.length > 1 ? its.map(e => `${e.w}: ${e.txt}`).join('\n') : its[0].txt,
+    });
+  };
   ntEvents().forEach(({ d, items }) => {
-    const id = +d.replace(/-/g, '') * 10, a = at(d), tab = items[0].tab;
-    if (+a > now) out.push({
-      id, at: a, tab,
-      title: items.length > 1 ? `🌱 ${items.length} scadenze oggi` : `🌱 Oggi · ${items[0].w}`,
-      body: items.length > 1 ? lines(items) : items[0].txt,
-    });
-    const imp = items.filter(e => e.pre);
-    const b = at(ad(d, -1));
-    if (NT.pre && imp.length && +b > now) out.push({
-      id: id + 1, at: b, tab: imp[0].tab,
-      title: imp.length > 1 ? `⏰ Domani ${imp.length} scadenze` : `⏰ Domani · ${imp[0].w}`,
-      body: imp.length > 1 ? lines(imp) : imp[0].txt,
-    });
+    const id = +d.replace(/-/g, '') * 10, imp = items.filter(e => e.pre);
+    note(id, at(d), items, '🌱 Oggi');
+    if (NT.pre && imp.length) note(id + 1, at(ad(d, -1)), imp, '⏰ Domani');
   });
   return out.sort((x, y) => x.at - y.at).slice(0, NT_MAX);
 }
 
+const ntNote = t => `<p style="color:var(--mu);margin:0">${t}</p>`;
 function ntMsg(t) { $('aMsg').innerHTML = t ? `<div class="tip" style="border-color:var(--wa)">${esc(t)}</div>` : ''; }
 
-function ntShow(L) {
-  const P = ntPlugin();
-  const info = P ? '' : '<div class="tip">Anteprima: le notifiche arrivano sul telefono con l’app installata (Android o iOS).</div>';
-  if (!NT.on) { $('aList').innerHTML = '<p style="color:var(--mu);margin:0">Notifiche disattivate.</p>'; return; }
+let ntLast = [];
+// Disegna l'elenco solo quando la scheda Avvisi è visibile.
+function ntShow(L = ntLast) {
+  if (!$('avv').classList.contains('on')) return;
+  const info = NT_P ? '' : '<div class="tip">Anteprima: le notifiche arrivano sul telefono con l’app installata (Android o iOS).</div>';
+  if (!NT.on) { $('aList').innerHTML = ntNote('Notifiche disattivate.'); return; }
   const hm = d => d.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
   $('aList').innerHTML = (L.length ? L.map(n => `<div class="ev"><b>${fd(n.at)}<br><small>${hm(n.at)}</small></b><span><b style="min-width:0;color:var(--tx)">${esc(n.title)}</b><br>${esc(n.body).replace(/\n/g, '<br>')}</span></div>`).join('')
-    : '<p style="color:var(--mu);margin:0">Nessuna scadenza nei prossimi ' + NT_HORIZON + ' giorni.</p>') + info;
+    : ntNote('Nessuna scadenza nei prossimi ' + NT_HORIZON + ' giorni.')) + info;
 }
 
 let ntTimer = 0, ntSig = '', ntBusy = Promise.resolve();
 function ntSched() { clearTimeout(ntTimer); ntTimer = setTimeout(() => { ntBusy = ntBusy.then(ntApply); }, 500); }
+notify = ntSched;
 
 async function ntApply() {
-  const L = ntList();
+  const L = ntLast = ntList();
   ntShow(L);
-  const P = ntPlugin();
-  if (!P) return;
+  if (!NT_P) return;
   const sig = NT.on ? JSON.stringify(L.map(n => [n.id, +n.at, n.title, n.body])) : 'off';
   if (sig === ntSig) return;
   try {
     if (NT.on && L.length) {
-      let perm = await P.checkPermissions();
-      if (perm.display !== 'granted') perm = await P.requestPermissions();
+      let perm = await NT_P.checkPermissions();
+      if (perm.display !== 'granted') perm = await NT_P.requestPermissions();
       if (perm.display !== 'granted') { ntMsg('Permesso negato: abilita le notifiche per “Torre Idroponica” nelle impostazioni del telefono.'); return; }
     }
-    const pend = (await P.getPending()).notifications || [];
-    if (pend.length) await P.cancel({ notifications: pend.map(n => ({ id: n.id })) });
-    if (NT.on && L.length) await P.schedule({
+    const pend = (await NT_P.getPending()).notifications || [];
+    if (pend.length) await NT_P.cancel({ notifications: pend.map(n => ({ id: n.id })) });
+    if (NT.on && L.length) await NT_P.schedule({
       notifications: L.map(n => ({
         id: n.id, title: n.title, body: n.body, largeBody: n.body,
         schedule: { at: n.at, allowWhileIdle: true },
@@ -127,7 +119,7 @@ async function ntApply() {
   } catch (e) { ntMsg('Errore nella programmazione delle notifiche: ' + (e && e.message || e)); }
 }
 
-function ntSave() { sv('nt', JSON.stringify(NT)); ntSig = ''; ntSched(); }
+function ntSave() { sv('nt', JSON.stringify(NT)); ntSched(); }
 
 // Impostazioni nella scheda Avvisi
 $('aOn').checked = NT.on; $('aH').value = NT.h; $('aPre').value = NT.pre ? '1' : '0'; $('aRou').checked = NT.rou;
@@ -135,20 +127,22 @@ $('aOn').onchange = e => { NT.on = e.target.checked; ntSave(); };
 $('aH').onchange = e => { NT.h = e.target.value || '09:00'; ntSave(); };
 $('aPre').onchange = e => { NT.pre = e.target.value === '1'; ntSave(); };
 $('aRou').onchange = e => { NT.rou = e.target.checked; ntSave(); };
+$('nav').addEventListener('click', e => { if (e.target.dataset.t === 'avv') ntShow(); });
 
-(async () => {
-  const P = ntPlugin();
-  if (P) {
-    try { await P.createChannel({ id: NT_CHANNEL, name: 'Scadenze coltivazione', description: 'Avvisi di germinazione, cambio soluzione, raccolta e fermo torre', importance: 4, vibration: true }); } catch (e) { /* solo Android */ }
-    // Tocco sulla notifica: apre la sezione dell'evento
-    P.addListener('localNotificationActionPerformed', a => {
-      const tab = a && a.notification && a.notification.extra && a.notification.extra.tab;
-      const b = tab && document.querySelector(`#nav button[data-t="${tab}"]`);
-      if (b) b.click();
-    });
-  }
-  ntSched();
-})();
+if (NT_P) {
+  NT_P.createChannel({ id: NT_CHANNEL, name: 'Scadenze coltivazione', description: 'Avvisi di germinazione, cambio soluzione, raccolta e fermo torre', importance: 4, vibration: true }).catch(() => { /* solo Android */ });
+  // Tocco sulla notifica: apre la sezione dell'evento
+  NT_P.addListener('localNotificationActionPerformed', a => {
+    const tab = a && a.notification && a.notification.extra && a.notification.extra.tab;
+    const b = tab && document.querySelector(`#nav button[data-t="${tab}"]`);
+    if (b) b.click();
+  });
+}
+ntSched();
 
-// Al ritorno nell'app ricalcola: "oggi" può essere cambiato
-document.addEventListener('visibilitychange', () => { if (!document.hidden) calR(); });
+// Al ritorno nell'app: se è cambiato il giorno, aggiorna calendario ("oggi") e avvisi.
+let ntDay = today();
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden || today() === ntDay) return;
+  ntDay = today(); calR(); creR();
+});

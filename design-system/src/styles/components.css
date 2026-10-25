@@ -1,5 +1,7 @@
-.hp-app { background: var(--hp-bg); color: var(--hp-text); font: var(--hp-text-md)/1.5 var(--hp-font); padding: 0 var(--hp-space-5) 40px; box-sizing: border-box; }
-.hp-app *, .hp-app *::before, .hp-app *::after { box-sizing: border-box; }
+/* I componenti funzionano anche fuori da AppShell: border-box su tutte le classi del sistema */
+[class^="hp-"], [class*=" hp-"], [class^="hp-"] *, [class*=" hp-"] * { box-sizing: border-box; }
+
+.hp-app { background: var(--hp-bg); color: var(--hp-text); font: var(--hp-text-md)/1.5 var(--hp-font); padding: 0 var(--hp-space-5) 40px; }
 .hp-title { font: 700 var(--hp-text-xl)/1.2 var(--hp-font); margin: 16px 0 0; color: var(--hp-text); }
 .hp-subtitle { color: var(--hp-accent); font-weight: 600; font-size: 16px; margin: 0 0 10px; }
 
@@ -31,11 +33,12 @@
 .hp-seg__item--on { background: var(--hp-accent-soft); border-color: var(--hp-accent); color: var(--hp-accent); font-weight: 700; }
 
 /* Form */
-.hp-field { display: block; }
+.hp-field { display: block; font-family: var(--hp-font); }
 .hp-field__label { display: block; font-size: var(--hp-text-sm); color: var(--hp-muted); margin: 8px 0 3px; font-family: var(--hp-font); }
-.hp-field__hint { font-size: var(--hp-text-xs); color: var(--hp-muted); margin-top: 3px; }
+.hp-field__hint { font-family: var(--hp-font); font-size: var(--hp-text-xs); color: var(--hp-muted); margin-top: 3px; }
 .hp-input { width: 100%; padding: 10px; border: 1px solid var(--hp-border); border-radius: var(--hp-radius-sm); background: var(--hp-bg); color: var(--hp-text); font: var(--hp-text-md) var(--hp-font); }
 .hp-input:focus-visible { outline: 2px solid var(--hp-accent); outline-offset: 2px; }
+.hp-input:disabled { background: var(--hp-header); color: var(--hp-muted); cursor: not-allowed; }
 .hp-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--hp-space-4); }
 .hp-toggle { display: flex; gap: var(--hp-space-4); align-items: center; color: var(--hp-text); font: 14px var(--hp-font); margin: 10px 0 4px; cursor: pointer; }
 .hp-toggle input { width: 22px; height: 22px; flex: 0 0 auto; accent-color: var(--hp-accent); margin: 0; }
@@ -71,7 +74,7 @@
 /* FeatureChip */
 .hp-chips { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
 .hp-chip { display: inline-flex; align-items: center; gap: 6px; font: var(--hp-text-xs) var(--hp-font); color: var(--hp-muted); }
-.hp-chip__icon { width: 28px; height: 28px; border: 1.5px solid var(--hp-accent); border-radius: 50%; display: grid; place-items: center; font-size: 13px; }
+.hp-chip__icon { width: 28px; height: 28px; border: 1.5px solid var(--hp-accent); border-radius: 50%; display: grid; place-items: center; font-size: 13px; font-style: normal; }
 
 /* Checklist */
 .hp-checklist { list-style: none; padding: 0; margin: 0; font-family: var(--hp-font); }
@@ -89,7 +92,3 @@
 .hp-table th { background: var(--hp-header); font-weight: 600; }
 .hp-table tr.hp-table__hl td { background: var(--hp-accent-soft); font-weight: 700; }
 
-/* I componenti funzionano anche fuori da AppShell */
-.hp-card, .hp-btn, .hp-input, .hp-seg__item, .hp-nav__item, .hp-tip { box-sizing: border-box; }
-.hp-field, .hp-field__hint { font-family: var(--hp-font); }
-.hp-input:disabled { background: var(--hp-header); color: var(--hp-muted); cursor: not-allowed; }
