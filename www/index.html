@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="it"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Torre Idroponica NFT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--sf:#fff;--tx:#233a35;--mu:#5f736d;--ac:#2f8f5b;--ac2:#e6f2ea;--bd:#d6e4dc;--wa:#e87722;--wb:#fff3e6;--hd:#dfeae3;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1c19;--sf:#162825;--tx:#e4f0ed;--mu:#93aca6;--ac:#5fc98f;--ac2:#1d3733;--bd:#2a413d;--wa:#f59a4d;--wb:#3a2a1b;--hd:#233b36}}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 Poppins,system-ui,-apple-system,"Segoe UI",sans-serif;padding:0 14px 40px}
+h1{font:700 22px/1.2 Georgia,serif;margin:16px 0 2px}
+h2{font:700 17px/1.3 Georgia,serif;margin:0 0 8px}
+.sub{color:var(--mu);margin:0 0 12px;font-size:13px}
+nav{display:flex;gap:6px;overflow-x:auto;padding:4px 0 10px;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5}
+nav button{flex:0 0 auto;border:1px solid var(--bd);background:var(--sf);color:var(--tx);padding:8px 13px;border-radius:20px;font:inherit;font-size:14px;cursor:pointer}
+nav button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+nav button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+section{display:none}section.on{display:block}
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:14px;margin-bottom:12px}
+label{display:block;font-size:13px;color:var(--mu);margin:8px 0 3px}
+input,select{width:100%;padding:10px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font:inherit}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.big{font:700 22px Poppins,system-ui,sans-serif;color:var(--wa)}
+.kv{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--bd)}
+.kv:last-child{border:0}.kv span:first-child{color:var(--mu)}.kv span:last-child{text-align:right;font-weight:600}
+.tabs{display:flex;gap:6px;margin-bottom:10px}
+.tabs button{flex:1;padding:8px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);border-radius:8px;font:inherit;cursor:pointer}
+.tabs button.on{background:var(--ac2);border-color:var(--ac);color:var(--ac);font-weight:700}
+.tip{background:var(--ac2);color:var(--tx);border-left:3px solid var(--ac);border-radius:8px;padding:10px;font-size:13px;margin-top:8px}
+.ok{color:var(--ac);font-weight:700}
+.scroll{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:6px 8px;border-bottom:1px solid var(--bd);text-align:right;white-space:nowrap}th:first-child,td:first-child{text-align:left}
+tr.hl td{background:var(--ac2);font-weight:700}
+ul.ck{list-style:none;padding:0;margin:0}ul.ck li{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid var(--bd)}
+ul.ck input{width:20px;height:20px;flex:0 0 auto;margin:2px 0 0}
+.ev{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--bd)}.ev b{min-width:96px;color:var(--ac)}
+h1{font:700 24px/1.2 Poppins,system-ui,sans-serif;margin:16px 0 0}
+h2{font:600 17px/1.3 Poppins,system-ui,sans-serif;display:flex;align-items:center;gap:10px}
+.sub{color:var(--ac);font-weight:600;font-size:16px;margin:0 0 10px}
+.chips{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+.chips span{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--mu)}
+.chips i{width:28px;height:28px;border:1.5px solid var(--ac);border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:13px}
+.card{border-radius:14px}
+#ger .card:first-child h2::before,#cre .card:first-child h2::before{content:"1";flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:var(--wa);color:#fff;display:grid;place-items:center;font-size:15px}
+#cre .card:first-child h2::before{content:"2"}
+th{background:var(--hd)}
+#nut .card:first-child,#ec .card:first-child,#ph .card{border:2px solid var(--wa)}
+#nut .card:first-child h2,#ec .card:first-child h2,#ph .card h2{display:inline-flex;background:var(--wa);color:#fff;padding:3px 12px;border-radius:8px;font-size:14px}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px}
+.lid{position:relative;border:3px solid #9cc3d6;border-bottom:0;border-radius:24px 24px 4px 4px;background:linear-gradient(160deg,rgba(190,225,240,.45),rgba(190,225,240,.1));padding:24px 10px 8px;overflow:hidden}
+.lid::before{content:"";position:absolute;top:9px;left:50%;width:70px;height:6px;margin-left:-35px;border-radius:4px;background:#9cc3d6}
+.lid::after{content:"";position:absolute;top:-10px;right:18px;width:30px;height:90px;border-radius:50%;background:rgba(255,255,255,.35);transform:rotate(25deg);pointer-events:none}
+.base{height:16px;background:#3d4f4a;border-radius:0 0 12px 12px}
+.fl{display:flex;align-items:center;gap:6px;margin:5px 0}
+.fl b{width:22px;font-size:11px;color:var(--mu);flex:0 0 auto}
+.fl div{flex:1;display:grid;gap:5px;justify-items:center}
+.fl i{width:100%;max-width:44px;aspect-ratio:1;border-radius:6px;display:grid;place-items:center;color:#fff;font:600 11px Poppins,system-ui,sans-serif;font-style:normal;box-shadow:inset 0 -3px 0 rgba(0,0,0,.18)}
+.fl i.e{background:#e9dfc9;border:1.5px dashed #b9a97f;box-shadow:none}
+.sg{display:grid;grid-template-columns:30px 1fr 126px;gap:6px;margin-top:8px;align-items:center}
+.sg b{font-size:12px;color:var(--mu)}
+.tw{width:min(100%,300px);margin:0 auto}
+.tcap{height:22px;width:50%;margin:0 auto;background:#2e403b;border-radius:16px 16px 4px 4px}
+.tpipe{width:10px;height:18px;margin:0 auto -2px;background:#2e403b;border-radius:3px 3px 0 0;position:relative}
+.tpipe::after{content:"";position:absolute;left:-16px;top:-4px;width:11px;height:11px;background:#3b82c4;border-radius:50% 0 50% 50%;transform:rotate(45deg)}
+.tbody{background:linear-gradient(90deg,transparent 34%,#b4c5bc 34%,#dbe6e0 50%,#b4c5bc 66%,transparent 66%);padding:0 4px 2px}
+.tl{display:flex;align-items:center;gap:4px;padding:14px 6px 6px;margin:4px 0;background:linear-gradient(#fbfdfc,#e1ebe6);border:1.5px solid #bccdc4;border-radius:18px;box-shadow:0 2px 3px rgba(0,0,0,.14)}
+.bd{font-size:11px;font-weight:600;margin:8px 6px 0;text-align:left;background:#f4faf6;display:inline-block;padding:1px 8px;border-radius:8px;position:relative}
+.tl>b{width:18px;font-size:10px;flex:0 0 auto}
+.ps{flex:1;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;justify-items:center}
+.tp{position:relative;width:100%;max-width:38px;aspect-ratio:1;border-radius:50%;border:3px solid #fff;background:#fff;box-shadow:0 0 0 1.5px #a9bbb2,0 2px 3px rgba(0,0,0,.25);color:#fff;font:600 11px Poppins,system-ui,sans-serif;cursor:pointer;padding:0}
+.tp:not(.e)::before,.tp:not(.e)::after{content:"";position:absolute;bottom:68%;width:52%;height:62%;background:inherit;pointer-events:none}
+.tp:not(.e)::before{left:-6%;border-radius:100% 0 100% 0;transform:rotate(-28deg)}
+.tp:not(.e)::after{right:-6%;border-radius:0 100% 0 100%;transform:rotate(28deg)}
+.tp.e{background:#e9dfc9;box-shadow:0 0 0 1.5px #b9a97f}
+.tp.on{outline:3px solid var(--wa);outline-offset:1px}
+.tbase{height:44px;background:linear-gradient(#2e403b,#1f2d29);border-top:6px solid #3b82c4;border-radius:8px 8px 12px 12px;color:#bfe3f5;text-align:center;font-size:12px;line-height:38px}
+.wh{display:flex;justify-content:space-around;padding:0 26px}.wh i{width:20px;height:20px;border-radius:50%;background:radial-gradient(#cfd8d4 25%,#2e403b 28%);display:block;margin-top:-2px}
+.bt{border:1px solid var(--ac);background:none;color:var(--ac);padding:8px 12px;border-radius:10px;font:600 13px Poppins,system-ui,sans-serif;cursor:pointer}
+.bt.f{background:var(--ac);color:#fff}
+.sw{display:flex;gap:10px;align-items:center;color:var(--tx);font-size:14px;margin:10px 0 4px}
+.sw input{width:22px;height:22px;flex:0 0 auto}
+</style></head><body>
+<h1>Torre Idroponica NFT</h1>
+<p class="sub">Guida per balcone</p>
+<div class="chips"><span><i>💧</i>Acqua in movimento</span><span><i>🌱</i>Crescita continua</span><span><i>🏡</i>Ideale per spazi piccoli</span></div>
+<nav id="nav">
+<button data-t="ger" class="on">Germinazione</button><button data-t="cre">Crescita</button><button data-t="pia">Piante</button><button data-t="rot">Ricambio</button><button data-t="nut">Nutrienti</button><button data-t="ec">EC</button><button data-t="ph">pH-</button><button data-t="avv">🔔 Avvisi</button>
+</nav>
+
+<section id="ger" class="on">
+<div class="card"><h2>Calendario germinazione</h2>
+<p style="color:var(--mu);font-size:13px;margin:0 0 8px">Le scadenze seguono le date di semina impostate per ogni fila delle serre qui sotto.</p>
+<div id="gOut"></div></div>
+<div class="card"><h2>Miniserra da interno</h2>
+<div class="row"><div><label>Numero di serre</label><input type="number" id="sN" min="1" max="4"></div><div></div></div><div id="sTab" class="tabs" style="margin-top:10px"></div>
+<div class="row"><div><label>File di pot</label><input type="number" id="sR" min="1" max="8"></div><div><label>Pot per fila</label><input type="number" id="sC" min="1" max="12"></div></div>
+<div class="lid" id="sT" style="margin-top:14px"></div><div class="base"></div>
+<div class="sg" style="grid-template-columns:1fr 126px;margin-bottom:4px"><span style="font-size:13px">Data semina per tutta la serra</span><input type="date" id="sD" aria-label="Data semina di tutta la serra"></div>
+<label style="margin-top:12px">Pianta e data di semina per fila</label><div id="sCtl"></div>
+<div id="sSum" style="margin-top:10px"></div></div>
+<div class="card"><h2>Regole di germinazione</h2><label>Scheda specie</label><select id="gSp"></select><div id="gRules"></div></div>
+<div class="card"><h2>Checklist semina</h2><ul class="ck" id="gCk"></ul></div>
+</section>
+
+<section id="cre">
+<div class="card"><h2>Calendario coltivazione</h2>
+<label>Data trasferimento in torre</label><input type="date" id="cDt">
+<div id="cOut"></div></div>
+<div class="card"><h2>Torre NFT · 5 pot × 10 livelli</h2>
+<div class="tw"><div class="tpipe"></div><div class="tcap"></div><div class="tbody" id="tB"></div><div class="tbase" id="tR"></div><div class="wh"><i></i><i></i></div></div>
+<div id="tSel" style="margin-top:14px"></div><div id="tLg" style="margin-top:10px"></div>
+<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button class="bt f" id="tAuto">Riempi per livelli consigliati</button><button class="bt" id="tClr">Svuota torre</button></div></div>
+<div class="card"><h2>Colture in torre</h2><div id="cLv"></div></div>
+<div class="card"><h2>Regole di coltivazione</h2><div id="cRules"></div></div>
+</section>
+
+<section id="rot">
+<div class="card"><h2>Fermo torre</h2>
+<p style="color:var(--mu);font-size:13px;margin:0 0 6px">Obiettivo: torre vuota 1 settimana ogni 3 mesi, per svuotare, pulire e sanificare.</p>
+<div class="row"><div><label>Inizio prossimo fermo</label><input type="date" id="rS"></div><div><label>Durata (giorni)</label><input type="number" id="rD" min="1" max="21"></div><div><label>Ogni (mesi)</label><input type="number" id="rM" min="1" max="12"></div><div><label>Giorni in miniserra dopo emergenza</label><input type="number" id="rE" min="0" max="30"></div></div>
+<div id="rW" style="margin-top:8px"></div><div id="rC"></div>
+<div class="tip">Durante il fermo: svuota e sciacqua il serbatoio, lava pompa e tubi, sanifica i net pot, controlla ruote e raccordi. Poi nuova soluzione TriPart e pH 5,8.</div></div>
+<div class="card"><h2>Spazi che si liberano</h2><div id="rL"></div></div>
+</section>
+
+<section id="pia">
+<div class="card"><h2>Archivio piante</h2><p class="sub" style="color:var(--mu);font-size:13px;font-weight:400;margin:0">Spunta le colture che hai in torre: guidano le sezioni Germinazione e Crescita. I valori sono indicativi, controlla sempre la bustina dei semi.</p></div>
+<div id="plL"></div>
+<div class="card"><h2>Aggiungi una pianta</h2>
+<label>Nome</label><input id="xN" maxlength="40">
+<div class="row"><div><label>Categoria</label><select id="xC"><option>Foglia</option><option>Aromatica</option><option>Frutto</option><option>Altro</option></select></div><div><label>Livello torre</label><select id="xV"><option>Alto</option><option selected>Medio</option><option>Basso</option></select></div>
+<div><label>Germinazione min (giorni)</label><input type="number" id="xG0" value="3"></div><div><label>Germinazione max (giorni)</label><input type="number" id="xG1" value="7"></div>
+<div><label>EC min</label><input type="number" id="xE0" value="1.2" step="0.1"></div><div><label>EC max</label><input type="number" id="xE1" value="1.8" step="0.1"></div>
+<div><label>pH min</label><input type="number" id="xP0" value="5.8" step="0.1"></div><div><label>pH max</label><input type="number" id="xP1" value="6.2" step="0.1"></div>
+<div><label>Temperatura germinazione</label><input id="xT" placeholder="18–22 °C"></div><div><label>Raccolta (giorni)</label><input id="xD" placeholder="40–60"></div></div>
+<button id="xB" style="margin-top:12px;width:100%;border:0;background:var(--ac);color:#fff;padding:11px;border-radius:10px;font:600 15px Poppins,system-ui,sans-serif;cursor:pointer">Aggiungi all’archivio</button><p id="xM" style="color:var(--wa);font-size:13px;margin:6px 0 0"></p></div>
+</section>
+
+<section id="nut">
+<div class="card"><h2>Dosaggio nutrienti</h2>
+<div class="row"><div><label>Serbatoio (litri)</label><input type="number" id="nL" value="30" min="1" step="0.5"></div>
+<div><label>Fase</label><select id="nP"></select></div></div>
+<div id="nOut"></div>
+<div class="tip">Miscela in ordine: prima Grow, poi Micro, infine Bloom, mescolando ogni volta. Poi misura l’EC e regola il pH a 5,8.</div></div>
+<div class="card"><h2>Schema ufficiale (mL/L)</h2><div class="scroll"><table id="nT"></table></div></div>
+</section>
+
+<section id="ec">
+<div class="card"><h2>Correzione EC per temperatura</h2>
+<div class="row"><div><label>EC misurata (mS/cm)</label><input type="number" id="eM" value="1.2" step="0.01"></div>
+<div><label>Temp. acqua (°C)</label><input type="number" id="eT" value="18" step="0.5"></div>
+<div><label>Calibrazione strumento (°C)</label><input type="number" id="eC" value="25"></div>
+<div><label>Coefficiente (%/°C)</label><input type="number" id="eK" value="1.91" step="0.01"></div></div>
+<div id="eOut"></div></div>
+<div class="card"><h2>Tabella rapida</h2><div class="scroll"><table id="eTb"></table></div></div>
+</section>
+
+<section id="ph">
+<div class="card"><h2>Taratura test</h2>
+<div class="row"><div><label>Litri nel test</label><input type="number" id="pL0" value="17.5" step="0.1"></div>
+<div><label>pH- aggiunto (mL)</label><input type="number" id="pV0" value="15" step="0.1"></div>
+<div><label>pH iniziale test</label><input type="number" id="pA0" value="6.21" step="0.01"></div>
+<div><label>pH finale test</label><input type="number" id="pB0" value="5.97" step="0.01"></div></div>
+<div id="pR"></div></div>
+<div class="card"><h2>Correzione del tuo serbatoio</h2>
+<div class="row"><div><label>Litri soluzione</label><input type="number" id="pL" value="30" step="0.5"></div>
+<div><label>pH attuale</label><input type="number" id="pA" value="6.21" step="0.01"></div>
+<div><label>pH desiderato</label><input type="number" id="pT" value="5.8" step="0.01"></div></div>
+<div id="pOut"></div>
+<div class="tip">Aggiungi circa l’80% della dose, mescola con la pompa attiva 5–10 minuti, ricontrolla il pH e solo allora aggiungi il resto.</div></div>
+</section>
+
+<section id="avv">
+<div class="card"><h2>Notifiche scadenze</h2>
+<p style="color:var(--mu);font-size:13px;margin:0 0 6px">Il telefono ti avvisa quando scade un evento: germinazione, cambio soluzione, raccolta, semina suggerita e fermo torre. Gli avvisi si aggiornano da soli quando cambi date o piante.</p>
+<label class="sw"><input type="checkbox" id="aOn">Attiva notifiche</label>
+<div class="row"><div><label>Orario dell’avviso</label><input type="time" id="aH"></div><div><label>Avviso il giorno prima</label><select id="aPre"><option value="1">Sì</option><option value="0">No</option></select></div></div>
+<label class="sw"><input type="checkbox" id="aRou">Promemoria di routine (rotazione torre, correzione pH)</label>
+<div id="aMsg"></div></div>
+<div class="card"><h2>Prossimi avvisi</h2><div id="aList"></div></div>
+</section>
+
+<script>
+const $=id=>document.getElementById(id);
+const f=(n,d=1)=>Number(n).toFixed(d).replace('.',',');
+const kv=(a,b)=>`<div class="kv"><span>${a}</span><span>${b}</span></div>`;
+const SP={
+ Spinaci:{sem:'1-2 semi per foro, profondità 0,5 cm',ger:[5,10],t:'15–20 °C (fresco)',um:'90–95% iniziale',note:'Ammolla i semi in acqua per 12 h prima della semina per ammorbidire il guscio.',lv:'Medio',lvn:'Beneficiano del flusso costante e dell’ottima aerazione.'},
+ Bieta:{sem:'1 pallina/seme per foro (sviluppa 2-3 germogli)',ger:[4,8],t:'20–24 °C',um:'90–95% iniziale',note:'Ogni pallina produce 2-3 germogli.',lv:'Basso',lvn:'Sviluppa foglie ampie e radici vigorose; in basso non fa ombra alle altre.'},
+ 'Insalata (lattuga)':{sem:'1-2 semi per foro, in superficie',ger:[2,5],t:'18–21 °C (max 23 °C)',um:'90–95% iniziale',note:'Sopra i 23–25 °C i semi vanno in dormienza termica e non germogliano.',lv:'Alto',lvn:'Richiede massima esposizione solare, portamento compatto.'}
+};
+const NEW=[['Rucola','Foglia',3,7,'15–20 °C',1.2,1.8,6,6.5,'Alto','30–40','2-3 semi in superficie','Cresce veloce: taglia le foglie esterne per più raccolti.'],['Basilico','Aromatica',5,10,'20–25 °C',1,1.6,5.5,6.5,'Alto','40–60','Semi in superficie, con luce','Teme il freddo (sotto 12 °C): ritira la torre di notte in autunno.'],['Coriandolo','Aromatica',7,10,'15–20 °C',1.2,1.8,6,6.7,'Medio','40–60','2-3 semi, 0,5 cm','Va in fioritura col caldo: preferisci mezz’ombra d’estate.'],['Prezzemolo','Aromatica',14,28,'18–22 °C',0.8,1.8,5.5,6,'Medio','60–80','Ammollo 12 h, 2-3 semi','Germinazione lenta: abbi pazienza e tieni umido.'],['Erba cipollina','Aromatica',10,14,'15–20 °C',1.4,1.8,6,6.5,'Medio','60–80','3-5 semi per foro','Si raccoglie a ciuffi più volte.'],['Menta','Aromatica',10,16,'18–22 °C',1.4,2,5.5,6,'Medio','40–60','Meglio da talea in acqua','Vigorosa e invasiva: tienila isolata dalle altre.'],['Pak choi','Foglia',3,7,'18–22 °C',1.5,2,6,7,'Medio','35–50','1-2 semi, 0,5 cm','Raccogli a cespo intero o a foglie.'],['Cavolo riccio (kale)','Foglia',3,7,'15–22 °C',1.8,2.5,5.5,6.5,'Basso','50–70','2 semi, 0,5 cm','Resiste al freddo; foglie grandi, serve spazio.'],['Fragole','Frutto',14,30,'18–22 °C',1,1.4,5.5,6.5,'Basso','90–120','Meglio da piantine o stoloni','Servono impollinazione e luce abbondante.'],['Radicchio','Foglia',3,7,'15–20 °C',1.4,1.8,5.5,6.5,'Medio','60–90','2-3 semi, 0,5 cm','Il colore rosso si intensifica con le temperature fresche; sopra i 25 °C i semi germinano male.'],['Canasta rossa','Foglia',2,5,'18–21 °C (max 23 °C)',1.2,1.6,5.8,6.2,'Alto','45–60','1-2 semi in superficie','Lattuga a cespo croccante: oltre i 23–25 °C i semi vanno in dormienza termica.'],['Scarola riccia','Foglia',3,8,'15–20 °C',1.4,1.8,5.5,6.5,'Medio','60–80','2-3 semi in superficie','Lega le foglie esterne a fine ciclo per ottenere il cuore chiaro e meno amaro.'],['Cavolo napoletano','Foglia',3,7,'15–22 °C',1.8,2.5,5.5,6.5,'Basso','70–90','2 semi, 0,5 cm','Brassica esigente: foglie grandi, serve spazio e un EC più alto delle insalate.']];
+NEW.forEach(r=>SP[r[0]]={cat:r[1],ger:[r[2],r[3]],t:r[4],ec:[r[5],r[6]],ph:[r[7],r[8]],lv:r[9],d:r[10]+' giorni',sem:r[11],note:r[12],um:'90–95% iniziale',lvn:r[12]});
+Object.assign(SP.Spinaci,{cat:'Foglia',ec:[1.2,1.4],ph:[5.5,6.2],d:'30–45 giorni'});Object.assign(SP.Bieta,{cat:'Foglia',ec:[1.2,1.4],ph:[5.5,6.2],d:'45–60 giorni'});Object.assign(SP['Insalata (lattuga)'],{cat:'Foglia',ec:[1.2,1.4],ph:[5.5,6.2],d:'30–45 giorni'});
+try{const c=JSON.parse(ld('cust','{}'));Object.keys(c).forEach(k=>SP[k]=c[k])}catch(e){}
+function act(){try{const v=JSON.parse(ld('act','null'));if(Array.isArray(v))return v}catch(e){}return['Spinaci','Bieta','Insalata (lattuga)']}
+function setAct(a){sv('act',JSON.stringify(a))}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const PH=[['1st roots (prime radici)',.5,.5,.5,'0,3–0,6'],['1st true leaves (prime foglie)',1,1,1,'0,8–1,2'],['Growing (crescita vegetativa)',1.8,1.2,.6,'1,3–1,8'],['Preflowering (prefioritura)',2,2,1.5,'1,8–2,0'],['Flowering (fioritura)',.8,1.6,2.4,'1,4–2,2']];
+const addD=(d,n)=>{const x=new Date(d+'T12:00:00');x.setDate(x.getDate()+n);return x};
+const fd=d=>d.toLocaleDateString('it-IT',{weekday:'short',day:'numeric',month:'short'});
+const today=()=>{const d=new Date();return new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,10)};
+function sv(k,v){try{localStorage.setItem('ti_'+k,v)}catch(e){}}
+function ld(k,d){try{return localStorage.getItem('ti_'+k)??d}catch(e){return d}}
+
+// nav
+document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>{
+ document.querySelectorAll('#nav button').forEach(x=>x.classList.toggle('on',x===b));
+ document.querySelectorAll('section').forEach(s=>s.classList.toggle('on',s.id===b.dataset.t));if(b.dataset.t==='ger')serraR();if(b.dataset.t==='cre')twR();if(b.dataset.t==='rot')rotR();scrollTo(0,0)});
+
+// germinazione
+function spOpt(){const cur=$('gSp').value||ld('sp',''),a=act().filter(k=>SP[k]),o=Object.keys(SP).filter(k=>!a.includes(k)),op=k=>`<option value="${esc(k)}">${esc(k)}</option>`;$('gSp').innerHTML='<optgroup label="In coltivazione">'+a.map(op).join('')+'</optgroup><optgroup label="Archivio">'+o.map(op).join('')+'</optgroup>';$('gSp').value=SP[cur]?cur:(a[0]||Object.keys(SP)[0])}
+spOpt();
+function gerR(){
+ const s=SP[$('gSp').value];sv('sp',$('gSp').value);if(!s)return;
+
+ $('gRules').innerHTML=kv('Semi per foro',s.sem)+kv('Temperatura',s.t)+kv('Umidità',s.um)+kv('Tempi',s.ger[0]+'–'+s.ger[1]+' giorni')+kv('Luce','Subito all’emergenza')+`<div class="tip">${s.note}</div>`;
+}
+$('gSp').onchange=gerR;
+const CK=['Cubi di spugna/lana di roccia ben idratati (pH 5,5–6,0)','Semi posizionati secondo la specie','Coperchio e bocchette chiusi per 2–3 giorni','Temperatura nell’intervallo ideale','Luce 14–16 h appena spuntano i germogli','Bocchette aperte per ridurre l’umidità'];
+$('gCk').innerHTML=CK.map((t,i)=>`<li><input type="checkbox" id="ck${i}" ${ld('ck'+i,'0')=='1'?'checked':''}><label for="ck${i}" style="margin:0;color:var(--tx);font-size:14px">${t}</label></li>`).join('');
+CK.forEach((_,i)=>$('ck'+i).onchange=e=>sv('ck'+i,e.target.checked?1:0));
+
+// crescita
+$('cDt').value=ld('cd',today());
+function creR(){
+ const d=$('cDt').value;sv('cd',d);if(!d)return;
+ let h=`<div class="ev"><b>${fd(addD(d,0))}</b><span>Trasferimento: spugna nel cestello (net pot 5 cm), base a contatto col velo d’acqua per 2 giorni.</span></div>`;
+ h+=`<div class="ev"><b>${fd(addD(d,0))} → ${fd(addD(d,5))}</b><span>Correggi il pH ogni giorno (serbatoio nuovo).</span></div>`;
+ h+=`<div class="ev"><b>Ogni 1–2 giorni</b><span>Ruota la torre di 180° per luce uniforme. Prossima: ${fd(addD(d,1))}, ${fd(addD(d,3))}, ${fd(addD(d,5))}…</span></div>`;
+ for(let i=1;i<=3;i++)h+=`<div class="ev"><b>${fd(addD(d,10*i))} → ${fd(addD(d,14*i))}</b><span>Cambio totale soluzione (giorno ${10*i}–${14*i}, ${i}° cambio).</span></div>`;
+ $('cOut').innerHTML=h+rotCre()+`<div class="tip">Nel frattempo rabbocca l’acqua evaporata con acqua a pH bilanciato.</div>`;
+ typeof ntSched=='function'&&ntSched();
+}
+$('cDt').onchange=creR;
+function lvR(){const C={Alto:'#2f8f5b',Medio:'#6bb98a',Basso:'#e87722'},o={Alto:0,Medio:1,Basso:2},a=(twUsed().length?twUsed():act()).filter(k=>SP[k]).sort((x,y)=>o[SP[x].lv]-o[SP[y].lv]);
+let h=a.map(n=>{const s=SP[n];return `<div class="kv"><span><i class="dot" style="background:${C[s.lv]}"></i>${s.lv} · ${esc(n)}</span><span>EC ${f(s.ec[0])}–${f(s.ec[1])} · pH ${f(s.ph[0])}–${f(s.ph[1])}<br><small style="font-weight:400;color:var(--mu)">${esc(s.lvn||s.note)}</small></span></div>`}).join('')||'<p style="color:var(--mu);margin:0">Nessuna coltura attiva: scegli le piante nella sezione Piante.</p>';
+if(a.length>1){const e0=Math.max(...a.map(k=>SP[k].ec[0])),e1=Math.min(...a.map(k=>SP[k].ec[1])),p0=Math.max(...a.map(k=>SP[k].ph[0])),p1=Math.min(...a.map(k=>SP[k].ph[1]));
+h+=e0<=e1&&p0<=p1?`<div class="tip">Valori comuni a tutte le colture: EC ${f(e0)}–${f(e1)} mS/cm, pH ${f(p0)}–${f(p1)}.</div>`:`<div class="tip" style="border-color:var(--wa)">Le colture scelte non hanno EC o pH in comune (EC ${f(e0)}–${f(e1)}, pH ${f(p0)}–${f(p1)}): meglio due torri o serbatoi separati.</div>`}
+$('cLv').innerHTML=h}
+function plR(){const a=act();$('plL').innerHTML=Object.keys(SP).map(k=>{const s=SP[k],e=esc(k);return `<div class="card"><div style="display:flex;align-items:center;gap:10px"><input type="checkbox" style="width:22px;height:22px;flex:0 0 auto" data-k="${e}" ${a.includes(k)?'checked':''} aria-label="In coltivazione"><b style="flex:1">${e}</b><span style="font-size:12px;color:var(--ac);font-weight:600">${s.lv}</span></div><details style="margin-top:6px"><summary style="color:var(--mu);font-size:13px;cursor:pointer">${s.cat} · scheda</summary>${kv('Germinazione',s.ger[0]+'–'+s.ger[1]+' giorni')+kv('Temperatura',esc(s.t))+kv('EC',f(s.ec[0])+'–'+f(s.ec[1])+' mS/cm')+kv('pH',f(s.ph[0])+'–'+f(s.ph[1]))+kv('Raccolta',esc(s.d))+kv('Semina',esc(s.sem))}<div class="tip">${esc(s.note)}</div>${s.c?`<button data-del="${e}" style="margin-top:8px;border:1px solid var(--wa);background:none;color:var(--wa);padding:6px 12px;border-radius:8px;font:inherit;cursor:pointer">Elimina</button>`:''}</details></div>`}).join('')}
+$('plL').onchange=e=>{const k=e.target.dataset.k;if(k===undefined)return;const a=act().filter(x=>x!==k);if(e.target.checked)a.push(k);setAct(a);lvR();spOpt();gerR()};
+$('plL').onclick=e=>{const k=e.target.dataset.del;if(k===undefined)return;delete SP[k];const c=JSON.parse(ld('cust','{}'));delete c[k];sv('cust',JSON.stringify(c));setAct(act().filter(x=>x!==k));plR();lvR();spOpt();gerR()};
+function addPl(){const n=$('xN').value.trim(),m=$('xM'),v=id=>+$(id).value,r=(a,b)=>a<=b?[a,b]:[b,a];
+if(!n){m.textContent='Inserisci un nome.';return}if(SP[n]){m.textContent='Esiste già una pianta con questo nome.';return}
+const d=$('xD').value.trim(),s={cat:$('xC').value,ger:r(v('xG0')||0,v('xG1')||0),t:$('xT').value.trim()||'—',ec:r(v('xE0')||0,v('xE1')||0),ph:r(v('xP0')||0,v('xP1')||0),lv:$('xV').value,d:d?d+' giorni':'—',sem:'Secondo la bustina',note:'Pianta personalizzata: verifica i valori sulla bustina dei semi.',um:'90–95% iniziale',lvn:'',c:1};
+SP[n]=s;const c=JSON.parse(ld('cust','{}'));c[n]=s;sv('cust',JSON.stringify(c));setAct(act().concat(n));m.textContent='';$('xN').value='';plR();lvR();spOpt();gerR()}
+let ST=(()=>{try{const v=JSON.parse(ld('serra','null'));if(v&&v.s)return v;if(v&&v.rows&&v.r)return{n:1,i:0,s:[v]}}catch(e){}const a=act().filter(k=>SP[k]);return{n:1,i:0,s:[{rows:3,cols:6,r:[0,1,2].map(i=>({p:a[i]||'',d:today()}))}]}})(),SR;
+function serraR(){
+ST.n=Math.min(4,Math.max(1,ST.n|0));while(ST.s.length<ST.n)ST.s.push({rows:3,cols:6,r:[]});ST.i=Math.min(ST.i|0,ST.n-1);SR=ST.s[ST.i];
+SR.rows=Math.min(8,Math.max(1,SR.rows|0));SR.cols=Math.min(12,Math.max(1,SR.cols|0));
+while(SR.r.length<SR.rows)SR.r.push({p:'',d:today()});
+sv('serra',JSON.stringify(ST));
+const R=SR.r.slice(0,SR.rows),C=['#2f8f5b','#e87722','#3b82c4','#a05bc4','#c9a227','#d0526a','#2aa3a3','#7a8b2f'],g=`repeat(${SR.cols},minmax(0,1fr))`,a=act().filter(k=>SP[k]),
+o1=(k,sel)=>`<option value="${esc(k)}"${k===sel?' selected':''}>${esc(k)}</option>`,
+opt=sel=>'<option value="">Vuota</option><optgroup label="In coltivazione">'+a.map(k=>o1(k,sel)).join('')+'</optgroup><optgroup label="Archivio">'+Object.keys(SP).filter(k=>!a.includes(k)).map(k=>o1(k,sel)).join('')+'</optgroup>';
+$('sR').value=SR.rows;$('sC').value=SR.cols;$('sN').value=ST.n;$('sTab').innerHTML=ST.s.slice(0,ST.n).map((_,k)=>`<button data-k="${k}" class="${k==ST.i?'on':''}">Serra ${k+1}</button>`).join('');
+$('sT').innerHTML=R.map((x,i)=>{const s=SP[x.p];return `<div class="fl"><b>F${i+1}</b><div style="grid-template-columns:${g}">`+Array.from({length:SR.cols},()=>s?`<i style="background:${C[i%8]}">${SR.cols<=8?esc(x.p[0]):''}</i>`:'<i class="e"></i>').join('')+'</div></div>'}).join('');
+$('sCtl').innerHTML=R.map((x,i)=>`<div class="sg"><b style="color:${C[i%8]}">F${i+1}</b><select data-i="${i}" data-f="p" aria-label="Pianta fila ${i+1}">${opt(x.p)}</select><input type="date" data-i="${i}" data-f="d" value="${x.d}" aria-label="Data semina fila ${i+1}"></div>`).join('');
+const used=R.filter(x=>SP[x.p]);
+let h=used.map(x=>{const s=SP[x.p],i=R.indexOf(x);return x.d?kv(`<i class="dot" style="background:${C[i%8]}"></i>F${i+1} · ${esc(x.p)}`,`${SR.cols} pot<br><small style="font-weight:400;color:var(--mu)">emergenza ${fd(addD(x.d,s.ger[0]))} → ${fd(addD(x.d,s.ger[1]))}</small>`):''}).join('');
+h=h?kv('Serra '+(ST.i+1)+' · pot occupati',used.length*SR.cols+' su '+SR.rows*SR.cols)+h:'<div class="tip">Scegli una pianta per ogni fila per vedere le date di emergenza.</div>';
+const rg=used.map(x=>SP[x.p].t.match(/(\d+)\D+(\d+)/)).filter(Boolean).map(m=>[+m[1],+m[2]]);
+if(rg.length>1){const t0=Math.max(...rg.map(r=>r[0])),t1=Math.min(...rg.map(r=>r[1]));h+=t0<=t1?`<div class="tip">Temperatura comune della miniserra: ${t0}–${t1} °C.</div>`:`<div class="tip" style="border-color:var(--wa)">Le piante scelte hanno temperature di germinazione incompatibili (${t0} °C minimo comune, ${t1} °C massimo): separa le file in due miniserre o semina in momenti diversi.</div>`}
+if(ST.n>1){const t=ST.s.slice(0,ST.n).reduce((q,z)=>q+z.r.slice(0,z.rows).filter(x=>SP[x.p]).length*z.cols,0);h+=kv('Totale pot occupati (tutte le serre)',t)}
+$('sD').value=R.length&&R.every(x=>x.d===R[0].d)?R[0].d:'';
+$('sSum').innerHTML=h;calR()}
+function calR(){
+const C=['#2f8f5b','#e87722','#3b82c4','#a05bc4','#c9a227','#d0526a','#2aa3a3','#7a8b2f'],ev=[];
+ST.s.slice(0,ST.n).forEach((z,si)=>z.r.slice(0,z.rows).forEach((x,ri)=>{const s=SP[x.p];if(!s||!x.d)return;
+const w=`Serra ${si+1} · F${ri+1} · ${esc(x.p)}`,c=C[ri%8],a=(n,txt)=>ev.push({dt:addD(x.d,n),w,c,txt});
+a(0,'semina: spugne idratate (pH 5,5–6,0), coperchio e bocchette chiusi.');
+a(3,'controlla l’umidità; spruzza acqua a pH bilanciato se la superficie si asciuga.');
+a(s.ger[0],'inizio emergenza: appena spuntano, luce 14–16 h e bocchette aperte.');
+a(s.ger[1],'fine finestra: se non è spuntato nulla, verifica temperatura e umidità.')}));
+const t0=+addD(today(),0),g={};rotPlan().forEach(sl=>{const x=sl.s[0];if(x)ev.push({dt:addD(x.sow<today()?today():x.sow,0),w:`Suggerito · L${sl.l+1}`,c:'#e87722',txt:`${x.sow<today()?'semina subito':'semina'} ${esc(x.k)} per il livello che si libera il ${fdi(sl.F)} (trapianto ${fdi(x.T)})`})});ev.forEach(e=>{(g[+e.dt]=g[+e.dt]||[]).push(e)});
+$('gOut').innerHTML=Object.keys(g).sort((a,b)=>a-b).map(k=>`<div class="ev" style="${k<t0?'opacity:.5':''}"><b>${fd(new Date(+k))}${k==t0?'<br><small>oggi</small>':''}</b><span>`+g[k].map(e=>`<i class="dot" style="background:${e.c}"></i><b style="min-width:0;color:var(--tx)">${e.w}</b>: ${e.txt}`).join('<br>')+'</span></div>').join('')||'<div class="tip">Imposta pianta e data di semina nelle file delle serre: le scadenze compaiono qui.</div>';
+typeof ntSched=='function'&&ntSched()}
+$('sR').onchange=()=>{SR.rows=+$('sR').value||1;serraR()};
+$('sC').onchange=()=>{SR.cols=+$('sC').value||1;serraR()};
+$('sN').onchange=()=>{ST.n=+$('sN').value||1;serraR()};
+$('sD').onchange=()=>{const v=$('sD').value;if(!v)return;SR.r.forEach(x=>x.d=v);serraR()};
+$('sTab').onclick=e=>{const k=e.target.dataset.k;if(k===undefined)return;ST.i=+k;serraR()};
+$('sCtl').onchange=e=>{const i=e.target.dataset.i;if(i===undefined)return;SR.r[i][e.target.dataset.f]=e.target.value;serraR()};
+const PAL8=['#2f8f5b','#e87722','#3b82c4','#a05bc4','#c9a227','#d0526a','#2aa3a3','#7a8b2f'],BC={Alto:'#2f8f5b',Medio:'#6bb98a',Basso:'#e87722'},RG={Alto:'1–3',Medio:'4–7',Basso:'8–10'},band=l=>l<3?'Alto':l<7?'Medio':'Basso',tCol=k=>PAL8[Math.max(0,Object.keys(SP).indexOf(k))%8],twNew=()=>Array.from({length:10},()=>Array(5).fill(''));
+let TW=(()=>{try{const v=JSON.parse(ld('torre','null'));if(v&&v.p&&v.p.length==10){if(!v.d)v.d=twNew();return v}}catch(e){}return{p:twNew(),d:twNew(),s:[0,0]}})();
+function twUsed(){return[...new Set(TW.p.flat().filter(k=>SP[k]))]}
+function twR(){sv('torre',JSON.stringify(TW));
+$('tB').innerHTML=TW.p.map((r,l)=>([0,3,7].includes(l)?`<div class="bd" style="color:${BC[band(l)]}">${band(l)} · livelli ${RG[band(l)]} · ${{Alto:'insalata',Medio:'spinaci',Basso:'bieta'}[band(l)]}</div>`:'')+`<div class="tl"><b style="color:${BC[band(l)]}">${l+1}</b><div class="ps">`+r.map((k,c)=>{const s=SP[k];return `<button class="tp${s?'':' e'}${TW.s[0]==l&&TW.s[1]==c?' on':''}" data-l="${l}" data-c="${c}" aria-label="Livello ${l+1} pot ${c+1}: ${s?esc(k):'vuoto'}" style="${s?'background:'+tCol(k):''}">${s?esc(k[0]):''}</button>`}).join('')+'</div></div>').join('');
+$('tR').textContent='Serbatoio '+ld('nl','30')+' L · pompa';
+const l=TW.s[0],c=TW.s[1],k=TW.p[l][c],s=SP[k];
+$('tSel').innerHTML=kv('Pot selezionato','Livello '+(l+1)+' · Pot '+(c+1))+'<label>Cosa cresce in questo pot</label><select id="tP"><option value="">Vuoto</option>'+Object.keys(SP).map(n=>`<option value="${esc(n)}"${n===k?' selected':''}>${esc(n)}</option>`).join('')+'</select><label>Data di trapianto</label><input type="date" id="tD" value="'+(TW.d[l][c]||'')+'">'+(s?(s.lv===band(l)?`<div class="tip">${esc(k)}: posizione adatta (${s.lv.toLowerCase()}).</div>`:`<div class="tip" style="border-color:var(--wa)">${esc(k)}: consigliato livello ${s.lv.toLowerCase()} (${RG[s.lv]}).</div>`):'')+'<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"><button class="bt" data-a="row">Applica a tutto il livello</button><button class="bt" data-a="all">Applica a tutta la torre</button></div>';
+const u=twUsed(),n=TW.p.flat().filter(x=>SP[x]).length;
+$('tLg').innerHTML=kv('Pot occupati',n+' su 50')+u.map(x=>kv(`<i class="dot" style="background:${tCol(x)}"></i>${esc(x)}`,'× '+TW.p.flat().filter(y=>y===x).length)).join('');rotR()}
+$('tB').onclick=e=>{const b=e.target.closest('button');if(!b)return;TW.s=[+b.dataset.l,+b.dataset.c];twR()};
+$('tSel').onchange=e=>{const l=TW.s[0],c=TW.s[1];if(e.target.id==='tD')TW.d[l][c]=e.target.value;else if(e.target.id==='tP'){TW.p[l][c]=e.target.value;TW.d[l][c]=e.target.value?(TW.d[l][c]||today()):''}else return;twR();lvR()};
+$('tSel').onclick=e=>{const a=e.target.dataset.a;if(!a)return;const v=$('tP').value,dv=v?($('tD').value||today()):'';if(a==='row'){TW.p[TW.s[0]].fill(v);TW.d[TW.s[0]].fill(dv)}else{TW.p.forEach(r=>r.fill(v));TW.d.forEach(r=>r.fill(dv))}twR();lvR()};
+$('tAuto').onclick=()=>{const a=act().filter(k=>SP[k]);TW.p=TW.p.map((r,l)=>{const L=a.filter(k=>SP[k].lv===band(l));return r.map((_,c)=>L.length?L[c%L.length]:'')});TW.d=TW.p.map((r,i)=>r.map((k,c)=>k?(TW.d[i][c]||today()):''));twR();lvR()};
+$('tClr').onclick=()=>{TW.p=twNew();TW.d=twNew();twR();lvR()};
+const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'),ad=(s,n)=>iso(addD(s,n)),am=(s,m)=>{const d=new Date(s+'T12:00:00');d.setMonth(d.getMonth()+m);return iso(d)},fdi=s=>fd(addD(s,0)),rn=s=>{const m=String(s||'').match(/\d+/g);return m?(m.map(Number).reduce((a,b)=>a+b,0)/m.length)|0:0};
+let WN=[],ROT=(()=>{try{const v=JSON.parse(ld('rot','null'));if(v&&v.s)return v}catch(e){}return{s:ad(today(),60),dur:7,m:3,sd:10}})();
+function wins(){const w=[],t=today();let s=ROT.s;for(let i=0;i<40&&ad(s,ROT.dur)<t;i++)s=am(s,ROT.m);for(let i=0;i<4;i++){w.push({s,e:ad(s,ROT.dur)});s=am(s,ROT.m)}return w}
+function nextT(F,dy){let t=F;for(const w of WN){if(t>=w.e)continue;if(ad(t,dy)<=w.s)return t;t=w.e}return t}
+function sug(sl){const oth=twUsed().filter(k=>k!==sl.k),a0=act(),cand=Object.keys(SP).filter(k=>SP[k].lv===band(sl.l)&&rn(SP[k].d)>0),ok=k=>oth.every(o=>Math.max(SP[o].ec[0],SP[k].ec[0])<=Math.min(SP[o].ec[1],SP[k].ec[1])&&Math.max(SP[o].ph[0],SP[k].ph[0])<=Math.min(SP[o].ph[1],SP[k].ph[1]));
+let c=cand.filter(ok);if(!c.length)c=cand;const F0=sl.F<today()?today():sl.F;
+return c.map(k=>{const T=nextT(F0,rn(SP[k].d));return{k,T,sow:ad(T,-(SP[k].ger[1]+ROT.sd)),fit:T===F0}}).sort((a,b)=>(b.fit-a.fit)||(a0.includes(b.k)-a0.includes(a.k))||((b.k!==sl.k)-(a.k!==sl.k))).slice(0,3)}
+function rotPlan(){WN=wins();const m={};TW.p.forEach((r,l)=>r.forEach((k,c)=>{const s=SP[k],d=TW.d[l][c],n=s?rn(s.d):0;if(!s||!d||!n)return;const F=ad(d,n),key=l+'|'+F+'|'+k;(m[key]=m[key]||{l,F,k,d,n:0}).n++}));return Object.values(m).sort((a,b)=>a.F<b.F?-1:1).map(sl=>({...sl,s:sug(sl)}))}
+function rotCre(){const P=rotPlan();return '<div style="margin-top:10px;font-weight:600">Ricambio torre</div>'+P.map(sl=>`<div class="ev"><b>${fdi(sl.F)}</b><span>Raccolta L${sl.l+1}: ${sl.n}× ${esc(sl.k)}${sl.s[0]?` → trapianto suggerito: ${esc(sl.s[0].k)} il ${fdi(sl.s[0].T)}`:''}</span></div>`).join('')+WN.slice(0,2).map(w=>`<div class="ev"><b>${fdi(w.s)} → ${fdi(w.e)}</b><span>Fermo torre: torre vuota, pulizia e nuova soluzione.</span></div>`).join('')}
+function rotR(){ROT.dur=Math.max(1,ROT.dur|0);ROT.m=Math.max(1,ROT.m|0);sv('rot',JSON.stringify(ROT));
+$('rS').value=ROT.s;$('rD').value=ROT.dur;$('rM').value=ROT.m;$('rE').value=ROT.sd;
+const P=rotPlan(),w=WN[0];
+$('rW').innerHTML=WN.slice(0,3).map((x,i)=>kv(i?'Poi':'Prossimo fermo','vuota '+fdi(x.s)+' → '+fdi(x.e))).join('');
+const cf=P.filter(s=>s.d<w.s&&s.F>w.s);
+$('rC').innerHTML=cf.length?`<div class="tip" style="border-color:var(--wa)">Non saranno pronti prima del fermo (${fdi(w.s)}): ${cf.map(s=>`L${s.l+1} ${esc(s.k)} (${s.n} pot, raccolta ${fdi(s.F)})`).join('; ')}. Anticipa la raccolta o sposta il fermo.</div>`:'';
+$('rL').innerHTML=P.length?P.map(sl=>`<div class="ev"><b style="min-width:70px">${sl.F<today()?'ora':fdi(sl.F)}</b><span><b style="min-width:0;color:var(--tx)">Livello ${sl.l+1}</b>: libera ${sl.n}× ${esc(sl.k)}<br>`+sl.s.map(x=>`<i class="dot" style="background:${tCol(x.k)}"></i>${esc(x.k)} · ${x.sow<today()?'semina subito':'semina entro '+fdi(x.sow)}, trapianto ${fdi(x.T)}${x.fit?'':' (dopo il fermo)'}`).join('<br>')+'</span></div>').join(''):'<div class="tip">Nella torre imposta pianta e data di trapianto dei pot: qui vedrai quando si liberano e cosa seminare.</div>';
+calR();creR()}
+['rS','rD','rM','rE'].forEach(id=>$(id).onchange=()=>{ROT.s=$('rS').value||ROT.s;ROT.dur=+$('rD').value||7;ROT.m=+$('rM').value||3;ROT.sd=Math.max(0,+$('rE').value||0);rotR()});
+$('xB').onclick=addPl;
+$('cRules').innerHTML=kv('Soluzione','TriPart Grow 1,8 · Micro 1,2 · Bloom 0,6 mL/L')+kv('EC target','1,2–1,4 mS/cm')+kv('pH ottimale','5,8 (5,5–6,2)')+kv('Pompa','24/7, oppure 15 min ON / 5 min OFF nelle ore calde')+kv('Esposizione','Ruota di 180° ogni 1–2 giorni')+`<div class="tip">Controlla il pH sempre dopo aver sciolto tutti e 3 i componenti. Aggiungi pH Down a gocce.</div>`;
+
+// nutrienti
+$('nP').innerHTML=PH.map((p,i)=>`<option value="${i}">${p[0]}</option>`).join('');$('nP').value=ld('np','2');$('nL').value=ld('nl','30');
+function nutR(){
+ const L=+$('nL').value||0,p=PH[$('nP').value];sv('np',$('nP').value);sv('nl',L);
+ $('nOut').innerHTML=[['1. TriPart Grow',p[1]],['2. TriPart Micro',p[2]],['3. TriPart Bloom',p[3]]].map(r=>kv(r[0]+' ('+f(r[1])+' mL/L)','<span class="big">'+f(r[1]*L)+' mL</span>')).join('')+kv('EC target atteso',p[4]+' mS/cm');
+ $('nT').innerHTML='<tr><th>Fase</th><th>Grow</th><th>Micro</th><th>Bloom</th><th>EC</th></tr>'+PH.map((r,i)=>`<tr class="${i==$('nP').value?'hl':''}"><td>${r[0].split(' (')[0]}</td><td>${f(r[1])}</td><td>${f(r[2])}</td><td>${f(r[3])}</td><td>${r[4]}</td></tr>`).join('');
+}
+$('nL').oninput=$('nP').onchange=nutR;
+
+// EC
+const ec25=(m,t,c,k)=>m/(1+k/100*(t-c));
+function ecR(){
+ const m=+$('eM').value,t=+$('eT').value,c=+$('eC').value,k=+$('eK').value,r=ec25(m,t,c,k);
+ const st=r>=1.2&&r<=1.4?'<span class="ok">Ottimale</span>':r<1.2?'Bassa (target 1,2–1,4)':r<=1.8?'Accettabile':'Alta';
+ $('eOut').innerHTML=kv('EC reale compensata a '+c+' °C','<span class="big">'+f(r,2)+' mS/cm</span>')+kv('Variazione',(r>=m?'+':'')+f(r-m,2)+' mS/cm ('+f((r/m-1)*100)+'%)')+kv('Valutazione per insalata/spinaci',st);
+ let h='<tr><th>Temp °C</th><th>EC misurata</th><th>EC reale</th><th>Var. %</th></tr>';
+ for(let T=12;T<=28;T++){const x=ec25(m,T,c,k);h+=`<tr class="${T==Math.round(t)?'hl':''}"><td>${T}</td><td>${f(m,2)}</td><td>${f(x,2)}</td><td>${(x>=m?'+':'')+f((x/m-1)*100)}%</td></tr>`}
+ $('eTb').innerHTML=h;
+}
+['eM','eT','eC','eK'].forEach(i=>$(i).oninput=ecR);
+
+// pH
+function phR(){
+ const L0=+$('pL0').value,V=+$('pV0').value,d0=+$('pA0').value-+$('pB0').value;
+ const rate=d0>0&&L0>0?V/L0/d0:0;
+ $('pR').innerHTML=kv('Rapporto di correzione','<span class="big">'+f(rate,4)+'</span> mL/L per 1 punto pH');
+ const L=+$('pL').value,a=+$('pA').value,t=+$('pT').value,d=a-t;
+ if(d<=0){$('pOut').innerHTML=kv('Variazione pH',f(d,2))+'<div class="tip">Il pH attuale è già uguale o inferiore al target: non serve pH-.</div>';return}
+ const tot=rate*L*d;
+ $('pOut').innerHTML=kv('Variazione da ottenere (ΔpH)',f(d,2)+' punti')+kv('Dose totale pH-','<span class="big">'+f(tot)+' mL</span>')+kv('Prima dose (80%)','<b>'+f(tot*.8)+' mL</b>')+kv('Dose residua (20%)',f(tot*.2)+' mL');
+}
+['pL0','pV0','pA0','pB0','pL','pA','pT'].forEach(i=>$(i).oninput=phR);
+plR();lvR();serraR();twR();gerR();creR();nutR();ecR();phR();
+</script>
+<script src="notifiche.js"></script>
+</body></html>

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Torre Idroponica</string>
+    <string name="title_activity_main">Torre Idroponica</string>
+    <string name="package_name">it.hydroponicmanager.app</string>
+    <string name="custom_url_scheme">it.hydroponicmanager.app</string>
+</resources>

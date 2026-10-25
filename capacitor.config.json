@@ -1,0 +1,10 @@
+{
+  "appId": "it.hydroponicmanager.app",
+  "appName": "Torre Idroponica",
+  "webDir": "www",
+  "plugins": {
+    "LocalNotifications": {
+      "iconColor": "#2f8f5b"
+    }
+  }
+}
