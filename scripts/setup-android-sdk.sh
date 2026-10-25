@@ -16,6 +16,8 @@ if [ ! -x "$TOOLS/android" ]; then
   rm -rf "$tmp"
 fi
 # Gli strumenti recenti usano la Android CLI ("android sdk install"); le licenze non vanno più accettate a parte.
-"$TOOLS/android" --sdk="$SDK" sdk install platform-tools platforms/android-36 build-tools/36.0.0
+if [ ! -d "$SDK/platforms/android-36" ] || [ ! -d "$SDK/build-tools/36.0.0" ] || [ ! -d "$SDK/platform-tools" ]; then
+  "$TOOLS/android" --sdk="$SDK" sdk install platform-tools platforms/android-36 build-tools/36.0.0
+fi
 echo "sdk.dir=$SDK" > "$(dirname "$0")/../android/local.properties"
 echo "Android SDK pronto in $SDK"

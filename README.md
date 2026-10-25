@@ -41,6 +41,24 @@ npm run apk         # compila android/app/build/outputs/apk/debug/app-debug.apk
 In locale l'APK ha `versionCode` 1: per installarlo sopra una build di GitHub usa `VERSION_CODE=<numero più alto> npm run apk`.
 `--max-workers=2` evita gli errori 429 (Too Many Requests) di Maven Central dietro il proxy della sandbox.
 
+### Ambiente cloud di Claude Code
+
+Per avere l'SDK già pronto in ogni sessione, incolla questo nello **Setup script** dell'ambiente (menu dell'ambiente → Edit) e aggiungi `dl.google.com` agli Allowed domains:
+
+```bash
+# Android SDK per compilare l'APK di HydroPonicManager (serve dl.google.com negli Allowed domains)
+SDK="$HOME/android-sdk"
+if [ ! -d "$SDK/platforms/android-36" ]; then
+  ZIP=$(curl -fsSL https://dl.google.com/android/repository/repository2-3.xml | grep -o 'commandlinetools-linux-[0-9]*_latest.zip' | sort -t- -k3 -n | tail -1)
+  curl -fsSL "https://dl.google.com/android/repository/$ZIP" -o /tmp/cmdline-tools.zip
+  rm -rf /tmp/cmdline-tools && unzip -q /tmp/cmdline-tools.zip -d /tmp/cmdline-tools
+  mkdir -p "$SDK/cmdline-tools" && rm -rf "$SDK/cmdline-tools/latest" && mv /tmp/cmdline-tools/cmdline-tools "$SDK/cmdline-tools/latest"
+  "$SDK/cmdline-tools/latest/bin/android" --sdk="$SDK" sdk install platform-tools platforms/android-36 build-tools/36.0.0
+fi
+```
+
+`npm run apk` trova l'SDK in `~/android-sdk` e scrive da solo `android/local.properties`.
+
 L'APK di debug viene compilato da GitHub Actions quando cambiano app o progetto Android: scaricalo da **Actions → APK Android → Artifacts**.
 Ogni APK è firmato con la stessa chiave di debug (`android/app/debug.keystore`) e ha un `versionCode` crescente, quindi si installa come aggiornamento del precedente. Gli APK compilati prima di questa modifica avevano chiavi diverse: per passare alla nuova chiave disinstalla l'app una volta.
 
