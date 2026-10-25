@@ -19,12 +19,12 @@ const addDays = n => { const d = new Date(); d.setDate(d.getDate() + n); return 
   };
   await page.addInitScript(seed => {
     for (const k in seed) localStorage.setItem('ti_' + k, seed[k]);
-    const log = window.__ln = { scheduled: [], perm: 0 };
+    const log = window.__ln = { scheduled: [], perm: 0, deny: true };
     window.Capacitor = {
       isNativePlatform: () => true,
       Plugins: { LocalNotifications: {
         checkPermissions: async () => ({ display: 'prompt' }),
-        requestPermissions: async () => { log.perm++; return { display: 'granted' }; },
+        requestPermissions: async () => { log.perm++; return { display: log.deny ? 'denied' : 'granted' }; },
         getPending: async () => ({ notifications: log.scheduled.map(n => ({ id: n.id })) }),
         cancel: async () => { log.scheduled = []; },
         schedule: async ({ notifications }) => { log.scheduled = notifications; return { notifications }; },
@@ -35,10 +35,16 @@ const addDays = n => { const d = new Date(); d.setDate(d.getDate() + n); return 
   }, seed);
   await page.goto('file://' + path.resolve(__dirname, '../www/index.html'));
   const scheduled = () => page.evaluate(() => window.__ln.scheduled.map(n => ({ id: n.id, at: new Date(n.schedule.at).toISOString(), title: n.title, body: n.body })));
+  // Primo avvio: permesso negato -> messaggio, nessuna notifica
+  await page.waitForFunction(() => window.__ln.perm === 1);
+  assert.ok((await page.textContent('#aMsg')).includes('Permesso negato'), 'manca il messaggio di permesso negato');
+  assert.equal((await scheduled()).length, 0);
+  // L'utente abilita le notifiche nelle impostazioni e torna nell'app lo stesso giorno
+  await page.evaluate(() => { window.__ln.deny = false; document.dispatchEvent(new Event('visibilitychange')); });
   await page.waitForFunction(() => window.__ln.scheduled.length > 0);
+  assert.equal(await page.textContent('#aMsg'), '', 'messaggio di errore non rimosso');
 
   let s = await scheduled();
-  assert.equal(await page.evaluate(() => window.__ln.perm), 1, 'permesso richiesto una volta');
   assert.ok(s.length > 0 && s.length <= 60, 'notifiche programmate: ' + s.length);
   assert.ok(s.every(n => new Date(n.at) > new Date()), 'nessuna notifica nel passato');
   const all = s.map(n => n.title + ' ' + n.body).join('\n');
@@ -57,6 +63,13 @@ const addDays = n => { const d = new Date(); d.setDate(d.getDate() + n); return 
   // Disattivando le notifiche si cancella tutto
   await page.uncheck('#aOn');
   await page.waitForFunction(() => window.__ln.scheduled.length === 0);
-  console.log('OK impostazioni (routine, disattivazione)');
+
+  // Avvisi persi dal sistema: riattivare l'impostazione li riprogramma anche se la lista non è cambiata
+  await page.check('#aOn');
+  await page.waitForFunction(() => window.__ln.scheduled.length > 0);
+  await page.evaluate(() => { window.__ln.scheduled = []; });
+  await page.uncheck('#aOn'); await page.check('#aOn');
+  await page.waitForFunction(() => window.__ln.scheduled.length > 0);
+  console.log('OK permesso, ritorno nell’app, impostazioni (routine, disattivazione, ripristino)');
   await browser.close();
 })().catch(e => { console.error(e); process.exit(1); });

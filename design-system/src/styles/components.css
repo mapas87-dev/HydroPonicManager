@@ -1,5 +1,5 @@
-/* I componenti funzionano anche fuori da AppShell: border-box su tutte le classi del sistema */
-[class^="hp-"], [class*=" hp-"], [class^="hp-"] *, [class*=" hp-"] * { box-sizing: border-box; }
+/* I componenti funzionano anche fuori da AppShell: border-box solo sugli elementi del sistema, non sui contenuti dell'utente */
+[class^="hp-"], [class*=" hp-"] { box-sizing: border-box; }
 
 .hp-app { background: var(--hp-bg); color: var(--hp-text); font: var(--hp-text-md)/1.5 var(--hp-font); padding: 0 var(--hp-space-5) 40px; }
 .hp-title { font: 700 var(--hp-text-xl)/1.2 var(--hp-font); margin: 16px 0 0; color: var(--hp-text); }

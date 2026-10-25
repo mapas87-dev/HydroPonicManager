@@ -272,13 +272,13 @@ $('sD').value=R.length&&R.every(x=>x.d===R[0].d)?R[0].d:'';
 $('sSum').innerHTML=h;calR()}
 // Scadenze di germinazione per ogni fila: unica fonte per calendario e notifiche (pre:false = routine).
 function gerEvents(){const ev=[];ST.s.slice(0,ST.n).forEach((z,si)=>z.r.slice(0,z.rows).forEach((x,ri)=>{const s=SP[x.p];if(!s||!x.d)return;
-const a=(n,txt,pre=true)=>ev.push({d:ad(x.d,n),w:`Serra ${si+1} · F${ri+1} · ${x.p}`,ri,txt,pre});
+const a=(n,txt,pre=true)=>{const dt=addD(x.d,n);ev.push({dt,d:iso(dt),w:`Serra ${si+1} · F${ri+1} · ${x.p}`,ri,txt,pre})};
 a(0,'semina: spugne idratate (pH 5,5–6,0), coperchio e bocchette chiusi.');
 a(3,'controlla l’umidità; spruzza acqua a pH bilanciato se la superficie si asciuga.',false);
 a(s.ger[0],'inizio emergenza: appena spuntano, luce 14–16 h e bocchette aperte.');
 a(s.ger[1],'fine finestra: se non è spuntato nulla, verifica temperatura e umidità.')}));return ev}
 function calR(){
-const C=['#2f8f5b','#e87722','#3b82c4','#a05bc4','#c9a227','#d0526a','#2aa3a3','#7a8b2f'],ev=gerEvents().map(e=>({dt:addD(e.d,0),w:esc(e.w),c:C[e.ri%8],txt:e.txt}));
+const C=['#2f8f5b','#e87722','#3b82c4','#a05bc4','#c9a227','#d0526a','#2aa3a3','#7a8b2f'],ev=gerEvents().map(e=>({dt:e.dt,w:esc(e.w),c:C[e.ri%8],txt:e.txt}));
 const t0=+addD(today(),0),g={};rotPlan().forEach(sl=>{const x=sl.s[0];if(x)ev.push({dt:addD(x.sow<today()?today():x.sow,0),w:`Suggerito · L${sl.l+1}`,c:'#e87722',txt:`${x.sow<today()?'semina subito':'semina'} ${esc(x.k)} per il livello che si libera il ${fdi(sl.F)} (trapianto ${fdi(x.T)})`})});ev.forEach(e=>{(g[+e.dt]=g[+e.dt]||[]).push(e)});
 $('gOut').innerHTML=Object.keys(g).sort((a,b)=>a-b).map(k=>`<div class="ev" style="${k<t0?'opacity:.5':''}"><b>${fd(new Date(+k))}${k==t0?'<br><small>oggi</small>':''}</b><span>`+g[k].map(e=>`<i class="dot" style="background:${e.c}"></i><b style="min-width:0;color:var(--tx)">${e.w}</b>: ${e.txt}`).join('<br>')+'</span></div>').join('')||'<div class="tip">Imposta pianta e data di semina nelle file delle serre: le scadenze compaiono qui.</div>';
 notify()}

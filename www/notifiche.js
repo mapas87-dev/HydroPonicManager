@@ -27,7 +27,7 @@ function ntEvents() {
   gerEvents().forEach(e => push(e.d, e.w, e.txt, 'ger', e.pre));
 
   // Crescita: dalla data di trasferimento in torre
-  const d = ld('cd', '');
+  const d = ld('cd', today()); // stesso valore iniziale del campo #cDt
   if (d) {
     push(d, 'Crescita', 'trasferimento in torre: spugna nel net pot, base a contatto col velo d’acqua', 'cre');
     for (let i = 1; i <= 3; i++) {
@@ -79,9 +79,8 @@ function ntList() {
 const ntNote = t => `<p style="color:var(--mu);margin:0">${t}</p>`;
 function ntMsg(t) { $('aMsg').innerHTML = t ? `<div class="tip" style="border-color:var(--wa)">${esc(t)}</div>` : ''; }
 
-let ntLast = [];
 // Disegna l'elenco solo quando la scheda Avvisi è visibile.
-function ntShow(L = ntLast) {
+function ntShow(L) {
   if (!$('avv').classList.contains('on')) return;
   const info = NT_P ? '' : '<div class="tip">Anteprima: le notifiche arrivano sul telefono con l’app installata (Android o iOS).</div>';
   if (!NT.on) { $('aList').innerHTML = ntNote('Notifiche disattivate.'); return; }
@@ -95,7 +94,7 @@ function ntSched() { clearTimeout(ntTimer); ntTimer = setTimeout(() => { ntBusy 
 notify = ntSched;
 
 async function ntApply() {
-  const L = ntLast = ntList();
+  const L = ntList();
   ntShow(L);
   if (!NT_P) return;
   const sig = NT.on ? JSON.stringify(L.map(n => [n.id, +n.at, n.title, n.body])) : 'off';
@@ -119,7 +118,8 @@ async function ntApply() {
   } catch (e) { ntMsg('Errore nella programmazione delle notifiche: ' + (e && e.message || e)); }
 }
 
-function ntSave() { sv('nt', JSON.stringify(NT)); ntSched(); }
+// Un cambio d'impostazione riprogramma comunque: ripara anche avvisi persi dal sistema (riavvio, app chiusa forzatamente).
+function ntSave() { sv('nt', JSON.stringify(NT)); ntSig = ''; ntSched(); }
 
 // Impostazioni nella scheda Avvisi
 $('aOn').checked = NT.on; $('aH').value = NT.h; $('aPre').value = NT.pre ? '1' : '0'; $('aRou').checked = NT.rou;
@@ -127,7 +127,7 @@ $('aOn').onchange = e => { NT.on = e.target.checked; ntSave(); };
 $('aH').onchange = e => { NT.h = e.target.value || '09:00'; ntSave(); };
 $('aPre').onchange = e => { NT.pre = e.target.value === '1'; ntSave(); };
 $('aRou').onchange = e => { NT.rou = e.target.checked; ntSave(); };
-$('nav').addEventListener('click', e => { if (e.target.dataset.t === 'avv') ntShow(); });
+$('nav').addEventListener('click', e => { if (e.target.dataset.t === 'avv') ntShow(ntList()); });
 
 if (NT_P) {
   NT_P.createChannel({ id: NT_CHANNEL, name: 'Scadenze coltivazione', description: 'Avvisi di germinazione, cambio soluzione, raccolta e fermo torre', importance: 4, vibration: true }).catch(() => { /* solo Android */ });
@@ -140,9 +140,10 @@ if (NT_P) {
 }
 ntSched();
 
-// Al ritorno nell'app: se è cambiato il giorno, aggiorna calendario ("oggi") e avvisi.
+// Al ritorno nell'app: riprova la programmazione (es. permesso appena concesso nelle impostazioni);
+// se è cambiato il giorno aggiorna anche tutte le viste che dipendono da "oggi" (rotR ridisegna Ricambio, calendario e Crescita).
 let ntDay = today();
 document.addEventListener('visibilitychange', () => {
-  if (document.hidden || today() === ntDay) return;
-  ntDay = today(); calR(); creR();
+  if (document.hidden) return;
+  if (today() !== ntDay) { ntDay = today(); rotR(); } else ntSched();
 });
