@@ -41,12 +41,12 @@ function ntEvents() {
     }
   }
 
-  // Ricambio: raccolte, semine suggerite e fermo torre
-  rotPlan().forEach(sl => {
-    const x = sl.s[0];
-    push(sl.F, `Torre · livello ${sl.l + 1}`, `raccolta di ${sl.n}× ${sl.k}` + (x ? `; poi trapianta ${x.k} il ${fdi(x.T)}` : ''), 'rot');
-    // Semina già in ritardo: avviso oggi (come "semina subito" nel calendario), ripetuto ogni giorno finché il pot non viene ripiantato.
-    if (x) push(x.sow < t ? t : x.sow, `Suggerito · L${sl.l + 1}`, `${x.sow < t ? 'semina subito' : 'semina'} ${x.k} per il livello che si libera il ${fdi(sl.F)}`, 'ger', x.sow >= t);
+  // Ricambio: raccolte e semine suggerite da rotEvents(), come nei calendari.
+  // In ritardo (late): avviso oggi, ripetuto ogni giorno finché il pot non viene aggiornato; niente avviso del giorno prima.
+  rotEvents().forEach(({ k, d, late, sl, x }) => {
+    const quando = late ? t : d;
+    if (k === 'racc') push(quando, `Torre · livello ${sl.l + 1}`, `${late ? 'raccolta in ritardo' : 'raccolta'} di ${sl.n}× ${sl.k}` + (x ? `; poi trapianta ${x.k} il ${fdi(x.T)}` : ''), 'rot', !late);
+    else push(quando, `Suggerito · L${sl.l + 1}`, `${late ? 'semina subito' : 'semina'} ${x.k} per il livello che si libera il ${fdi(sl.F)}`, 'ger', !late);
   });
   WN.forEach(w => {
     push(w.s, 'Fermo torre', 'inizia oggi: svuota, pulisci e sanifica torre, pompa e tubi', 'rot');

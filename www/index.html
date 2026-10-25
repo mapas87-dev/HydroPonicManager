@@ -123,20 +123,18 @@ ul.ck label{font-weight:500}
 .ag-badge{display:inline-block;font-size:12px;font-weight:700;color:var(--wa);background:var(--wb);border-radius:var(--r-pill);padding:1px 8px;margin-left:6px;white-space:nowrap;vertical-align:1px}
 .ag-chips{display:flex;flex-wrap:wrap;gap:2px 10px;margin-top:2px;font-size:14px;color:var(--mu)}.ag-chips span{display:inline-flex;align-items:center;white-space:nowrap}
 .ag-hint{font-size:14px;color:var(--mu);margin-top:2px}
-.ag-bd details{margin-top:0}.ag-bd summary{list-style:none;font-size:14px;color:var(--mu);min-height:44px;display:flex;align-items:center;gap:8px;cursor:pointer}
+.ag-bd summary{list-style:none;font-size:14px;color:var(--mu);gap:8px;cursor:pointer}
 .ag-bd summary::-webkit-details-marker{display:none}
 .ag-bd summary::after{content:"Dettagli ›";color:var(--ac);font-weight:600;margin-left:auto;white-space:nowrap}
 .ag-bd details[open] summary::after{content:"Chiudi"}
 .ag-bd details p{margin:0 0 6px;font-size:14px;background:var(--bg);padding:8px 10px;border-radius:10px}
 .ag-more{display:flex;gap:8px;margin-top:10px}.ag-more:empty{display:none}
-.ag-more button{flex:1;min-height:44px;border:1.5px solid var(--ac);background:none;color:var(--ac);border-radius:var(--r-pill);font:700 14px var(--f-body);cursor:pointer}
-.ag-more button.g{border-color:var(--bd);color:var(--mu)}
+.ag-more .bt{flex:1}.ag-more .bt.g{border-color:var(--bd);color:var(--mu)}
 .ag-state{display:flex;gap:14px;align-items:center;background:var(--ac2);border-radius:var(--r-md);padding:10px 12px;margin:12px 0;font-size:14px}
 .ag-state>div:first-child{text-align:center}.ag-state>div:first-child b{display:block;font:600 24px/1.1 var(--f-head);color:var(--ac)}
 .ag-state>div:last-child{flex:1}.ag-prog{height:6px;background:var(--bd);border-radius:6px;margin-top:6px;overflow:hidden}.ag-prog i{display:block;height:100%;background:var(--ac);border-radius:6px}
 .ag-rout{background:var(--bg);border-radius:var(--r-md);padding:4px 12px;margin-bottom:12px}.ag-rout .ag-it{border-bottom:1px dashed var(--bd)}.ag-rout .ag-it:last-child{border:0}
 .ev>b{min-width:92px;color:var(--ac);font-weight:700}
-.ev>b small{display:inline-block;margin-top:3px;padding:1px 8px;border-radius:var(--r-pill);background:var(--ac);color:var(--on-ac);font-size:12px}
 .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;box-shadow:0 0 0 2px var(--sf)}
 .pl{display:flex;align-items:center;gap:12px;min-height:44px;margin:-4px 0;color:var(--tx);font-size:16px;cursor:pointer}
 .pl input{width:24px;height:24px;flex:0 0 auto}
@@ -346,43 +344,43 @@ CK.forEach((_,i)=>$('ck'+i).onchange=e=>sv('ck'+i,e.target.checked?1:0));
 $('cDt').value=ld('cd',today());
 // Calendario di crescita dalla data di trasferimento: unica fonte per calendario e notifiche.
 // sol = cambi totali della soluzione (giorni 10–14, 20–28, 30–42), ph = correzione quotidiana dei primi 5 giorni, rot(da,a) = rotazioni a giorni dispari.
-function creEvents(d){return{d,sol:[1,2,3].map(i=>({i,s:ad(d,10*i),e:ad(d,14*i)})),ph:[1,2,3,4,5].map(i=>ad(d,i)),
+function creEvents(d){return{sol:[1,2,3].map(i=>({i,s:ad(d,10*i),e:ad(d,14*i)})),ph:[1,2,3,4,5].map(i=>ad(d,i)),
  rot:(da,a)=>{const r=[];let n=Math.max(1,dDiff(d,da));if(n%2===0)n++;for(;ad(d,n)<=a;n+=2)r.push(ad(d,n));return r}}}
-function creR(){
+// Ricambio torre dal piano: raccolte e semine suggerite, con late = scadenza passata ma ancora da fare. Unica fonte per calendari e notifiche.
+function rotEvents(P=rotPlan()){const t=today(),r=[];P.forEach(sl=>{const x=sl.s[0];r.push({k:'racc',d:sl.F,late:sl.F<t,sl,x});if(x)r.push({k:'sow',d:x.sow,late:x.sow<t,sl,x})});return r}
+function creR(P){
  const d=$('cDt').value;sv('cd',d);if(!d)return;
  const t=today(),n=dDiff(d,t),C=creEvents(d),items=[],phEnd=C.ph[C.ph.length-1];
- items.push({d,ic:'i-tower',title:'Trasferimento in torre',hint:'Spugna nel net pot, base nel velo d’acqua',full:'Trasferimento: spugna nel cestello (net pot 5 cm), base a contatto col velo d’acqua per 2 giorni.'});
- C.sol.forEach(({i,s:si,e})=>items.push({d:si,e,from:i>1?C.sol[i-2].e:d,ic:'i-flask',title:`${i}° cambio soluzione`,badge:`entro ${fdi(e)}`,
-  hint:'Svuota, sciacqua e prepara TriPart nuovo',full:`Cambio totale della soluzione tra il giorno ${10*i} e il giorno ${14*i} dal trasferimento: svuota il serbatoio, sciacqua, prepara TriPart nuovo e regola il pH a 5,8.`}));
- // raccolta in ritardo: compare oggi, evidenziata, come "Semina subito" in germinazione
- rotPlan().forEach(sl=>{const x=sl.s[0],tardi=sl.F<t;items.push({d:tardi?t:sl.F,from:sl.d,ic:'i-basket',cls:tardi?'warn':'',title:`Raccolta livello ${sl.l+1}`,badge:tardi?'in ritardo':'',
-  chips:[{c:tCol(sl.k),t:`${sl.n}× ${sl.k}`}],hint:(tardi?`Era prevista ${fdi(sl.F)}. `:'')+(x?`Poi trapianta ${x.k} il ${fdi(x.T)}`:'Livello libero dopo la raccolta')})});
- WN.slice(0,2).forEach(w=>items.push({d:w.s,e:w.e,ic:'i-alert',cls:'warn',title:'Fermo torre',badge:`fino a ${fdi(w.e)}`,hint:'Torre vuota: pulizia e nuova soluzione',
+ items.push({d,from:d,ic:'i-tower',title:'Trasferimento in torre',hint:'Spugna nel net pot, base nel velo d’acqua',full:'Trasferimento: spugna nel cestello (net pot 5 cm), base a contatto col velo d’acqua per 2 giorni.'});
+ C.sol.forEach(({i,s:si,e},j,a)=>items.push({d:si,e,from:j?a[j-1].e:d,ic:'i-flask',title:`${i}° cambio soluzione`,badge:`entro ${fdi(e)}`,
+  hint:'Svuota, sciacqua e prepara TriPart nuovo',full:`Cambio totale della soluzione tra il giorno ${dDiff(d,si)} e il giorno ${dDiff(d,e)} dal trasferimento: svuota il serbatoio, sciacqua, prepara TriPart nuovo e regola il pH a 5,8.`}));
+ rotEvents(P).filter(r=>r.k==='racc').forEach(({d:F,late,sl,x})=>items.push({d:F,late,from:sl.d,ic:'i-basket',title:`Raccolta livello ${sl.l+1}`,
+  chips:[{c:tCol(sl.k),t:`${sl.n}× ${sl.k}`}],hint:x?`Poi trapianta ${x.k} il ${fdi(x.T)}`:'Livello libero dopo la raccolta'}));
+ WN.slice(0,2).forEach((w,j,a)=>items.push({d:w.s,e:w.e,from:j?a[j-1].e:d,ic:'i-alert',cls:'warn',title:'Fermo torre',badge:`fino a ${fdi(w.e)}`,hint:'Torre vuota: pulizia e nuova soluzione',
   full:'Svuota e sciacqua il serbatoio, lava pompa e tubi, sanifica i net pot, controlla ruote e raccordi. Poi nuova soluzione TriPart e pH 5,8.'}));
- // riquadro di stato: la prima scadenza non ancora chiusa (anche oggi o in corso) e l'avanzamento verso di essa
- const quando=x=>x.d>t?x.d:t,aperte=items.filter(x=>(x.e||x.d)>=t);
- const prox=aperte.reduce((a,x)=>!a||quando(x)<quando(a)||(quando(x)===quando(a)&&x.d<a.d)?x:a,null);
+ // riquadro di stato: la prima scadenza non ancora chiusa (anche oggi, in corso o in ritardo) e l'avanzamento verso di essa da items[].from
+ const prox=items.filter(x=>agOpen(x,t)).sort((a,b)=>agDay(a,t).localeCompare(agDay(b,t))||a.d.localeCompare(b.d))[0];
  let h='';
  if(n>=0){let txt='Nessuna scadenza in arrivo',pct=100;
-  if(prox){const inCorso=prox.d<=t&&prox.e&&prox.e>=t,tit=`<b>${esc(prox.title)}</b>`;
-   if(inCorso){txt=`In corso: ${tit}, entro ${fdi(prox.e)}`;pct=Math.round(dDiff(prox.d,t)/Math.max(1,dDiff(prox.d,prox.e))*100)}
-   else if(prox.d===t){txt=`Oggi: ${tit}`;pct=100}
-   else{const tra=dDiff(t,prox.d),da=prox.from||items.filter(x=>(x.e||x.d)<t).reduce((m,x)=>(x.e||x.d)>m?(x.e||x.d):m,d);
-    txt=`Prossimo: ${tit} ${tra===1?'domani':`tra ${tra} giorni`}`;pct=Math.round(Math.max(0,dDiff(da,t))/Math.max(1,dDiff(da,prox.d))*100)}}
+  if(prox){const tit=`<b>${esc(prox.title)}</b>`;
+   if(prox.late)txt=`In ritardo: ${tit}`;
+   else if(prox.d<t){txt=`In corso: ${tit}, entro ${fdi(prox.e)}`;pct=Math.round(dDiff(prox.d,t)/Math.max(1,dDiff(prox.d,prox.e))*100)}
+   else if(prox.d===t)txt=`Oggi: ${tit}`;
+   else{txt=`Prossimo: ${tit} ${relWord(prox.d,t)}`;pct=Math.round(dDiff(prox.from,t)/Math.max(1,dDiff(prox.from,prox.d))*100)}}
   pct=Math.min(100,Math.max(0,pct));
   h+=`<div class="ag-state"><div>Giorno<b>${n+1}</b></div><div>${txt}<div class="ag-prog" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"><i style="width:${pct}%"></i></div></div></div>`}
  else h+=`<div class="ag-state"><div>Tra<b>${-n}</b></div><div>${n===-1?'giorno':'giorni'} il trasferimento in torre</div></div>`;
  // routine separata dalle scadenze
- const rot=C.rot(t,ad(t,2))[0],rout=[];
+ const rout=[];
  if(t<=phEnd)rout.push({ic:'i-gauge',cls:'routine',title:'Correggi il pH',sub:`Ogni giorno, fino a ${fdi(phEnd)}`,hint:'Serbatoio nuovo: il pH sale in fretta',full:'Correggi il pH ogni giorno per i primi 5 giorni dal trasferimento (serbatoio nuovo). Target 5,8.'});
- rout.push({ic:'i-cycle',cls:'routine',title:'Ruota la torre di 180°',sub:`Ogni 2 giorni · prossima ${rot===t?'oggi':rot===ad(t,1)?'domani':fdi(rot)}`,hint:'Luce uniforme su tutti i lati'});
+ rout.push({ic:'i-cycle',cls:'routine',title:'Ruota la torre di 180°',sub:`Ogni 2 giorni · prossima ${relWord(C.rot(t,ad(t,2))[0],t)}`,hint:'Luce uniforme su tutti i lati'});
  rout.push({ic:'i-drop',cls:'routine',title:'Rabbocca l’acqua evaporata',sub:'Quando il livello scende',hint:'Con acqua a pH bilanciato'});
  h+=`<div class="ag-rout">${rout.map(agIt).join('')}</div><div id="cAg"></div>`;
  $('cOut').innerHTML=h;
  agenda('cAg',items,'Nessuna scadenza in arrivo.');
  notify();
 }
-$('cDt').onchange=creR;
+$('cDt').onchange=()=>creR();
 function lvR(){const C={Alto:'var(--lv-hi)',Medio:'var(--lv-mid)',Basso:'var(--lv-lo)'},o={Alto:0,Medio:1,Basso:2},a=(twUsed().length?twUsed():act()).filter(k=>SP[k]).sort((x,y)=>o[SP[x].lv]-o[SP[y].lv]);
 let h=a.map(n=>{const s=SP[n];return `<div class="kv"><span><i class="dot" style="background:${C[s.lv]}"></i>${s.lv} · ${esc(n)}</span><span>EC ${f(s.ec[0])}–${f(s.ec[1])} · pH ${f(s.ph[0])}–${f(s.ph[1])}<br><small style="font-weight:400;color:var(--mu)">${esc(s.lvn||s.note)}</small></span></div>`}).join('')||'<p style="color:var(--mu);margin:0">Nessuna coltura attiva: scegli le piante nella sezione Piante.</p>';
 if(a.length>1){const e0=Math.max(...a.map(k=>SP[k].ec[0])),e1=Math.min(...a.map(k=>SP[k].ec[1])),p0=Math.max(...a.map(k=>SP[k].ph[0])),p1=Math.min(...a.map(k=>SP[k].ph[1]));
@@ -424,41 +422,44 @@ a(s.ger[0],'emergenza','inizio emergenza: appena spuntano, luce 14–16 h e bocc
 a(s.ger[1],'fine','fine finestra: se non è spuntato nulla, verifica temperatura e umidità.')}));return ev}
 
 // Agenda: raggruppa per giorno, mostra le prime 3 giornate a venire; passate e successive su richiesta.
+// Regola unica: un evento in corso (intervallo iniziato e non finito) o in ritardo (late) compare oggi.
 const AG={};
 const dDiff=(a,b)=>Math.round((addD(b,0)-addD(a,0))/864e5);
 const cap=t=>t.charAt(0).toUpperCase()+t.slice(1);
-function relDay(d){const n=dDiff(today(),d),dm=addD(d,0).toLocaleDateString('it-IT',{day:'numeric',month:'short'}),wd=cap(addD(d,0).toLocaleDateString('it-IT',{weekday:'long'}));
- if(n===0)return['Oggi',fd(addD(d,0))];if(n===1)return['Domani',fd(addD(d,0))];if(n===-1)return['Ieri',fd(addD(d,0))];
- return n>0?[wd,`${dm} · tra ${n} giorni`]:[wd,`${dm} · ${-n} giorni fa`]}
+const agOpen=(x,t)=>x.late||(x.e||x.d)>=t;
+const agDay=(x,t)=>x.d<t&&agOpen(x,t)?t:x.d;
+// "oggi", "domani", "ieri", "tra N giorni", "N giorni fa"
+function relWord(d,t){const n=dDiff(t,d);return n===0?'oggi':n===1?'domani':n===-1?'ieri':n>0?`tra ${n} giorni`:`${-n} giorni fa`}
+function relDay(d,t){const n=dDiff(t,d);if(Math.abs(n)<=1)return[cap(relWord(d,t)),fdi(d)];
+ const x=addD(d,0);return[cap(x.toLocaleDateString('it-IT',{weekday:'long'})),`${x.toLocaleDateString('it-IT',{day:'numeric',month:'short'})} · ${relWord(d,t)}`]}
 function agIt(x){const ch=(x.chips||[]).map(c=>`<span><i class="dot" style="background:${c.c}"></i>${esc(c.t)}</span>`).join('');
- const info=x.full&&x.full!==x.hint?`<details><summary>${esc(x.hint)}</summary><p>${esc(x.full)}</p></details>`:(x.hint?`<div class="ag-hint">${esc(x.hint)}</div>`:'');
- return `<div class="ag-it${x.cls?' '+x.cls:''}"><span class="ag-ico"><svg class="ic" aria-hidden="true"><use href="#${x.ic}"/></svg></span><div class="ag-bd"><div class="ag-t">${esc(x.title)}${x.sub?`<small>${esc(x.sub)}</small>`:''}${x.badge?`<span class="ag-badge">${esc(x.badge)}</span>`:''}</div>${ch?`<div class="ag-chips">${ch}</div>`:''}${info}</div></div>`}
+ const hint=(x.late?`Era prevista ${fdi(x.d)}. `:'')+(x.hint||''),badge=x.late?'in ritardo':x.badge;
+ const info=x.full&&x.full!==x.hint?`<details><summary>${esc(hint)}</summary><p>${esc(x.full)}</p></details>`:(hint?`<div class="ag-hint">${esc(hint)}</div>`:'');
+ return `<div class="ag-it${x.late?' warn':x.cls?' '+x.cls:''}"><span class="ag-ico"><svg class="ic" aria-hidden="true"><use href="#${x.ic}"/></svg></span><div class="ag-bd"><div class="ag-t">${esc(x.title)}${x.sub?`<small>${esc(x.sub)}</small>`:''}${badge?`<span class="ag-badge">${esc(badge)}</span>`:''}</div>${ch?`<div class="ag-chips">${ch}</div>`:''}${info}</div></div>`}
 function agenda(id,items,vuoto){const st=AG[id]=AG[id]||{more:false,past:false};st.items=items;st.vuoto=vuoto;agDraw(id)}
 function agDraw(id){const t=today(),st=AG[id],g={};
- // un evento con intervallo già iniziato e non finito compare oggi
- st.items.forEach(x=>{const k=x.d<t&&x.e&&x.e>=t?t:x.d;(g[k]=g[k]||[]).push(x)});
+ st.items.forEach(x=>{const k=agDay(x,t);(g[k]=g[k]||[]).push(x)});
  const days=Object.keys(g).sort(),next=days.filter(d=>d>=t),past=days.filter(d=>d<t),vis=st.more?next:next.slice(0,3);
- const day=(d,cls)=>{const[a,b]=relDay(d);return `<div class="ag-day${d===t?' today':''}${cls||''}"><div class="ag-dh"><b>${a}</b><span>${b}</span></div>${g[d].map(agIt).join('')}</div>`};
+ const day=d=>{const[a,b]=relDay(d,t);return `<div class="ag-day${d===t?' today':''}${d<t?' past':''}"><div class="ag-dh"><b>${a}</b><span>${b}</span></div>${g[d].map(agIt).join('')}</div>`};
  const restN=next.slice(3).reduce((n,d)=>n+g[d].length,0),pastN=past.reduce((n,d)=>n+g[d].length,0);
- let h=(st.past?past.map(d=>day(d,' past')).join(''):'')+vis.map(d=>day(d)).join('');
+ let h=(st.past?past.map(day).join(''):'')+vis.map(day).join('');
  if(!next.length&&!st.past)h+=`<div class="tip">${pastN?'Nessuna scadenza in arrivo: quelle di questo calendario sono tutte passate.':st.vuoto}</div>`;
- const btn=(a,l,c)=>`<button type="button" data-ag="${a}"${c?' class="g"':''}>${l}</button>`;
+ const btn=(a,l,c)=>`<button type="button" class="bt${c?' g':''}" data-ag="${a}">${l}</button>`;
  h+=`<div class="ag-more">${restN?btn('more',st.more?'Mostra meno':`Mostra altre ${restN}`):''}${pastN?btn('past',st.past?'Nascondi passate':`Passate (${pastN})`,1):''}</div>`;
- $(id).innerHTML=h}
+ const el=$(id);el.dataset.agRoot=id;el.innerHTML=h}
 // I pulsanti cambiano solo la vista: niente ricalcolo né riprogrammazione delle notifiche.
-document.addEventListener('click',e=>{const b=e.target.closest('[data-ag]');if(!b)return;const id=b.closest('[id]').id,st=AG[id];if(!st||!st.items)return;st[b.dataset.ag]=!st[b.dataset.ag];agDraw(id)});
+document.addEventListener('click',e=>{const b=e.target.closest('[data-ag]');if(!b)return;const id=b.closest('[data-ag-root]').dataset.agRoot,st=AG[id];st[b.dataset.ag]=!st[b.dataset.ag];agDraw(id)});
 
 const GK={semina:['Semina','i-sprout','Spugne idratate, coperchio chiuso'],umidita:['Controllo umidità','i-drop','Spruzza se la superficie è asciutta'],
  emergenza:['Inizio emergenza','i-leaf','Luce 14–16 h, apri le bocchette'],fine:['Fine germinazione','i-alert','Se non è spuntato nulla, controlla temperatura e umidità']};
-function calR(){
+function calR(P){
 const C=PAL8,m={},items=[],righe=new Set();
 // stesso tipo nello stesso giorno: una voce sola con le file come etichette
 gerEvents().forEach(e=>{righe.add(e.si+'|'+e.ri);const k=e.d+'|'+e.k;(m[k]=m[k]||{d:e.d,k:e.k,ev:[]}).ev.push(e)});
 Object.values(m).forEach(({d,k,ev})=>{const[title,ic,hint]=GK[k];items.push({d,ic,title,hint,full:cap(ev[0].txt),cls:k==='umidita'?'routine':k==='fine'?'warn':'',
  chips:ev.map(e=>({c:C[e.ri%8],t:(ST.n>1?`S${e.si+1} `:'')+`F${e.ri+1} ${e.p}`}))})});
-rotPlan().forEach(sl=>{const x=sl.s[0];if(!x)return;const tardi=x.sow<today();
- items.push({d:tardi?today():x.sow,ic:'i-sprout',title:tardi?'Semina subito':'Semina suggerita',cls:tardi?'warn':'',chips:[{c:tCol(x.k),t:x.k}],
-  hint:`Per il livello ${sl.l+1}, libero dal ${fdi(sl.F)}`,full:`Semina ${x.k} per il livello ${sl.l+1} della torre che si libera il ${fdi(sl.F)}; trapianto previsto il ${fdi(x.T)}.`})});
+rotEvents(P).filter(r=>r.k==='sow').forEach(({d,late,sl,x})=>items.push({d,late,ic:'i-sprout',title:'Semina suggerita',chips:[{c:tCol(x.k),t:x.k}],
+ hint:`Per il livello ${sl.l+1}, libero dal ${fdi(sl.F)}`,full:`Semina ${x.k} per il livello ${sl.l+1} della torre che si libera il ${fdi(sl.F)}; trapianto previsto il ${fdi(x.T)}.`}));
 $('gSub').textContent=righe.size?`${righe.size} ${righe.size===1?'fila':'file'} in miniserra`:'';
 agenda('gOut',items,'Imposta pianta e data di semina nelle file delle serre: le scadenze compaiono qui.');
 notify()}
@@ -498,7 +499,7 @@ $('rW').innerHTML=WN.slice(0,3).map((x,i)=>kv(i?'Poi':'Prossimo fermo','vuota '+
 const cf=P.filter(s=>s.d<w.s&&s.F>w.s);
 $('rC').innerHTML=cf.length?`<div class="tip" style="border-color:var(--wa)">Non saranno pronti prima del fermo (${fdi(w.s)}): ${cf.map(s=>`L${s.l+1} ${esc(s.k)} (${s.n} pot, raccolta ${fdi(s.F)})`).join('; ')}. Anticipa la raccolta o sposta il fermo.</div>`:'';
 $('rL').innerHTML=P.length?P.map(sl=>`<div class="ev"><b style="min-width:70px">${sl.F<today()?'ora':fdi(sl.F)}</b><span><b style="min-width:0;color:var(--tx)">Livello ${sl.l+1}</b>: libera ${sl.n}× ${esc(sl.k)}<br>`+sl.s.map(x=>`<i class="dot" style="background:${tCol(x.k)}"></i>${esc(x.k)} · ${x.sow<today()?'semina subito':'semina entro '+fdi(x.sow)}, trapianto ${fdi(x.T)}${x.fit?'':' (dopo il fermo)'}`).join('<br>')+'</span></div>').join(''):'<div class="tip">Nella torre imposta pianta e data di trapianto dei pot: qui vedrai quando si liberano e cosa seminare.</div>';
-calR();creR()}
+calR(P);creR(P)}
 ['rS','rD','rM','rE'].forEach(id=>$(id).onchange=()=>{ROT.s=$('rS').value||ROT.s;ROT.dur=+$('rD').value||7;ROT.m=+$('rM').value||3;ROT.sd=Math.max(0,+$('rE').value||0);rotR()});
 $('xB').onclick=addPl;
 $('cRules').innerHTML=kv('Soluzione','TriPart Grow 1,8 · Micro 1,2 · Bloom 0,6 mL/L')+kv('EC target','1,2–1,4 mS/cm')+kv('pH ottimale','5,8 (5,5–6,2)')+kv('Pompa','24/7, oppure 15 min ON / 5 min OFF nelle ore calde')+kv('Esposizione','Ruota di 180° ogni 1–2 giorni')+`<div class="tip">Controlla il pH sempre dopo aver sciolto tutti e 3 i componenti. Aggiungi pH Down a gocce.</div>`;
@@ -535,7 +536,7 @@ function phR(){
  $('pOut').innerHTML=kv('Variazione da ottenere (ΔpH)',f(d,2)+' punti')+kv('Dose totale pH-','<span class="big">'+f(tot)+' mL</span>')+kv('Prima dose (80%)','<b>'+f(tot*.8)+' mL</b>')+kv('Dose residua (20%)',f(tot*.2)+' mL');
 }
 ['pL0','pV0','pA0','pB0','pL','pA','pT'].forEach(i=>$(i).oninput=phR);
-plR();lvR();serraR();twR();gerR();creR();nutR();ecR();phR();
+plR();lvR();serraR();twR();gerR();nutR();ecR();phR();
 </script>
 <script>
 // Collega ogni etichetta al campo che la segue (lettori di schermo, tocco sull'etichetta)
