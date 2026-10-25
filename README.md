@@ -32,3 +32,7 @@ npm run ios         # apre Xcode (solo macOS)
 ```
 
 L'APK di debug viene compilato da GitHub Actions a ogni push: scaricalo da **Actions → APK Android → Artifacts**.
+
+## Design system
+
+`design-system/` contiene `@hydroponic/ui`: token, CSS e 21 componenti React ricavati dall'interfaccia dell'app, pronti per Claude Design (`/design-sync`). Vedi `design-system/.design-sync/NOTES.md`.

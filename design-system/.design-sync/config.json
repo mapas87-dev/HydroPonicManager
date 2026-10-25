@@ -1,0 +1,66 @@
+{
+  "pkg": "@hydroponic/ui",
+  "globalName": "HydroponicUI",
+  "shape": "package",
+  "buildCmd": "npm run build",
+  "cssEntry": "dist/styles.css",
+  "extraFonts": [
+    "node_modules/@fontsource/poppins/latin-400.css",
+    "node_modules/@fontsource/poppins/latin-600.css",
+    "node_modules/@fontsource/poppins/latin-700.css"
+  ],
+  "componentSrcMap": {
+    "ButtonRow": "src/Button.tsx",
+    "FieldGrid": "src/Field.tsx",
+    "Select": "src/Input.tsx",
+    "TimelineItem": "src/Timeline.tsx",
+    "FeatureChips": "src/FeatureChip.tsx"
+  },
+  "docsMap": {
+    "AppShell": ".design-sync/groups/Layout.md",
+    "Card": ".design-sync/groups/Layout.md",
+    "FieldGrid": ".design-sync/groups/Layout.md",
+    "ButtonRow": ".design-sync/groups/Layout.md",
+    "Button": ".design-sync/groups/Azioni.md",
+    "NavTabs": ".design-sync/groups/Navigazione.md",
+    "SegmentedTabs": ".design-sync/groups/Navigazione.md",
+    "Field": ".design-sync/groups/Moduli.md",
+    "Input": ".design-sync/groups/Moduli.md",
+    "Select": ".design-sync/groups/Moduli.md",
+    "Toggle": ".design-sync/groups/Moduli.md",
+    "Checklist": ".design-sync/groups/Moduli.md",
+    "KeyValue": ".design-sync/groups/Dati.md",
+    "Stat": ".design-sync/groups/Dati.md",
+    "DataTable": ".design-sync/groups/Dati.md",
+    "Timeline": ".design-sync/groups/Dati.md",
+    "TimelineItem": ".design-sync/groups/Dati.md",
+    "Dot": ".design-sync/groups/Dati.md",
+    "Tip": ".design-sync/groups/Feedback.md",
+    "FeatureChip": ".design-sync/groups/Feedback.md",
+    "FeatureChips": ".design-sync/groups/Feedback.md"
+  },
+  "overrides": {
+    "DataTable": {
+      "cardMode": "column"
+    },
+    "KeyValue": {
+      "cardMode": "column"
+    },
+    "Tip": {
+      "cardMode": "column"
+    },
+    "Card": {
+      "cardMode": "column"
+    },
+    "FieldGrid": {
+      "cardMode": "column"
+    },
+    "NavTabs": {
+      "cardMode": "column"
+    },
+    "SegmentedTabs": {
+      "cardMode": "column"
+    }
+  },
+  "readmeHeader": ".design-sync/conventions.md"
+}

@@ -1,0 +1,60 @@
+/* Token della Torre Idroponica (ricavati da www/index.html). Tema chiaro + scuro automatico. */
+:root {
+  --hp-bg: #ffffff;
+  --hp-surface: #ffffff;
+  --hp-text: #233a35;
+  --hp-muted: #5f736d;
+  --hp-accent: #2f8f5b;
+  --hp-accent-soft: #e6f2ea;
+  --hp-border: #d6e4dc;
+  --hp-warn: #e87722;
+  --hp-warn-soft: #fff3e6;
+  --hp-header: #dfeae3;
+  --hp-water: #3b82c4;
+  --hp-on-accent: #ffffff;
+
+  /* Colori delle file / colture (palette categoriale) */
+  --hp-cat-1: #2f8f5b;
+  --hp-cat-2: #e87722;
+  --hp-cat-3: #3b82c4;
+  --hp-cat-4: #a05bc4;
+  --hp-cat-5: #c9a227;
+  --hp-cat-6: #d0526a;
+  --hp-cat-7: #2aa3a3;
+  --hp-cat-8: #7a8b2f;
+
+  /* Livelli della torre */
+  --hp-level-high: #2f8f5b;
+  --hp-level-mid: #6bb98a;
+  --hp-level-low: #e87722;
+
+  --hp-font: Poppins, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --hp-text-xs: 12px;
+  --hp-text-sm: 13px;
+  --hp-text-md: 15px;
+  --hp-text-lg: 17px;
+  --hp-text-xl: 24px;
+
+  --hp-space-1: 4px;
+  --hp-space-2: 6px;
+  --hp-space-3: 8px;
+  --hp-space-4: 10px;
+  --hp-space-5: 14px;
+
+  --hp-radius-sm: 8px;
+  --hp-radius-md: 10px;
+  --hp-radius-lg: 14px;
+  --hp-radius-pill: 20px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --hp-bg: #0e1c19; --hp-surface: #162825; --hp-text: #e4f0ed; --hp-muted: #93aca6;
+    --hp-accent: #5fc98f; --hp-accent-soft: #1d3733; --hp-border: #2a413d;
+    --hp-warn: #f59a4d; --hp-warn-soft: #3a2a1b; --hp-header: #233b36;
+  }
+}
+:root[data-theme="dark"] {
+  --hp-bg: #0e1c19; --hp-surface: #162825; --hp-text: #e4f0ed; --hp-muted: #93aca6;
+  --hp-accent: #5fc98f; --hp-accent-soft: #1d3733; --hp-border: #2a413d;
+  --hp-warn: #f59a4d; --hp-warn-soft: #3a2a1b; --hp-header: #233b36;
+}
