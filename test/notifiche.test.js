@@ -55,7 +55,7 @@ const addDays = n => { const d = new Date(); d.setDate(d.getDate() + n); return 
   console.log('OK', s.length, 'notifiche. Prime:\n' + s.slice(0, 4).map(n => `  ${n.at} ${n.title} | ${n.body.split('\n')[0]}`).join('\n'));
 
   // Disattivando le routine spariscono rotazione e pH
-  await page.click('#nav button[data-t="avv"]');
+  await page.click('#bar button[data-g="avvisi"]');
   assert.ok(await page.locator('#aList .ev').count() > 0, 'elenco Avvisi vuoto');
   await page.uncheck('#aRou');
   await page.waitForFunction(() => window.__ln.scheduled.length > 0 && !window.__ln.scheduled.some(n => n.body.includes('ruota la torre')));
@@ -85,10 +85,27 @@ const addDays = n => { const d = new Date(); d.setDate(d.getDate() + n); return 
 
   // Tasto Indietro: torna alle schede visitate in ordine inverso, poi segnala cronologia vuota
   const tab = () => late.evaluate(() => document.querySelector('#nav button.on').dataset.t);
-  for (const t of ['nut', 'ec', 'avv']) await late.click(`#nav button[data-t="${t}"]`);
+  // Visibilità reale (layout), non solo l'attributo hidden
+  const visibili = () => late.evaluate(() => [...document.querySelectorAll('#nav button')].filter(b => b.getClientRects().length).map(b => b.dataset.t));
+  const gruppo = () => late.evaluate(() => document.querySelector('#bar button.on').dataset.g);
+
+  // Barra in basso: 5 gruppi; le schede in alto mostrano solo quelle del gruppo; ogni gruppo ricorda l'ultima scheda
+  assert.equal(await late.locator('#bar button').count(), 5);
+  assert.deepEqual(await visibili(), [], 'Semina ha una sola scheda: barra in alto nascosta');
+  await late.click('#bar button[data-g="soluzione"]');
+  assert.equal(await tab(), 'nut'); assert.deepEqual(await visibili(), ['nut', 'ec', 'ph']);
+  await late.click('#nav button[data-t="ec"]');
+  await late.click('#bar button[data-g="torre"]');
+  assert.equal(await tab(), 'cre'); assert.deepEqual(await visibili(), ['cre', 'rot']);
+  await late.click('#bar button[data-g="soluzione"]');
+  assert.equal(await tab(), 'ec', 'il gruppo non ricorda l’ultima scheda');
+  await late.click('#bar button[data-g="avvisi"]');
+  assert.equal(await gruppo(), 'avvisi');
+  console.log('OK barra in basso a 5 gruppi');
+
   const giro = [];
-  while (await late.evaluate(() => tornaIndietro())) giro.push(await tab());
-  assert.deepEqual(giro, ['ec', 'nut', 'ger'], 'cronologia Indietro: ' + giro);
+  while (await late.evaluate(() => tornaIndietro())) giro.push([await tab(), await gruppo()].join('/'));
+  assert.deepEqual(giro, ['ec/soluzione', 'cre/torre', 'ec/soluzione', 'nut/soluzione', 'ger/semina'], 'cronologia Indietro: ' + giro);
   const caricati = await late.evaluate(async () => [(await document.fonts.load('16px Raleway')).length, (await document.fonts.load('600 16px Lora')).length]);
   assert.ok(caricati[0] > 0 && caricati[1] > 0, 'font locali non caricati: ' + caricati);
   const remoti = await late.evaluate(() => performance.getEntriesByType('resource').filter(r => /googleapis|gstatic/.test(r.name)).length);

@@ -22,7 +22,7 @@ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:en
 --wa:#eb9a6a;--on-wa:#2a1408;--wb:#3a2a1f;--hd:#26312a;--earth:#c9955f;--sky:#7fb8d4;--hero1:#24432d;--hero2:#18301f;--leaf:#4f7a45;--lv-hi:#86c893;--lv-mid:#b5d68a;--lv-lo:#eb9a6a;--sh:0 8px 28px rgba(0,0,0,.35)}
 html{height:100%;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px)}
 *{box-sizing:border-box}
-body{margin:0;color:var(--tx);font:16px/1.55 var(--f-body);font-variant-numeric:lining-nums tabular-nums;padding:0 16px 48px;
+body{margin:0;color:var(--tx);font:16px/1.55 var(--f-body);font-variant-numeric:lining-nums tabular-nums;padding:0 16px calc(96px + env(safe-area-inset-bottom,0px));
 background:var(--bg) radial-gradient(circle at 100% 0,rgba(143,191,116,.18),transparent 45%) no-repeat;-webkit-tap-highlight-color:transparent}
 .ic{width:20px;height:20px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
 
@@ -48,6 +48,15 @@ nav button .ic{color:var(--ac)}
 nav button.on{background:var(--ac);color:var(--on-ac);border-color:var(--ac)}
 nav button.on .ic{color:currentColor}
 button:active{opacity:.8}
+#nav[hidden],#nav button[hidden]{display:none}
+/* Barra in basso: 5 gruppi */
+#bar{position:fixed;left:0;right:0;bottom:0;z-index:6;display:grid;grid-template-columns:repeat(5,1fr);background:var(--sf);border-top:1px solid var(--bd);
+box-shadow:0 -6px 18px rgba(83,66,30,.08);padding:4px 4px calc(4px + env(safe-area-inset-bottom,0px))}
+#bar button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:56px;border:0;background:none;color:var(--mu);
+font:600 12px var(--f-body);cursor:pointer;border-radius:var(--r-md);transition:color var(--dur) var(--ease),background var(--dur) var(--ease)}
+#bar button .ic{width:24px;height:24px}
+#bar button.on{color:var(--ac);background:var(--ac2)}
+#bar button:focus-visible{outline:2px solid var(--ac);outline-offset:-2px}
 :focus-visible{outline:3px solid var(--ac);outline-offset:2px}
 section{display:none}section.on{display:block}
 
@@ -142,7 +151,7 @@ details summary{min-height:44px;display:flex;align-items:center}
 
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .tl{background:linear-gradient(#2c3a30,#222d26);border-color:#3e4d41}}
 :root[data-theme="dark"] .tl{background:linear-gradient(#2c3a30,#222d26);border-color:#3e4d41}
-@media(min-width:600px){body{max-width:640px;margin:0 auto;padding:0 24px 48px}nav{margin:0 -24px;padding:8px 24px 12px}}
+@media(min-width:600px){body{max-width:640px;margin:0 auto;padding:0 24px calc(104px + env(safe-area-inset-bottom,0px))}#bar{max-width:640px;margin:0 auto;border-radius:20px 20px 0 0}nav{margin:0 -24px;padding:8px 24px 12px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style></head><body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -155,6 +164,7 @@ details summary{min-height:44px;display:flex;align-items:center}
 <symbol id="i-flask" viewBox="0 0 24 24"><path d="M10 2v7.5a2 2 0 0 1-.2.9L4.7 20.5a1 1 0 0 0 .9 1.5h12.8a1 1 0 0 0 .9-1.5l-5.1-10.1a2 2 0 0 1-.2-.9V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></symbol>
 <symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></symbol>
 <symbol id="i-gauge" viewBox="0 0 24 24"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></symbol>
+<symbol id="i-tower" viewBox="0 0 24 24"><rect x="8" y="3" width="8" height="15" rx="3"/><path d="M5 21h14"/><path d="M12 18v3"/><circle cx="12" cy="8" r="1.3"/><circle cx="12" cy="13" r="1.3"/></symbol>
 <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol>
 </defs></svg>
 <header class="hero">
@@ -445,4 +455,5 @@ new MutationObserver(navSync).observe($('nav'),{subtree:true,attributes:true,att
 </script>
 <script src="notifiche.js"></script>
 <script src="indietro.js"></script>
+<script src="gruppi.js"></script>
 </body></html>

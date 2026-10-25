@@ -23,6 +23,7 @@ La scheda **🔔 Avvisi** programma notifiche locali sul telefono (plugin `@capa
 
 ## Navigazione e font
 
+- **Barra in basso a 5 gruppi** (`www/gruppi.js`): Semina, Torre (Crescita + Ricambio), Soluzione (Nutrienti + EC + pH), Piante, Avvisi. In alto compaiono solo le schede del gruppo; ogni gruppo ricorda l'ultima scheda aperta.
 - **Tasto Indietro (Android):** torna alla scheda visitata prima (`www/indietro.js`, plugin `@capacitor/app`); a cronologia vuota manda l'app in background.
 - **Font:** Lora e Raleway sono inclusi in `www/fonts/` (subset latino, licenza SIL OFL), quindi l'app ha il suo aspetto anche senza connessione.
 
