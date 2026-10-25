@@ -82,5 +82,17 @@ const addDays = n => { const d = new Date(); d.setDate(d.getDate() + n); return 
   const oggi = await late.evaluate(() => (ntEvents().find(g => g.d === today()) || { items: [] }).items.filter(e => e.w.startsWith('Suggerito')));
   assert.ok(oggi.length && oggi.every(e => e.txt.startsWith('semina subito') && !e.pre), 'manca l’avviso di semina in ritardo: ' + JSON.stringify(oggi));
   console.log('OK semina in ritardo:', oggi[0].txt);
+
+  // Tasto Indietro: torna alle schede visitate in ordine inverso, poi segnala cronologia vuota
+  const tab = () => late.evaluate(() => document.querySelector('#nav button.on').dataset.t);
+  for (const t of ['nut', 'ec', 'avv']) await late.click(`#nav button[data-t="${t}"]`);
+  const giro = [];
+  while (await late.evaluate(() => tornaIndietro())) giro.push(await tab());
+  assert.deepEqual(giro, ['ec', 'nut', 'ger'], 'cronologia Indietro: ' + giro);
+  const caricati = await late.evaluate(async () => [(await document.fonts.load('16px Raleway')).length, (await document.fonts.load('600 16px Lora')).length]);
+  assert.ok(caricati[0] > 0 && caricati[1] > 0, 'font locali non caricati: ' + caricati);
+  const remoti = await late.evaluate(() => performance.getEntriesByType('resource').filter(r => /googleapis|gstatic/.test(r.name)).length);
+  assert.equal(remoti, 0, 'richieste a Google Fonts');
+  console.log('OK tasto Indietro e font inclusi nell’app');
   await browser.close();
 })().catch(e => { console.error(e); process.exit(1); });

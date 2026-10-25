@@ -21,6 +21,11 @@ La scheda **🔔 Avvisi** programma notifiche locali sul telefono (plugin `@capa
 - Le notifiche si riprogrammano da sole quando cambi date o piante e quando riapri l'app, per i successivi 60 giorni (massimo 60 avvisi in attesa, limite di iOS).
 - Toccando una notifica si apre la sezione dell'evento.
 
+## Navigazione e font
+
+- **Tasto Indietro (Android):** torna alla scheda visitata prima (`www/indietro.js`, plugin `@capacitor/app`); a cronologia vuota manda l'app in background.
+- **Font:** Lora e Raleway sono inclusi in `www/fonts/` (subset latino, licenza SIL OFL), quindi l'app ha il suo aspetto anche senza connessione.
+
 ## Icona
 
 L'icona nasce da un design Canva (torre NFT bianca con piantine e goccia arancione su verde `#2f8f5b`), ridisegnata come vettoriale in `assets/icon-foreground.svg`. Per rigenerare le icone dopo una modifica: renderizza i PNG da 1024 px in `assets/` e lancia
