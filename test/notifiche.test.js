@@ -111,5 +111,30 @@ const addDays = n => { const d = new Date(); d.setDate(d.getDate() + n); return 
   const remoti = await late.evaluate(() => performance.getEntriesByType('resource').filter(r => /googleapis|gstatic/.test(r.name)).length);
   assert.equal(remoti, 0, 'richieste a Google Fonts');
   console.log('OK tasto Indietro e font inclusi nell’app');
+
+  // Calendari: 3 giornate visibili, passate nascoste, stessa scadenza di più file unita in una voce
+  const cal = await browser.newPage();
+  await cal.addInitScript(([a, b, c]) => {
+    localStorage.setItem('ti_serra', JSON.stringify({ n: 1, i: 0, s: [{ rows: 3, cols: 6, r: [{ p: 'Spinaci', d: a }, { p: 'Bieta', d: a }, { p: 'Insalata (lattuga)', d: b }] }] }));
+    localStorage.setItem('ti_cd', c);
+  }, [addDays(-2), addDays(0), addDays(-1)]);
+  await cal.goto('file://' + path.resolve(__dirname, '../www/index.html'));
+  const giorni = () => cal.evaluate(() => [...document.querySelectorAll('#gOut .ag-day')].map(d => d.querySelector('.ag-dh b').textContent));
+  assert.deepEqual((await giorni()).slice(0, 2), ['Oggi', 'Domani'], 'date relative');
+  assert.equal((await giorni()).length, 3, 'più di 3 giornate visibili');
+  const umid = await cal.evaluate(() => [...document.querySelectorAll('#gOut .ag-it')].filter(i => i.textContent.includes('Controllo umidità')).map(i => i.querySelectorAll('.ag-chips span').length));
+  assert.deepEqual(umid, [2], 'controllo umidità di F1 e F2 non unito in una voce');
+  await cal.click('#gOut [data-ag="past"]');
+  assert.equal((await giorni()).length, 4, 'le passate non si aprono');
+  assert.ok(await cal.evaluate(() => document.querySelector('#gOut .ag-day.past') !== null));
+  await cal.click('#gOut [data-ag="more"]');
+  assert.ok((await giorni()).length > 4, 'Mostra altre non espande');
+  // Crescita: giorno in torre, routine separata, scadenze con al massimo 3 giornate
+  await cal.click('#bar button[data-g="torre"]');
+  const cre = await cal.evaluate(() => ({ giorno: document.querySelector('.ag-state b').textContent, rout: document.querySelectorAll('.ag-rout .ag-it').length,
+    giorni: document.querySelectorAll('#cAg .ag-day').length, prox: document.querySelector('.ag-state').textContent }));
+  assert.equal(cre.giorno, '2'); assert.equal(cre.rout, 3); assert.equal(cre.giorni, 3);
+  assert.ok(cre.prox.includes('1° cambio soluzione'), cre.prox);
+  console.log('OK calendari: 3 giornate, passate nascoste, voci unite, routine separata');
   await browser.close();
 })().catch(e => { console.error(e); process.exit(1); });

@@ -109,6 +109,32 @@ ul.ck li:last-child{border:0}
 ul.ck input{width:24px;height:24px;flex:0 0 auto;margin:0}
 ul.ck label{font-weight:500}
 .ev{display:flex;gap:12px;padding:11px 0;border-bottom:1px dashed var(--bd)}.ev:last-child{border:0}
+/* Agenda dei calendari: giornate raggruppate, dettagli su richiesta */
+.ag-sub{color:var(--mu);font-size:14px;margin:0 0 12px}
+.ag-day{padding:10px 0 4px;border-top:1px dashed var(--bd)}.ag-day:first-child{border-top:0;padding-top:0}
+.ag-day.past{opacity:.6}
+.ag-dh{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 8px;margin-bottom:4px}.ag-dh b{font-weight:700;color:var(--ac)}.ag-dh span{color:var(--mu);font-size:14px}
+.ag-day.today .ag-dh b{background:var(--ac);color:var(--on-ac);padding:1px 10px;border-radius:var(--r-pill);font-size:14px}
+.ag-it{display:flex;gap:10px;padding:6px 0}
+.ag-ico{width:36px;height:36px;flex:0 0 auto;border-radius:12px;background:var(--ac2);color:var(--ac);display:grid;place-items:center}
+.ag-it.warn .ag-ico{background:var(--wb);color:var(--wa)}.ag-it.routine .ag-ico{background:var(--hd);color:var(--mu)}
+.ag-bd{flex:1;min-width:0}.ag-t{font-weight:700;line-height:1.3}.ag-it.routine .ag-t{font-weight:600}
+.ag-t small{display:block;font-weight:500;color:var(--mu);font-size:14px}
+.ag-badge{display:inline-block;font-size:12px;font-weight:700;color:var(--wa);background:var(--wb);border-radius:var(--r-pill);padding:1px 8px;margin-left:6px;white-space:nowrap;vertical-align:1px}
+.ag-chips{display:flex;flex-wrap:wrap;gap:2px 10px;margin-top:2px;font-size:14px;color:var(--mu)}.ag-chips span{display:inline-flex;align-items:center;white-space:nowrap}
+.ag-hint{font-size:14px;color:var(--mu);margin-top:2px}
+.ag-bd details{margin-top:0}.ag-bd summary{list-style:none;font-size:14px;color:var(--mu);min-height:44px;display:flex;align-items:center;gap:8px;cursor:pointer}
+.ag-bd summary::-webkit-details-marker{display:none}
+.ag-bd summary::after{content:"Dettagli ›";color:var(--ac);font-weight:600;margin-left:auto;white-space:nowrap}
+.ag-bd details[open] summary::after{content:"Chiudi"}
+.ag-bd details p{margin:0 0 6px;font-size:14px;background:var(--bg);padding:8px 10px;border-radius:10px}
+.ag-more{display:flex;gap:8px;margin-top:10px}.ag-more:empty{display:none}
+.ag-more button{flex:1;min-height:44px;border:1.5px solid var(--ac);background:none;color:var(--ac);border-radius:var(--r-pill);font:700 14px var(--f-body);cursor:pointer}
+.ag-more button.g{border-color:var(--bd);color:var(--mu)}
+.ag-state{display:flex;gap:14px;align-items:center;background:var(--ac2);border-radius:var(--r-md);padding:10px 12px;margin:0 0 12px;font-size:14px}
+.ag-state>div:first-child{text-align:center}.ag-state>div:first-child b{display:block;font:600 24px/1.1 var(--f-head);color:var(--ac)}
+.ag-state>div:last-child{flex:1}.ag-prog{height:6px;background:var(--bd);border-radius:6px;margin-top:6px;overflow:hidden}.ag-prog i{display:block;height:100%;background:var(--ac);border-radius:6px}
+.ag-rout{background:var(--bg);border-radius:var(--r-md);padding:4px 12px;margin-bottom:12px}.ag-rout .ag-it{border-bottom:1px dashed var(--bd)}.ag-rout .ag-it:last-child{border:0}
 .ev>b{min-width:92px;color:var(--ac);font-weight:700}
 .ev>b small{display:inline-block;margin-top:3px;padding:1px 8px;border-radius:var(--r-pill);background:var(--ac);color:var(--on-ac);font-size:12px}
 .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;box-shadow:0 0 0 2px var(--sf)}
@@ -165,6 +191,8 @@ details summary{min-height:44px;display:flex;align-items:center}
 <symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></symbol>
 <symbol id="i-gauge" viewBox="0 0 24 24"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></symbol>
 <symbol id="i-tower" viewBox="0 0 24 24"><rect x="8" y="3" width="8" height="15" rx="3"/><path d="M5 21h14"/><path d="M12 18v3"/><circle cx="12" cy="8" r="1.3"/><circle cx="12" cy="13" r="1.3"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
+<symbol id="i-basket" viewBox="0 0 24 24"><path d="M3 10h18l-2 10H5z"/><path d="M8 10l4-6 4 6"/></symbol>
 <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol>
 </defs></svg>
 <header class="hero">
@@ -179,8 +207,8 @@ details summary{min-height:44px;display:flex;align-items:center}
 </nav>
 
 <section id="ger" class="on">
-<div class="card"><h2>Calendario germinazione</h2>
-<p style="color:var(--mu);font-size:13px;margin:0 0 8px">Le scadenze seguono le date di semina impostate per ogni fila delle serre qui sotto.</p>
+<div class="card"><h2>Prossime scadenze</h2>
+<p class="ag-sub" id="gSub"></p>
 <div id="gOut"></div></div>
 <div class="card"><h2>Miniserra da interno</h2>
 <div class="row"><div><label>Numero di serre</label><input type="number" id="sN" min="1" max="4"></div><div></div></div><div id="sTab" class="tabs" style="margin-top:10px"></div>
@@ -194,7 +222,7 @@ details summary{min-height:44px;display:flex;align-items:center}
 </section>
 
 <section id="cre">
-<div class="card"><h2>Calendario coltivazione</h2>
+<div class="card"><h2>In torre</h2>
 <label>Data trasferimento in torre</label><input type="date" id="cDt">
 <div id="cOut"></div></div>
 <div class="card"><h2>Torre NFT · 5 pot × 10 livelli</h2>
@@ -318,11 +346,28 @@ CK.forEach((_,i)=>$('ck'+i).onchange=e=>sv('ck'+i,e.target.checked?1:0));
 $('cDt').value=ld('cd',today());
 function creR(){
  const d=$('cDt').value;sv('cd',d);if(!d)return;
- let h=`<div class="ev"><b>${fd(addD(d,0))}</b><span>Trasferimento: spugna nel cestello (net pot 5 cm), base a contatto col velo d’acqua per 2 giorni.</span></div>`;
- h+=`<div class="ev"><b>${fd(addD(d,0))} → ${fd(addD(d,5))}</b><span>Correggi il pH ogni giorno (serbatoio nuovo).</span></div>`;
- h+=`<div class="ev"><b>Ogni 1–2 giorni</b><span>Ruota la torre di 180° per luce uniforme. Prossima: ${fd(addD(d,1))}, ${fd(addD(d,3))}, ${fd(addD(d,5))}…</span></div>`;
- for(let i=1;i<=3;i++)h+=`<div class="ev"><b>${fd(addD(d,10*i))} → ${fd(addD(d,14*i))}</b><span>Cambio totale soluzione (giorno ${10*i}–${14*i}, ${i}° cambio).</span></div>`;
- $('cOut').innerHTML=h+rotCre()+`<div class="tip">Nel frattempo rabbocca l’acqua evaporata con acqua a pH bilanciato.</div>`;
+ const t=today(),n=dDiff(d,t),items=[],ph=ad(d,5);
+ items.push({d,ic:'i-tower',title:'Trasferimento in torre',hint:'Spugna nel net pot, base nel velo d’acqua',full:'Trasferimento: spugna nel cestello (net pot 5 cm), base a contatto col velo d’acqua per 2 giorni.'});
+ for(let i=1;i<=3;i++)items.push({d:ad(d,10*i),e:ad(d,14*i),ic:'i-flask',title:`${i}° cambio soluzione`,badge:`entro ${fdi(ad(d,14*i))}`,
+  hint:'Svuota, sciacqua e prepara TriPart nuovo',full:`Cambio totale della soluzione tra il giorno ${10*i} e il giorno ${14*i} dal trasferimento: svuota il serbatoio, sciacqua, prepara TriPart nuovo e regola il pH a 5,8.`});
+ rotPlan().forEach(sl=>{const x=sl.s[0];items.push({d:sl.F,ic:'i-basket',title:`Raccolta livello ${sl.l+1}`,chips:[{c:tCol(sl.k),t:`${sl.n}× ${sl.k}`}],
+  hint:x?`Poi trapianta ${x.k} il ${fdi(x.T)}`:'Livello libero dopo la raccolta'})});
+ WN.slice(0,2).forEach(w=>items.push({d:w.s,e:w.e,ic:'i-alert',cls:'warn',title:'Fermo torre',badge:`fino a ${fdi(w.e)}`,hint:'Torre vuota: pulizia e nuova soluzione',
+  full:'Svuota e sciacqua il serbatoio, lava pompa e tubi, sanifica i net pot, controlla ruote e raccordi. Poi nuova soluzione TriPart e pH 5,8.'}));
+ // riquadro di stato: giorno in torre e avanzamento verso la prossima scadenza
+ const prox=items.filter(x=>(x.e||x.d)>=t&&x.d>t).sort((a,b)=>a.d<b.d?-1:1)[0];
+ let h='';
+ if(n>=0){const tot=prox?Math.max(1,dDiff(d,prox.d)):1,pct=prox?Math.min(100,Math.round(n/tot*100)):100,tra=prox?dDiff(t,prox.d):0;
+  h+=`<div class="ag-state"><div>Giorno<b>${n+1}</b></div><div>${prox?`Prossimo: <b>${prox.title}</b> ${tra===1?'domani':`tra ${tra} giorni`}`:'Nessuna scadenza in arrivo'}<div class="ag-prog" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"><i style="width:${pct}%"></i></div></div></div>`}
+ else h+=`<div class="ag-state"><div>Tra<b>${-n}</b></div><div>giorni il trasferimento in torre</div></div>`;
+ // routine separata dalle scadenze
+ const rot=n<1?ad(d,1):ad(d,n%2?n:n+1),rout=[];
+ if(t<=ph)rout.push({ic:'i-gauge',cls:'routine',title:`Correggi il pH<small>Ogni giorno, fino a ${fdi(ph)}</small>`,hint:'Serbatoio nuovo: il pH sale in fretta',full:'Correggi il pH ogni giorno per i primi 5 giorni dal trasferimento (serbatoio nuovo). Target 5,8.'});
+ rout.push({ic:'i-cycle',cls:'routine',title:`Ruota la torre di 180°<small>Ogni 2 giorni · prossima ${rot===t?'oggi':rot===ad(t,1)?'domani':fdi(rot)}</small>`,hint:'Luce uniforme su tutti i lati'});
+ rout.push({ic:'i-drop',cls:'routine',title:'Rabbocca l’acqua evaporata<small>Quando il livello scende</small>',hint:'Con acqua a pH bilanciato'});
+ h+=`<div class="ag-rout">${rout.map(agIt).join('')}</div><div id="cAg"></div>`;
+ $('cOut').innerHTML=h;
+ agenda('cAg',items,'Nessuna scadenza in arrivo.');
  notify();
 }
 $('cDt').onchange=creR;
@@ -359,16 +404,50 @@ if(ST.n>1){const t=ST.s.slice(0,ST.n).reduce((q,z)=>q+z.r.slice(0,z.rows).filter
 $('sD').value=R.length&&R.every(x=>x.d===R[0].d)?R[0].d:'';
 $('sSum').innerHTML=h;calR()}
 // Scadenze di germinazione per ogni fila: unica fonte per calendario e notifiche (pre:false = routine).
+// Scadenze di germinazione per ogni fila: unica fonte per calendario e notifiche (pre:false = routine, k = tipo).
 function gerEvents(){const ev=[];ST.s.slice(0,ST.n).forEach((z,si)=>z.r.slice(0,z.rows).forEach((x,ri)=>{const s=SP[x.p];if(!s||!x.d)return;
-const a=(n,txt,pre=true)=>{const dt=addD(x.d,n);ev.push({dt,d:iso(dt),w:`Serra ${si+1} · F${ri+1} · ${x.p}`,ri,txt,pre})};
-a(0,'semina: spugne idratate (pH 5,5–6,0), coperchio e bocchette chiusi.');
-a(3,'controlla l’umidità; spruzza acqua a pH bilanciato se la superficie si asciuga.',false);
-a(s.ger[0],'inizio emergenza: appena spuntano, luce 14–16 h e bocchette aperte.');
-a(s.ger[1],'fine finestra: se non è spuntato nulla, verifica temperatura e umidità.')}));return ev}
+const a=(n,k,txt,pre=true)=>{const dt=addD(x.d,n);ev.push({dt,d:iso(dt),w:`Serra ${si+1} · F${ri+1} · ${x.p}`,si,ri,p:x.p,k,txt,pre})};
+a(0,'semina','semina: spugne idratate (pH 5,5–6,0), coperchio e bocchette chiusi.');
+a(3,'umidita','controlla l’umidità; spruzza acqua a pH bilanciato se la superficie si asciuga.',false);
+a(s.ger[0],'emergenza','inizio emergenza: appena spuntano, luce 14–16 h e bocchette aperte.');
+a(s.ger[1],'fine','fine finestra: se non è spuntato nulla, verifica temperatura e umidità.')}));return ev}
+
+// Agenda: raggruppa per giorno, mostra le prime 3 giornate a venire; passate e successive su richiesta.
+const AG={};
+const dDiff=(a,b)=>Math.round((addD(b,0)-addD(a,0))/864e5);
+const cap=t=>t.charAt(0).toUpperCase()+t.slice(1);
+function relDay(d){const n=dDiff(today(),d),dm=addD(d,0).toLocaleDateString('it-IT',{day:'numeric',month:'short'}),wd=cap(addD(d,0).toLocaleDateString('it-IT',{weekday:'long'}));
+ if(n===0)return['Oggi',fd(addD(d,0))];if(n===1)return['Domani',fd(addD(d,0))];if(n===-1)return['Ieri',fd(addD(d,0))];
+ return n>0?[wd,`${dm} · tra ${n} giorni`]:[wd,`${dm} · ${-n} giorni fa`]}
+function agIt(x){const ch=(x.chips||[]).map(c=>`<span><i class="dot" style="background:${c.c}"></i>${esc(c.t)}</span>`).join('');
+ const info=x.full&&x.full!==x.hint?`<details><summary>${esc(x.hint)}</summary><p>${esc(x.full)}</p></details>`:(x.hint?`<div class="ag-hint">${esc(x.hint)}</div>`:'');
+ return `<div class="ag-it${x.cls?' '+x.cls:''}"><span class="ag-ico"><svg class="ic" aria-hidden="true"><use href="#${x.ic}"/></svg></span><div class="ag-bd"><div class="ag-t">${x.title}${x.badge?`<span class="ag-badge">${esc(x.badge)}</span>`:''}</div>${ch?`<div class="ag-chips">${ch}</div>`:''}${info}</div></div>`}
+function agenda(id,items,vuoto){const t=today(),st=AG[id]=AG[id]||{more:false,past:false},g={};
+ // un evento con intervallo già iniziato e non finito compare oggi
+ items.forEach(x=>{const k=x.d<t&&x.e&&x.e>=t?t:x.d;(g[k]=g[k]||[]).push(x)});
+ const days=Object.keys(g).sort(),next=days.filter(d=>d>=t),past=days.filter(d=>d<t),vis=st.more?next:next.slice(0,3);
+ const day=(d,cls)=>{const[a,b]=relDay(d);return `<div class="ag-day${d===t?' today':''}${cls||''}"><div class="ag-dh"><b>${a}</b><span>${b}</span></div>${g[d].map(agIt).join('')}</div>`};
+ const restN=next.slice(3).reduce((n,d)=>n+g[d].length,0),pastN=past.reduce((n,d)=>n+g[d].length,0);
+ let h=(st.past?past.map(d=>day(d,' past')).join(''):'')+vis.map(d=>day(d)).join('');
+ if(!next.length&&!(st.past&&pastN))h+=`<div class="tip">${vuoto}</div>`;
+ const btn=(a,l,c)=>`<button type="button" data-ag="${a}"${c?' class="g"':''}>${l}</button>`;
+ h+=`<div class="ag-more">${restN?btn('more',st.more?'Mostra meno':`Mostra altre ${restN}`):''}${pastN?btn('past',st.past?'Nascondi passate':`Passate (${pastN})`,1):''}</div>`;
+ $(id).innerHTML=h}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-ag]');if(!b)return;const id=b.closest('[id]').id,st=AG[id];if(!st)return;st[b.dataset.ag]=!st[b.dataset.ag];id==='gOut'?calR():creR()});
+
+const GK={semina:['Semina','i-sprout','Spugne idratate, coperchio chiuso'],umidita:['Controllo umidità','i-drop','Spruzza se la superficie è asciutta'],
+ emergenza:['Inizio emergenza','i-leaf','Luce 14–16 h, apri le bocchette'],fine:['Fine germinazione','i-alert','Se non è spuntato nulla, controlla temperatura e umidità']};
 function calR(){
-const C=['#2a7a4e','#b35512','#2f6ea6','#8746aa','#86690f','#b03c55','#1d7a7a','#5d6b1d'],ev=gerEvents().map(e=>({dt:e.dt,w:esc(e.w),c:C[e.ri%8],txt:e.txt}));
-const t0=+addD(today(),0),g={};rotPlan().forEach(sl=>{const x=sl.s[0];if(x)ev.push({dt:addD(x.sow<today()?today():x.sow,0),w:`Suggerito · L${sl.l+1}`,c:'#b35512',txt:`${x.sow<today()?'semina subito':'semina'} ${esc(x.k)} per il livello che si libera il ${fdi(sl.F)} (trapianto ${fdi(x.T)})`})});ev.forEach(e=>{(g[+e.dt]=g[+e.dt]||[]).push(e)});
-$('gOut').innerHTML=Object.keys(g).sort((a,b)=>a-b).map(k=>`<div class="ev" style="${k<t0?'opacity:.5':''}"><b>${fd(new Date(+k))}${k==t0?'<br><small>oggi</small>':''}</b><span>`+g[k].map(e=>`<i class="dot" style="background:${e.c}"></i><b style="min-width:0;color:var(--tx)">${e.w}</b>: ${e.txt}`).join('<br>')+'</span></div>').join('')||'<div class="tip">Imposta pianta e data di semina nelle file delle serre: le scadenze compaiono qui.</div>';
+const C=['#2a7a4e','#b35512','#2f6ea6','#8746aa','#86690f','#b03c55','#1d7a7a','#5d6b1d'],m={},items=[],righe=new Set();
+// stesso tipo nello stesso giorno: una voce sola con le file come etichette
+gerEvents().forEach(e=>{righe.add(e.si+'|'+e.ri);const k=e.d+'|'+e.k;(m[k]=m[k]||{d:e.d,k:e.k,ev:[]}).ev.push(e)});
+Object.values(m).forEach(({d,k,ev})=>{const[title,ic,hint]=GK[k];items.push({d,ic,title,hint,full:cap(ev[0].txt),cls:k==='umidita'?'routine':k==='fine'?'warn':'',
+ chips:ev.map(e=>({c:C[e.ri%8],t:(ST.n>1?`S${e.si+1} `:'')+`F${e.ri+1} ${e.p}`}))})});
+rotPlan().forEach(sl=>{const x=sl.s[0];if(!x)return;const tardi=x.sow<today();
+ items.push({d:tardi?today():x.sow,ic:'i-sprout',title:tardi?'Semina subito':'Semina suggerita',cls:tardi?'warn':'',chips:[{c:tCol(x.k),t:x.k}],
+  hint:`Per il livello ${sl.l+1}, libero dal ${fdi(sl.F)}`,full:`Semina ${x.k} per il livello ${sl.l+1} della torre che si libera il ${fdi(sl.F)}; trapianto previsto il ${fdi(x.T)}.`})});
+$('gSub').textContent=righe.size?`${righe.size} ${righe.size===1?'fila':'file'} in miniserra`:'';
+agenda('gOut',items,'Imposta pianta e data di semina nelle file delle serre: le scadenze compaiono qui.');
 notify()}
 $('sR').onchange=()=>{SR.rows=+$('sR').value||1;serraR()};
 $('sC').onchange=()=>{SR.cols=+$('sC').value||1;serraR()};
@@ -399,7 +478,6 @@ function sug(sl){const oth=twUsed().filter(k=>k!==sl.k),a0=act(),cand=Object.key
 let c=cand.filter(ok);if(!c.length)c=cand;const F0=sl.F<today()?today():sl.F;
 return c.map(k=>{const T=nextT(F0,rn(SP[k].d));return{k,T,sow:ad(T,-(SP[k].ger[1]+ROT.sd)),fit:T===F0}}).sort((a,b)=>(b.fit-a.fit)||(a0.includes(b.k)-a0.includes(a.k))||((b.k!==sl.k)-(a.k!==sl.k))).slice(0,3)}
 function rotPlan(){WN=wins();const m={};TW.p.forEach((r,l)=>r.forEach((k,c)=>{const s=SP[k],d=TW.d[l][c],n=s?rn(s.d):0;if(!s||!d||!n)return;const F=ad(d,n),key=l+'|'+F+'|'+k;(m[key]=m[key]||{l,F,k,d,n:0}).n++}));return Object.values(m).sort((a,b)=>a.F<b.F?-1:1).map(sl=>({...sl,s:sug(sl)}))}
-function rotCre(){const P=rotPlan();return '<div style="margin-top:10px;font-weight:600">Ricambio torre</div>'+P.map(sl=>`<div class="ev"><b>${fdi(sl.F)}</b><span>Raccolta L${sl.l+1}: ${sl.n}× ${esc(sl.k)}${sl.s[0]?` → trapianto suggerito: ${esc(sl.s[0].k)} il ${fdi(sl.s[0].T)}`:''}</span></div>`).join('')+WN.slice(0,2).map(w=>`<div class="ev"><b>${fdi(w.s)} → ${fdi(w.e)}</b><span>Fermo torre: torre vuota, pulizia e nuova soluzione.</span></div>`).join('')}
 function rotR(){ROT.dur=Math.max(1,ROT.dur|0);ROT.m=Math.max(1,ROT.m|0);sv('rot',JSON.stringify(ROT));
 $('rS').value=ROT.s;$('rD').value=ROT.dur;$('rM').value=ROT.m;$('rE').value=ROT.sd;
 const P=rotPlan(),w=WN[0];
