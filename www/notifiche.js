@@ -44,7 +44,8 @@ function ntEvents() {
   rotPlan().forEach(sl => {
     const x = sl.s[0];
     push(sl.F, `Torre · livello ${sl.l + 1}`, `raccolta di ${sl.n}× ${sl.k}` + (x ? `; poi trapianta ${x.k} il ${fdi(x.T)}` : ''), 'rot');
-    if (x) push(x.sow, `Suggerito · L${sl.l + 1}`, `semina ${x.k} per il livello che si libera il ${fdi(sl.F)}`, 'ger');
+    // Semina già in ritardo: avviso oggi (come "semina subito" nel calendario), ripetuto ogni giorno finché il pot non viene ripiantato.
+    if (x) push(x.sow < t ? t : x.sow, `Suggerito · L${sl.l + 1}`, `${x.sow < t ? 'semina subito' : 'semina'} ${x.k} per il livello che si libera il ${fdi(sl.F)}`, 'ger', x.sow >= t);
   });
   WN.forEach(w => {
     push(w.s, 'Fermo torre', 'inizia oggi: svuota, pulisci e sanifica torre, pompa e tubi', 'rot');

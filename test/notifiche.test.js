@@ -71,5 +71,16 @@ const addDays = n => { const d = new Date(); d.setDate(d.getDate() + n); return 
   await page.uncheck('#aOn'); await page.check('#aOn');
   await page.waitForFunction(() => window.__ln.scheduled.length > 0);
   console.log('OK permesso, ritorno nell’app, impostazioni (routine, disattivazione, ripristino)');
+
+  // Semina suggerita in ritardo: Rucola trapiantata 40 giorni fa (raccolta ~35) -> avviso "semina subito" oggi, senza avviso del giorno prima
+  const late = await browser.newPage();
+  await late.addInitScript(d => {
+    localStorage.setItem('ti_torre', JSON.stringify({ p: Array.from({ length: 10 }, (_, l) => Array(5).fill(l === 0 ? 'Rucola' : '')),
+      d: Array.from({ length: 10 }, (_, l) => Array(5).fill(l === 0 ? d : '')), s: [0, 0] }));
+  }, addDays(-40));
+  await late.goto('file://' + path.resolve(__dirname, '../www/index.html'));
+  const oggi = await late.evaluate(() => (ntEvents().find(g => g.d === today()) || { items: [] }).items.filter(e => e.w.startsWith('Suggerito')));
+  assert.ok(oggi.length && oggi.every(e => e.txt.startsWith('semina subito') && !e.pre), 'manca l’avviso di semina in ritardo: ' + JSON.stringify(oggi));
+  console.log('OK semina in ritardo:', oggi[0].txt);
   await browser.close();
 })().catch(e => { console.error(e); process.exit(1); });
