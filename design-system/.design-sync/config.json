@@ -5,9 +5,12 @@
   "buildCmd": "npm run build",
   "cssEntry": "dist/styles.css",
   "extraFonts": [
-    "node_modules/@fontsource/poppins/latin-400.css",
-    "node_modules/@fontsource/poppins/latin-600.css",
-    "node_modules/@fontsource/poppins/latin-700.css"
+    "node_modules/@fontsource/lora/latin-500.css",
+    "node_modules/@fontsource/lora/latin-600.css",
+    "node_modules/@fontsource/raleway/latin-400.css",
+    "node_modules/@fontsource/raleway/latin-500.css",
+    "node_modules/@fontsource/raleway/latin-600.css",
+    "node_modules/@fontsource/raleway/latin-700.css"
   ],
   "componentSrcMap": {
     "ButtonRow": "src/Button.tsx",
@@ -37,7 +40,9 @@
     "Dot": ".design-sync/groups/Dati.md",
     "Tip": ".design-sync/groups/Feedback.md",
     "FeatureChip": ".design-sync/groups/Feedback.md",
-    "FeatureChips": ".design-sync/groups/Feedback.md"
+    "FeatureChips": ".design-sync/groups/Feedback.md",
+    "Icon": ".design-sync/groups/Feedback.md",
+    "BottomNav": ".design-sync/groups/Navigazione.md"
   },
   "overrides": {
     "DataTable": {
@@ -59,6 +64,15 @@
       "cardMode": "column"
     },
     "SegmentedTabs": {
+      "cardMode": "column"
+    },
+    "BottomNav": {
+      "cardMode": "column"
+    },
+    "FeatureChip": {
+      "cardMode": "column"
+    },
+    "Icon": {
       "cardMode": "column"
     }
   },

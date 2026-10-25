@@ -1,60 +1,76 @@
-/* Token della Torre Idroponica (ricavati da www/index.html). Tema chiaro + scuro automatico. */
+/* Token della Torre Idroponica — stile "Organic Biophilic" (allineati a www/index.html). Tema chiaro + scuro automatico. */
 :root {
-  --hp-bg: #ffffff;
-  --hp-surface: #ffffff;
-  --hp-text: #233a35;
-  --hp-muted: #5f736d;
-  --hp-accent: #2f8f5b;
-  --hp-accent-soft: #e6f2ea;
-  --hp-border: #d6e4dc;
-  --hp-warn: #e87722;
-  --hp-warn-soft: #fff3e6;
-  --hp-header: #dfeae3;
-  --hp-water: #3b82c4;
+  --hp-bg: #f5efe0;          /* crema, sfondo pagina */
+  --hp-surface: #fffcf5;     /* card */
+  --hp-text: #23302a;
+  --hp-muted: #56655a;
+  --hp-accent: #2f7040;      /* verde bosco: azioni, date, scheda attiva */
+  --hp-accent-soft: #e3ecd8;
   --hp-on-accent: #ffffff;
+  --hp-border: #e3d9c2;
+  --hp-warn: #a8501d;        /* terracotta: risultati dei calcoli, avvisi */
+  --hp-warn-soft: #f8e7d6;
+  --hp-on-warn: #ffffff;
+  --hp-header: #ece3cc;      /* intestazioni tabelle */
+  --hp-earth: #8b5a2b;       /* marrone terra: badge dei passi */
+  --hp-sky: #4f8ead;         /* acqua */
+  --hp-hero-1: #2f7040;
+  --hp-hero-2: #1f5530;
+  --hp-leaf: #8fbf74;
 
-  /* Colori delle file / colture (palette categoriale) */
-  --hp-cat-1: #2f8f5b;
-  --hp-cat-2: #e87722;
-  --hp-cat-3: #3b82c4;
-  --hp-cat-4: #a05bc4;
-  --hp-cat-5: #c9a227;
-  --hp-cat-6: #d0526a;
-  --hp-cat-7: #2aa3a3;
-  --hp-cat-8: #7a8b2f;
+  /* Colori delle file / colture (testo bianco leggibile ≥ 4,5:1) */
+  --hp-cat-1: #2a7a4e;
+  --hp-cat-2: #b35512;
+  --hp-cat-3: #2f6ea6;
+  --hp-cat-4: #8746aa;
+  --hp-cat-5: #86690f;
+  --hp-cat-6: #b03c55;
+  --hp-cat-7: #1d7a7a;
+  --hp-cat-8: #5d6b1d;
 
   /* Livelli della torre */
-  --hp-level-high: #2f8f5b;
-  --hp-level-mid: #6bb98a;
-  --hp-level-low: #e87722;
+  --hp-level-high: #2f7040;
+  --hp-level-mid: #4a7f3f;
+  --hp-level-low: #a8501d;
 
-  --hp-font: Poppins, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --hp-font: Raleway, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --hp-font-head: Lora, Georgia, serif;
   --hp-text-xs: 12px;
-  --hp-text-sm: 13px;
-  --hp-text-md: 15px;
-  --hp-text-lg: 17px;
-  --hp-text-xl: 24px;
+  --hp-text-sm: 14px;
+  --hp-text-md: 16px;
+  --hp-text-lg: 19px;
+  --hp-text-xl: 26px;
 
   --hp-space-1: 4px;
   --hp-space-2: 6px;
   --hp-space-3: 8px;
-  --hp-space-4: 10px;
-  --hp-space-5: 14px;
+  --hp-space-4: 12px;
+  --hp-space-5: 16px;
 
-  --hp-radius-sm: 8px;
-  --hp-radius-md: 10px;
-  --hp-radius-lg: 14px;
-  --hp-radius-pill: 20px;
+  --hp-radius-sm: 12px;
+  --hp-radius-md: 16px;
+  --hp-radius-lg: 24px 20px 24px 20px;  /* card: angoli leggermente irregolari */
+  --hp-radius-pill: 999px;
+  --hp-shadow: 0 8px 28px rgba(83, 66, 30, .09), 0 1px 2px rgba(83, 66, 30, .06);
+  --hp-ease: cubic-bezier(.3, .7, .4, 1);
+  --hp-dur: 180ms;
+  --hp-tap: 44px;            /* altezza minima dei controlli */
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --hp-bg: #0e1c19; --hp-surface: #162825; --hp-text: #e4f0ed; --hp-muted: #93aca6;
-    --hp-accent: #5fc98f; --hp-accent-soft: #1d3733; --hp-border: #2a413d;
-    --hp-warn: #f59a4d; --hp-warn-soft: #3a2a1b; --hp-header: #233b36;
+    --hp-bg: #131a15; --hp-surface: #1c2520; --hp-text: #ece7d8; --hp-muted: #aab4a6;
+    --hp-accent: #86c893; --hp-on-accent: #10251a; --hp-accent-soft: #243529; --hp-border: #344236;
+    --hp-warn: #eb9a6a; --hp-on-warn: #2a1408; --hp-warn-soft: #3a2a1f; --hp-header: #26312a;
+    --hp-earth: #c9955f; --hp-sky: #7fb8d4; --hp-hero-1: #24432d; --hp-hero-2: #18301f; --hp-leaf: #4f7a45;
+    --hp-level-high: #86c893; --hp-level-mid: #b5d68a; --hp-level-low: #eb9a6a;
+    --hp-shadow: 0 8px 28px rgba(0, 0, 0, .35);
   }
 }
 :root[data-theme="dark"] {
-  --hp-bg: #0e1c19; --hp-surface: #162825; --hp-text: #e4f0ed; --hp-muted: #93aca6;
-  --hp-accent: #5fc98f; --hp-accent-soft: #1d3733; --hp-border: #2a413d;
-  --hp-warn: #f59a4d; --hp-warn-soft: #3a2a1b; --hp-header: #233b36;
+  --hp-bg: #131a15; --hp-surface: #1c2520; --hp-text: #ece7d8; --hp-muted: #aab4a6;
+  --hp-accent: #86c893; --hp-on-accent: #10251a; --hp-accent-soft: #243529; --hp-border: #344236;
+  --hp-warn: #eb9a6a; --hp-on-warn: #2a1408; --hp-warn-soft: #3a2a1f; --hp-header: #26312a;
+  --hp-earth: #c9955f; --hp-sky: #7fb8d4; --hp-hero-1: #24432d; --hp-hero-2: #18301f; --hp-leaf: #4f7a45;
+  --hp-level-high: #86c893; --hp-level-mid: #b5d68a; --hp-level-low: #eb9a6a;
+  --hp-shadow: 0 8px 28px rgba(0, 0, 0, .35);
 }

@@ -14,3 +14,5 @@ export * from './Timeline';
 export * from './FeatureChip';
 export * from './Checklist';
 export * from './DataTable';
+export * from './Icon';
+export * from './BottomNav';

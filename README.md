@@ -70,4 +70,4 @@ Ogni APK è firmato con la stessa chiave di debug (`android/app/debug.keystore`)
 
 ## Design system
 
-`design-system/` contiene `@hydroponic/ui`: token, CSS e 21 componenti React ricavati dall'interfaccia dell'app, pronti per Claude Design (`/design-sync`). Vedi `design-system/.design-sync/NOTES.md`.
+`design-system/` contiene `@hydroponic/ui`: token, CSS e 23 componenti React (incluse BottomNav e Icon) allineati allo stile "Organic Biophilic" dell'app, pronti per Claude Design (`/design-sync`). Vedi `design-system/.design-sync/NOTES.md`.

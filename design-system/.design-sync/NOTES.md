@@ -2,13 +2,13 @@
 
 - Il pacchetto vive in `design-system/` (config home = questa cartella). Esegui tutti i comandi da qui, con `--node-modules ./node_modules --entry ./dist/index.js`.
 - Build: `npm run build` (esbuild + tsc + concatenazione CSS in `dist/styles.css`). Ricompila sempre prima del convertitore.
-- Il design system è stato **estratto** da `../www/index.html` (app Capacitor, HTML/JS vanilla). L'app NON usa ancora questi componenti: se cambi colori o stili nell'app, aggiornali a mano in `src/styles/`.
-- Font: Poppins da `@fontsource/poppins` (latin 400/600/700) via `extraFonts`. Altri pesi/subset non vengono spediti.
+- Il design system è stato **estratto** da `../www/index.html` (app Capacitor, HTML/JS vanilla) e riallineato al ridisegno "Organic Biophilic". L'app NON usa questi componenti: se cambi colori o stili nell'app, aggiornali a mano in `src/styles/` (i token `--hp-*` corrispondono ai `--*` di `:root` nell'app). Le icone di `src/Icon.tsx` sono generate dai `<symbol>` dell'app.
+- Font: Lora (500/600, titoli) e Raleway (400–700, testo) da `@fontsource`, subset latino, via `extraFonts` — gli stessi inclusi nell'app in `../www/fonts/`.
 - Componenti con più export nello stesso file (`ButtonRow`, `FieldGrid`, `Select`, `TimelineItem`, `FeatureChips`) sono mappati con `componentSrcMap`.
 - Gruppi: stub `.design-sync/groups/<Gruppo>.md` collegati via `docsMap` (solo `category`; il `.prompt.md` viene sintetizzato da `.d.ts` + anteprime).
-- `cardMode: "column"` per i componenti larghi (DataTable, KeyValue, Tip, Card, FieldGrid, NavTabs, SegmentedTabs) — segnalati da `[GRID_OVERFLOW]`.
+- `cardMode: "column"` per i componenti larghi (DataTable, KeyValue, Tip, Card, FieldGrid, NavTabs, SegmentedTabs, BottomNav, FeatureChip, Icon) — segnalati da `[GRID_OVERFLOW]`.
 - Playwright: nella sandbox cloud è globale; collegalo con `ln -sfn $(npm root -g)/playwright .ds-sync/node_modules/playwright` dopo aver ricopiato `.ds-sync/`.
-- Le anteprime con testo libero (es. Dot) vanno avvolte in `<AppShell style={{ padding: 0 }}>`, come dicono le convenzioni; altrimenti il testo cade nel serif del browser.
+- Le anteprime con testo libero (es. Dot) vanno messe dentro un componente che imposta il font (Card, o AppShell per schermate intere); altrimenti il testo cade nel serif del browser. AppShell da solo in piccolo mostra il gradiente di sfondo come una banda.
 
 ## Known render warns
 - Nessuno.
