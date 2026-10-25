@@ -34,7 +34,12 @@ npm test            # verifica la programmazione delle notifiche (Playwright)
 npx cap sync        # copia www/ nei progetti nativi
 npm run android     # apre Android Studio
 npm run ios         # apre Xcode (solo macOS)
+npm run setup:android  # installa l'Android SDK (serve Java 21 e accesso a dl.google.com)
+npm run apk         # compila android/app/build/outputs/apk/debug/app-debug.apk
 ```
+
+In locale l'APK ha `versionCode` 1: per installarlo sopra una build di GitHub usa `VERSION_CODE=<numero più alto> npm run apk`.
+`--max-workers=2` evita gli errori 429 (Too Many Requests) di Maven Central dietro il proxy della sandbox.
 
 L'APK di debug viene compilato da GitHub Actions quando cambiano app o progetto Android: scaricalo da **Actions → APK Android → Artifacts**.
 Ogni APK è firmato con la stessa chiave di debug (`android/app/debug.keystore`) e ha un `versionCode` crescente, quindi si installa come aggiornamento del precedente. Gli APK compilati prima di questa modifica avevano chiavi diverse: per passare alla nuova chiave disinstalla l'app una volta.
