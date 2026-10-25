@@ -4,7 +4,8 @@ const { chromium } = require('playwright');
 const path = require('path');
 const assert = require('assert');
 
-const iso = d => d.toISOString().slice(0, 10);
+// Data locale, come today() nell'app (toISOString da solo darebbe la data UTC)
+const iso = d => new Date(d - d.getTimezoneOffset() * 6e4).toISOString().slice(0, 10);
 const addDays = n => { const d = new Date(); d.setDate(d.getDate() + n); return iso(d); };
 
 (async () => {
@@ -135,6 +136,36 @@ const addDays = n => { const d = new Date(); d.setDate(d.getDate() + n); return 
     giorni: document.querySelectorAll('#cAg .ag-day').length, prox: document.querySelector('.ag-state').textContent }));
   assert.equal(cre.giorno, '2'); assert.equal(cre.rout, 3); assert.equal(cre.giorni, 3);
   assert.ok(cre.prox.includes('1° cambio soluzione'), cre.prox);
+  // I pulsanti cambiano solo la vista: nessuna riprogrammazione delle notifiche
+  await cal.evaluate(() => { window.__nt = 0; const n0 = notify; notify = () => { window.__nt++; n0(); }; });
+  await cal.click('#cAg [data-ag="past"]');
+  assert.equal(await cal.evaluate(() => window.__nt), 0, 'un pulsante dell’agenda ha riprogrammato le notifiche');
   console.log('OK calendari: 3 giornate, passate nascoste, voci unite, routine separata');
+
+  // Casi limite della Crescita
+  const caso = async (seed, fn) => {
+    const pg = await browser.newPage();
+    await pg.addInitScript(seed => { for (const k in seed) localStorage.setItem('ti_' + k, seed[k]); }, seed);
+    await pg.goto('file://' + path.resolve(__dirname, '../www/index.html'));
+    await pg.click('#bar button[data-g="torre"]');
+    const r = await pg.evaluate(fn); await pg.close(); return r;
+  };
+  const torre = (pianta, d) => JSON.stringify({ p: Array.from({ length: 10 }, (_, l) => Array(5).fill(l === 0 ? pianta : '')), d: Array.from({ length: 10 }, (_, l) => Array(5).fill(l === 0 ? d : '')), s: [0, 0] });
+  // raccolta scaduta da 13 giorni: in vista oggi, evidenziata, non tra le passate
+  let r = await caso({ cd: addDays(-50), torre: torre('Rucola', addDays(-48)) }, () => {
+    const it = [...document.querySelectorAll('#cAg .ag-day:not(.past) .ag-it')].find(i => i.textContent.includes('Raccolta'));
+    return it && { oggi: it.closest('.ag-day').classList.contains('today'), warn: it.classList.contains('warn'), testo: it.textContent };
+  });
+  assert.ok(r && r.oggi && r.warn && r.testo.includes('in ritardo'), 'raccolta in ritardo nascosta: ' + JSON.stringify(r));
+  // giorno 12: il 1° cambio soluzione è in corso e il riquadro lo dice
+  r = await caso({ cd: addDays(-11) }, () => document.querySelector('.ag-state').textContent);
+  assert.ok(r.includes('In corso') && r.includes('1° cambio soluzione'), r);
+  // trasferimento domani: singolare
+  r = await caso({ cd: addDays(1) }, () => document.querySelector('.ag-state').textContent);
+  assert.ok(r.includes('giorno il trasferimento') && !r.includes('1giorni'), r);
+  // germinazione con scadenze tutte passate: messaggio giusto, non "imposta la semina"
+  r = await caso({ serra: JSON.stringify({ n: 1, i: 0, s: [{ rows: 1, cols: 6, r: [{ p: 'Spinaci', d: addDays(-30) }] }] }) }, () => document.querySelector('#gOut').textContent);
+  assert.ok(r.includes('tutte passate') && !r.includes('Imposta pianta'), r);
+  console.log('OK casi limite: raccolta in ritardo, scadenza in corso, singolare, scadenze tutte passate');
   await browser.close();
 })().catch(e => { console.error(e); process.exit(1); });

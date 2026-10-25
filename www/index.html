@@ -131,7 +131,7 @@ ul.ck label{font-weight:500}
 .ag-more{display:flex;gap:8px;margin-top:10px}.ag-more:empty{display:none}
 .ag-more button{flex:1;min-height:44px;border:1.5px solid var(--ac);background:none;color:var(--ac);border-radius:var(--r-pill);font:700 14px var(--f-body);cursor:pointer}
 .ag-more button.g{border-color:var(--bd);color:var(--mu)}
-.ag-state{display:flex;gap:14px;align-items:center;background:var(--ac2);border-radius:var(--r-md);padding:10px 12px;margin:0 0 12px;font-size:14px}
+.ag-state{display:flex;gap:14px;align-items:center;background:var(--ac2);border-radius:var(--r-md);padding:10px 12px;margin:12px 0;font-size:14px}
 .ag-state>div:first-child{text-align:center}.ag-state>div:first-child b{display:block;font:600 24px/1.1 var(--f-head);color:var(--ac)}
 .ag-state>div:last-child{flex:1}.ag-prog{height:6px;background:var(--bd);border-radius:6px;margin-top:6px;overflow:hidden}.ag-prog i{display:block;height:100%;background:var(--ac);border-radius:6px}
 .ag-rout{background:var(--bg);border-radius:var(--r-md);padding:4px 12px;margin-bottom:12px}.ag-rout .ag-it{border-bottom:1px dashed var(--bd)}.ag-rout .ag-it:last-child{border:0}
@@ -344,27 +344,39 @@ CK.forEach((_,i)=>$('ck'+i).onchange=e=>sv('ck'+i,e.target.checked?1:0));
 
 // crescita
 $('cDt').value=ld('cd',today());
+// Calendario di crescita dalla data di trasferimento: unica fonte per calendario e notifiche.
+// sol = cambi totali della soluzione (giorni 10–14, 20–28, 30–42), ph = correzione quotidiana dei primi 5 giorni, rot(da,a) = rotazioni a giorni dispari.
+function creEvents(d){return{d,sol:[1,2,3].map(i=>({i,s:ad(d,10*i),e:ad(d,14*i)})),ph:[1,2,3,4,5].map(i=>ad(d,i)),
+ rot:(da,a)=>{const r=[];let n=Math.max(1,dDiff(d,da));if(n%2===0)n++;for(;ad(d,n)<=a;n+=2)r.push(ad(d,n));return r}}}
 function creR(){
  const d=$('cDt').value;sv('cd',d);if(!d)return;
- const t=today(),n=dDiff(d,t),items=[],ph=ad(d,5);
+ const t=today(),n=dDiff(d,t),C=creEvents(d),items=[],phEnd=C.ph[C.ph.length-1];
  items.push({d,ic:'i-tower',title:'Trasferimento in torre',hint:'Spugna nel net pot, base nel velo d’acqua',full:'Trasferimento: spugna nel cestello (net pot 5 cm), base a contatto col velo d’acqua per 2 giorni.'});
- for(let i=1;i<=3;i++)items.push({d:ad(d,10*i),e:ad(d,14*i),ic:'i-flask',title:`${i}° cambio soluzione`,badge:`entro ${fdi(ad(d,14*i))}`,
-  hint:'Svuota, sciacqua e prepara TriPart nuovo',full:`Cambio totale della soluzione tra il giorno ${10*i} e il giorno ${14*i} dal trasferimento: svuota il serbatoio, sciacqua, prepara TriPart nuovo e regola il pH a 5,8.`});
- rotPlan().forEach(sl=>{const x=sl.s[0];items.push({d:sl.F,ic:'i-basket',title:`Raccolta livello ${sl.l+1}`,chips:[{c:tCol(sl.k),t:`${sl.n}× ${sl.k}`}],
-  hint:x?`Poi trapianta ${x.k} il ${fdi(x.T)}`:'Livello libero dopo la raccolta'})});
+ C.sol.forEach(({i,s:si,e})=>items.push({d:si,e,from:i>1?C.sol[i-2].e:d,ic:'i-flask',title:`${i}° cambio soluzione`,badge:`entro ${fdi(e)}`,
+  hint:'Svuota, sciacqua e prepara TriPart nuovo',full:`Cambio totale della soluzione tra il giorno ${10*i} e il giorno ${14*i} dal trasferimento: svuota il serbatoio, sciacqua, prepara TriPart nuovo e regola il pH a 5,8.`}));
+ // raccolta in ritardo: compare oggi, evidenziata, come "Semina subito" in germinazione
+ rotPlan().forEach(sl=>{const x=sl.s[0],tardi=sl.F<t;items.push({d:tardi?t:sl.F,from:sl.d,ic:'i-basket',cls:tardi?'warn':'',title:`Raccolta livello ${sl.l+1}`,badge:tardi?'in ritardo':'',
+  chips:[{c:tCol(sl.k),t:`${sl.n}× ${sl.k}`}],hint:(tardi?`Era prevista ${fdi(sl.F)}. `:'')+(x?`Poi trapianta ${x.k} il ${fdi(x.T)}`:'Livello libero dopo la raccolta')})});
  WN.slice(0,2).forEach(w=>items.push({d:w.s,e:w.e,ic:'i-alert',cls:'warn',title:'Fermo torre',badge:`fino a ${fdi(w.e)}`,hint:'Torre vuota: pulizia e nuova soluzione',
   full:'Svuota e sciacqua il serbatoio, lava pompa e tubi, sanifica i net pot, controlla ruote e raccordi. Poi nuova soluzione TriPart e pH 5,8.'}));
- // riquadro di stato: giorno in torre e avanzamento verso la prossima scadenza
- const prox=items.filter(x=>(x.e||x.d)>=t&&x.d>t).sort((a,b)=>a.d<b.d?-1:1)[0];
+ // riquadro di stato: la prima scadenza non ancora chiusa (anche oggi o in corso) e l'avanzamento verso di essa
+ const quando=x=>x.d>t?x.d:t,aperte=items.filter(x=>(x.e||x.d)>=t);
+ const prox=aperte.reduce((a,x)=>!a||quando(x)<quando(a)||(quando(x)===quando(a)&&x.d<a.d)?x:a,null);
  let h='';
- if(n>=0){const tot=prox?Math.max(1,dDiff(d,prox.d)):1,pct=prox?Math.min(100,Math.round(n/tot*100)):100,tra=prox?dDiff(t,prox.d):0;
-  h+=`<div class="ag-state"><div>Giorno<b>${n+1}</b></div><div>${prox?`Prossimo: <b>${prox.title}</b> ${tra===1?'domani':`tra ${tra} giorni`}`:'Nessuna scadenza in arrivo'}<div class="ag-prog" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"><i style="width:${pct}%"></i></div></div></div>`}
- else h+=`<div class="ag-state"><div>Tra<b>${-n}</b></div><div>giorni il trasferimento in torre</div></div>`;
+ if(n>=0){let txt='Nessuna scadenza in arrivo',pct=100;
+  if(prox){const inCorso=prox.d<=t&&prox.e&&prox.e>=t,tit=`<b>${esc(prox.title)}</b>`;
+   if(inCorso){txt=`In corso: ${tit}, entro ${fdi(prox.e)}`;pct=Math.round(dDiff(prox.d,t)/Math.max(1,dDiff(prox.d,prox.e))*100)}
+   else if(prox.d===t){txt=`Oggi: ${tit}`;pct=100}
+   else{const tra=dDiff(t,prox.d),da=prox.from||items.filter(x=>(x.e||x.d)<t).reduce((m,x)=>(x.e||x.d)>m?(x.e||x.d):m,d);
+    txt=`Prossimo: ${tit} ${tra===1?'domani':`tra ${tra} giorni`}`;pct=Math.round(Math.max(0,dDiff(da,t))/Math.max(1,dDiff(da,prox.d))*100)}}
+  pct=Math.min(100,Math.max(0,pct));
+  h+=`<div class="ag-state"><div>Giorno<b>${n+1}</b></div><div>${txt}<div class="ag-prog" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"><i style="width:${pct}%"></i></div></div></div>`}
+ else h+=`<div class="ag-state"><div>Tra<b>${-n}</b></div><div>${n===-1?'giorno':'giorni'} il trasferimento in torre</div></div>`;
  // routine separata dalle scadenze
- const rot=n<1?ad(d,1):ad(d,n%2?n:n+1),rout=[];
- if(t<=ph)rout.push({ic:'i-gauge',cls:'routine',title:`Correggi il pH<small>Ogni giorno, fino a ${fdi(ph)}</small>`,hint:'Serbatoio nuovo: il pH sale in fretta',full:'Correggi il pH ogni giorno per i primi 5 giorni dal trasferimento (serbatoio nuovo). Target 5,8.'});
- rout.push({ic:'i-cycle',cls:'routine',title:`Ruota la torre di 180°<small>Ogni 2 giorni · prossima ${rot===t?'oggi':rot===ad(t,1)?'domani':fdi(rot)}</small>`,hint:'Luce uniforme su tutti i lati'});
- rout.push({ic:'i-drop',cls:'routine',title:'Rabbocca l’acqua evaporata<small>Quando il livello scende</small>',hint:'Con acqua a pH bilanciato'});
+ const rot=C.rot(t,ad(t,2))[0],rout=[];
+ if(t<=phEnd)rout.push({ic:'i-gauge',cls:'routine',title:'Correggi il pH',sub:`Ogni giorno, fino a ${fdi(phEnd)}`,hint:'Serbatoio nuovo: il pH sale in fretta',full:'Correggi il pH ogni giorno per i primi 5 giorni dal trasferimento (serbatoio nuovo). Target 5,8.'});
+ rout.push({ic:'i-cycle',cls:'routine',title:'Ruota la torre di 180°',sub:`Ogni 2 giorni · prossima ${rot===t?'oggi':rot===ad(t,1)?'domani':fdi(rot)}`,hint:'Luce uniforme su tutti i lati'});
+ rout.push({ic:'i-drop',cls:'routine',title:'Rabbocca l’acqua evaporata',sub:'Quando il livello scende',hint:'Con acqua a pH bilanciato'});
  h+=`<div class="ag-rout">${rout.map(agIt).join('')}</div><div id="cAg"></div>`;
  $('cOut').innerHTML=h;
  agenda('cAg',items,'Nessuna scadenza in arrivo.');
@@ -389,7 +401,7 @@ ST.n=Math.min(4,Math.max(1,ST.n|0));while(ST.s.length<ST.n)ST.s.push({rows:3,col
 SR.rows=Math.min(8,Math.max(1,SR.rows|0));SR.cols=Math.min(12,Math.max(1,SR.cols|0));
 while(SR.r.length<SR.rows)SR.r.push({p:'',d:today()});
 sv('serra',JSON.stringify(ST));
-const R=SR.r.slice(0,SR.rows),C=['#2a7a4e','#b35512','#2f6ea6','#8746aa','#86690f','#b03c55','#1d7a7a','#5d6b1d'],g=`repeat(${SR.cols},minmax(0,1fr))`,a=act().filter(k=>SP[k]),
+const R=SR.r.slice(0,SR.rows),C=PAL8,g=`repeat(${SR.cols},minmax(0,1fr))`,a=act().filter(k=>SP[k]),
 o1=(k,sel)=>`<option value="${esc(k)}"${k===sel?' selected':''}>${esc(k)}</option>`,
 opt=sel=>'<option value="">Vuota</option><optgroup label="In coltivazione">'+a.map(k=>o1(k,sel)).join('')+'</optgroup><optgroup label="Archivio">'+Object.keys(SP).filter(k=>!a.includes(k)).map(k=>o1(k,sel)).join('')+'</optgroup>';
 $('sR').value=SR.rows;$('sC').value=SR.cols;$('sN').value=ST.n;$('sTab').innerHTML=ST.s.slice(0,ST.n).map((_,k)=>`<button data-k="${k}" class="${k==ST.i?'on':''}">Serra ${k+1}</button>`).join('');
@@ -403,7 +415,6 @@ if(rg.length>1){const t0=Math.max(...rg.map(r=>r[0])),t1=Math.min(...rg.map(r=>r
 if(ST.n>1){const t=ST.s.slice(0,ST.n).reduce((q,z)=>q+z.r.slice(0,z.rows).filter(x=>SP[x.p]).length*z.cols,0);h+=kv('Totale pot occupati (tutte le serre)',t)}
 $('sD').value=R.length&&R.every(x=>x.d===R[0].d)?R[0].d:'';
 $('sSum').innerHTML=h;calR()}
-// Scadenze di germinazione per ogni fila: unica fonte per calendario e notifiche (pre:false = routine).
 // Scadenze di germinazione per ogni fila: unica fonte per calendario e notifiche (pre:false = routine, k = tipo).
 function gerEvents(){const ev=[];ST.s.slice(0,ST.n).forEach((z,si)=>z.r.slice(0,z.rows).forEach((x,ri)=>{const s=SP[x.p];if(!s||!x.d)return;
 const a=(n,k,txt,pre=true)=>{const dt=addD(x.d,n);ev.push({dt,d:iso(dt),w:`Serra ${si+1} · F${ri+1} · ${x.p}`,si,ri,p:x.p,k,txt,pre})};
@@ -421,24 +432,26 @@ function relDay(d){const n=dDiff(today(),d),dm=addD(d,0).toLocaleDateString('it-
  return n>0?[wd,`${dm} · tra ${n} giorni`]:[wd,`${dm} · ${-n} giorni fa`]}
 function agIt(x){const ch=(x.chips||[]).map(c=>`<span><i class="dot" style="background:${c.c}"></i>${esc(c.t)}</span>`).join('');
  const info=x.full&&x.full!==x.hint?`<details><summary>${esc(x.hint)}</summary><p>${esc(x.full)}</p></details>`:(x.hint?`<div class="ag-hint">${esc(x.hint)}</div>`:'');
- return `<div class="ag-it${x.cls?' '+x.cls:''}"><span class="ag-ico"><svg class="ic" aria-hidden="true"><use href="#${x.ic}"/></svg></span><div class="ag-bd"><div class="ag-t">${x.title}${x.badge?`<span class="ag-badge">${esc(x.badge)}</span>`:''}</div>${ch?`<div class="ag-chips">${ch}</div>`:''}${info}</div></div>`}
-function agenda(id,items,vuoto){const t=today(),st=AG[id]=AG[id]||{more:false,past:false},g={};
+ return `<div class="ag-it${x.cls?' '+x.cls:''}"><span class="ag-ico"><svg class="ic" aria-hidden="true"><use href="#${x.ic}"/></svg></span><div class="ag-bd"><div class="ag-t">${esc(x.title)}${x.sub?`<small>${esc(x.sub)}</small>`:''}${x.badge?`<span class="ag-badge">${esc(x.badge)}</span>`:''}</div>${ch?`<div class="ag-chips">${ch}</div>`:''}${info}</div></div>`}
+function agenda(id,items,vuoto){const st=AG[id]=AG[id]||{more:false,past:false};st.items=items;st.vuoto=vuoto;agDraw(id)}
+function agDraw(id){const t=today(),st=AG[id],g={};
  // un evento con intervallo già iniziato e non finito compare oggi
- items.forEach(x=>{const k=x.d<t&&x.e&&x.e>=t?t:x.d;(g[k]=g[k]||[]).push(x)});
+ st.items.forEach(x=>{const k=x.d<t&&x.e&&x.e>=t?t:x.d;(g[k]=g[k]||[]).push(x)});
  const days=Object.keys(g).sort(),next=days.filter(d=>d>=t),past=days.filter(d=>d<t),vis=st.more?next:next.slice(0,3);
  const day=(d,cls)=>{const[a,b]=relDay(d);return `<div class="ag-day${d===t?' today':''}${cls||''}"><div class="ag-dh"><b>${a}</b><span>${b}</span></div>${g[d].map(agIt).join('')}</div>`};
  const restN=next.slice(3).reduce((n,d)=>n+g[d].length,0),pastN=past.reduce((n,d)=>n+g[d].length,0);
  let h=(st.past?past.map(d=>day(d,' past')).join(''):'')+vis.map(d=>day(d)).join('');
- if(!next.length&&!(st.past&&pastN))h+=`<div class="tip">${vuoto}</div>`;
+ if(!next.length&&!st.past)h+=`<div class="tip">${pastN?'Nessuna scadenza in arrivo: quelle di questo calendario sono tutte passate.':st.vuoto}</div>`;
  const btn=(a,l,c)=>`<button type="button" data-ag="${a}"${c?' class="g"':''}>${l}</button>`;
  h+=`<div class="ag-more">${restN?btn('more',st.more?'Mostra meno':`Mostra altre ${restN}`):''}${pastN?btn('past',st.past?'Nascondi passate':`Passate (${pastN})`,1):''}</div>`;
  $(id).innerHTML=h}
-document.addEventListener('click',e=>{const b=e.target.closest('[data-ag]');if(!b)return;const id=b.closest('[id]').id,st=AG[id];if(!st)return;st[b.dataset.ag]=!st[b.dataset.ag];id==='gOut'?calR():creR()});
+// I pulsanti cambiano solo la vista: niente ricalcolo né riprogrammazione delle notifiche.
+document.addEventListener('click',e=>{const b=e.target.closest('[data-ag]');if(!b)return;const id=b.closest('[id]').id,st=AG[id];if(!st||!st.items)return;st[b.dataset.ag]=!st[b.dataset.ag];agDraw(id)});
 
 const GK={semina:['Semina','i-sprout','Spugne idratate, coperchio chiuso'],umidita:['Controllo umidità','i-drop','Spruzza se la superficie è asciutta'],
  emergenza:['Inizio emergenza','i-leaf','Luce 14–16 h, apri le bocchette'],fine:['Fine germinazione','i-alert','Se non è spuntato nulla, controlla temperatura e umidità']};
 function calR(){
-const C=['#2a7a4e','#b35512','#2f6ea6','#8746aa','#86690f','#b03c55','#1d7a7a','#5d6b1d'],m={},items=[],righe=new Set();
+const C=PAL8,m={},items=[],righe=new Set();
 // stesso tipo nello stesso giorno: una voce sola con le file come etichette
 gerEvents().forEach(e=>{righe.add(e.si+'|'+e.ri);const k=e.d+'|'+e.k;(m[k]=m[k]||{d:e.d,k:e.k,ev:[]}).ev.push(e)});
 Object.values(m).forEach(({d,k,ev})=>{const[title,ic,hint]=GK[k];items.push({d,ic,title,hint,full:cap(ev[0].txt),cls:k==='umidita'?'routine':k==='fine'?'warn':'',

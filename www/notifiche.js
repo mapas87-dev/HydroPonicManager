@@ -29,14 +29,15 @@ function ntEvents() {
   // Crescita: dalla data di trasferimento in torre
   const d = ld('cd', today()); // stesso valore iniziale del campo #cDt
   if (d) {
+    const C = creEvents(d); // stessa pianificazione del calendario Crescita
     push(d, 'Crescita', 'trasferimento in torre: spugna nel net pot, base a contatto col velo d’acqua', 'cre');
-    for (let i = 1; i <= 3; i++) {
-      push(ad(d, 10 * i), 'Soluzione', `da oggi ${i}° cambio totale della soluzione (entro ${fdi(ad(d, 14 * i))})`, 'cre');
-      push(ad(d, 14 * i), 'Soluzione', `scade oggi il ${i}° cambio totale della soluzione`, 'cre');
-    }
+    C.sol.forEach(({ i, s: inizio, e }) => {
+      push(inizio, 'Soluzione', `da oggi ${i}° cambio totale della soluzione (entro ${fdi(e)})`, 'cre');
+      push(e, 'Soluzione', `scade oggi il ${i}° cambio totale della soluzione`, 'cre');
+    });
     if (NT.rou) {
-      for (let i = 1; i <= 5; i++) push(ad(d, i), 'pH', 'correggi il pH del serbatoio nuovo', 'cre', false);
-      for (let i = 1; ad(d, i) <= end; i += 2) push(ad(d, i), 'Torre', 'ruota la torre di 180° per una luce uniforme', 'cre', false);
+      C.ph.forEach(g => push(g, 'pH', 'correggi il pH del serbatoio nuovo', 'cre', false));
+      C.rot(t, end).forEach(g => push(g, 'Torre', 'ruota la torre di 180° per una luce uniforme', 'cre', false));
     }
   }
 
