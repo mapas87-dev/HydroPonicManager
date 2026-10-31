@@ -21,6 +21,15 @@ La scheda **🔔 Avvisi** programma notifiche locali sul telefono (plugin `@capa
 - Le notifiche si riprogrammano da sole quando cambi date o piante e quando riapri l'app, per i successivi 60 giorni (massimo 60 avvisi in attesa, limite di iOS).
 - Toccando una notifica si apre la sezione dell'evento.
 
+## Riconoscimento delle piante da foto
+
+Nella sezione **Piante** → "Riconosci da foto" (`www/riconoscimento.js`): una foto viene inviata a [Pl@ntNet](https://my.plantnet.org), che restituisce fino a 3 specie con la probabilità.
+
+- La specie è collegata alle schede dell'archivio con la tabella `SCI` (specie esatta, poi genere). Varietà della stessa specie (es. lattuga e Canasta rossa) vengono proposte tutte.
+- Per una specie in archivio compaiono la scheda, la **posizione consigliata in torre** e "Aggiungi alle colture".
+- Per una specie fuori archivio, "Crea scheda" precompila nome e specie; la pianta personalizzata ricorda la specie (`sci`) e le foto successive la ritrovano.
+- Serve una chiave Pl@ntNet gratuita (500 foto al giorno), inserita nell'app e salvata solo sul telefono.
+
 ## Navigazione e font
 
 - **Barra in basso a 5 gruppi** (`www/gruppi.js`): Semina, Torre (Crescita + Ricambio), Soluzione (Nutrienti + EC + pH), Piante, Avvisi. In alto compaiono solo le schede del gruppo; ogni gruppo ricorda l'ultima scheda aperta.

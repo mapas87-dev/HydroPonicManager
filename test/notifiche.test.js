@@ -170,5 +170,48 @@ const torre = (pianta, d) => JSON.stringify({ p: Array.from({ length: 10 }, (_, 
   assert.ok(domani.includes('giorno il trasferimento') && !domani.includes('1giorni'), domani);
   assert.ok(passate.includes('tutte passate') && !passate.includes('Imposta pianta'), passate);
   console.log('OK casi limite: raccolta in ritardo, scadenza in corso, singolare, scadenze tutte passate');
+
+  // Riconoscimento da foto: Pl@ntNet simulato. Ogni richiesta risponde con la prossima risposta in coda.
+  const foto = path.resolve(__dirname, '../assets/icon-only.png'), coda = [], richieste = [];
+  const pn = (specie, score, comuni = [], genere = specie.split(' ')[0]) => ({ status: 200, json: { results: [{ score, species: { scientificNameWithoutAuthor: specie, genus: { scientificNameWithoutAuthor: genere }, commonNames: comuni } }] } });
+  const rc = await apri({});
+  await rc.route('https://my-api.plantnet.org/**', route => {
+    richieste.push({ url: route.request().url(), corpo: route.request().postDataBuffer() || Buffer.alloc(0) });
+    const r = coda.shift();
+    route.fulfill({ status: r.status, contentType: 'application/json', body: JSON.stringify(r.json || {}) });
+  });
+  await rc.click('#bar button[data-g="piante"]');
+  // senza chiave: pulsante disattivato e campo chiave aperto
+  assert.ok(await rc.evaluate(() => $('rcFoto').disabled && $('rcKeyBox').open), 'senza chiave il pulsante dovrebbe essere disattivato');
+  await rc.fill('#rcKey', 'chiave-prova'); await rc.press('#rcKey', 'Tab');
+  const scatta = async risposta => { coda.push(risposta); await rc.setInputFiles('#rcFoto', foto); await rc.waitForFunction(() => !RC.attesa && (RC.esiti || RC.errore)); return rc.evaluate(() => $('rcOut').textContent); };
+  // specie in archivio: scheda con posizione, e si aggiunge alle colture
+  let t = await scatta(pn('Eruca vesicaria', 0.82, ['rucola']));
+  assert.ok(t.includes('Rucola') && t.includes('livello alto') && t.includes('1–3') && t.includes('82%'), t);
+  assert.ok(richieste[0].url.includes('api-key=chiave-prova') && richieste[0].corpo.includes('name="images"') && richieste[0].corpo.includes('name="organs"'), 'richiesta Pl@ntNet malformata');
+  await rc.click('[data-rc-usa="Rucola"]');
+  assert.ok(await rc.evaluate(() => act().includes('Rucola') && $('rcOut').textContent.includes('Già in coltivazione')), 'Rucola non aggiunta alle colture');
+  // stessa specie per più varietà: le propone entrambe
+  t = await scatta(pn('Lactuca sativa', 0.7));
+  assert.ok(t.includes('Insalata (lattuga)') && t.includes('Canasta rossa') && t.includes('Più varietà'), t);
+  // solo il genere: Cichorium generico -> Radicchio e Scarola
+  t = await scatta(pn('Cichorium pumilum', 0.6, [], 'Cichorium'));
+  assert.ok(t.includes('Radicchio') && t.includes('Scarola riccia'), t);
+  // fuori archivio: precompila la nuova scheda con nome e specie; la foto successiva la ritrova
+  t = await scatta(pn('Solanum lycopersicum', 0.9, ['pomodoro']));
+  assert.ok(t.includes('Non è in archivio'), t);
+  await rc.click('[data-rc-crea="0"]');
+  assert.deepEqual(await rc.evaluate(() => [$('xN').value, $('xS').value]), ['Pomodoro', 'Solanum lycopersicum']);
+  await rc.click('#xB');
+  assert.equal(await rc.evaluate(() => SP.Pomodoro && SP.Pomodoro.sci), 'Solanum lycopersicum');
+  t = await scatta(pn('Solanum lycopersicum', 0.9, ['pomodoro']));
+  assert.ok(t.includes('Pomodoro') && t.includes('Posizione consigliata') && !t.includes('Non è in archivio'), t);
+  // risultato incerto, nessun risultato, chiave sbagliata, limite giornaliero
+  assert.ok((await scatta(pn('Spinacia oleracea', 0.08))).includes('incerto'));
+  assert.ok((await scatta({ status: 404 })).includes('Nessuna pianta riconosciuta'));
+  assert.ok((await scatta({ status: 401 })).includes('Chiave Pl@ntNet non valida'));
+  assert.ok((await scatta({ status: 429 })).includes('limite giornaliero'));
+  await rc.close();
+  console.log('OK riconoscimento da foto: archivio, varietà, genere, nuova scheda, errori');
   await browser.close();
 })().catch(e => { console.error(e); process.exit(1); });

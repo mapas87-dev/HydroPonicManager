@@ -49,6 +49,20 @@ nav button.on{background:var(--ac);color:var(--on-ac);border-color:var(--ac)}
 nav button.on .ic{color:currentColor}
 button:active{opacity:.8}
 #nav[hidden],#nav button[hidden]{display:none}
+/* Riconoscimento da foto */
+.rc-file{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.rc-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin:0;color:var(--on-ac)!important;font-size:15px}
+.rc-file:focus-visible+.rc-btn{outline:3px solid var(--ac)}
+.rc-file:disabled+.rc-btn{opacity:.45;cursor:not-allowed}#rcKeyBox{margin-top:10px}
+.rc-foto{display:block;width:100%;max-height:220px;object-fit:cover;border-radius:var(--r-md);margin:12px 0 4px}
+.rc-esito{padding:12px 0;border-top:1px dashed var(--bd)}.rc-esito:first-of-type{border-top:0}
+.rc-h{display:flex;justify-content:space-between;gap:10px;align-items:baseline;font-weight:600}.rc-h i{font-weight:500;color:var(--mu)}
+.rc-pct{flex:0 0 auto;font-weight:700;color:var(--ac);background:var(--ac2);border-radius:var(--r-pill);padding:1px 10px;font-size:14px}.rc-pct.basso{color:var(--wa);background:var(--wb)}
+.rc-sch{background:var(--bg);border-radius:var(--r-md);padding:10px 12px;margin-top:8px}
+.rc-sch-t{display:flex;justify-content:space-between;align-items:baseline}.rc-sch-t span{font-size:14px;color:var(--mu)}
+.rc-pos{display:flex;gap:8px;align-items:center;margin:6px 0 4px;color:var(--ac);font-size:15px}.rc-pos b{color:var(--tx)}
+.rc-dati{font-size:14px;color:var(--mu);margin-bottom:8px}
+.rc-nota{font-size:14px;color:var(--mu);margin:6px 0}.rc-ok{margin:0;font-weight:700;color:var(--ac)}
 /* Barra in basso: 5 gruppi */
 #bar{position:fixed;left:0;right:0;bottom:0;z-index:6;display:grid;grid-template-columns:repeat(5,1fr);background:var(--sf);border-top:1px solid var(--bd);
 box-shadow:0 -6px 18px rgba(83,66,30,.08);padding:4px 4px calc(4px + env(safe-area-inset-bottom,0px))}
@@ -242,9 +256,17 @@ details summary{min-height:44px;display:flex;align-items:center}
 
 <section id="pia">
 <div class="card"><h2>Archivio piante</h2><p class="sub" style="color:var(--mu);font-size:13px;font-weight:400;margin:0">Spunta le colture che hai in torre: guidano le sezioni Germinazione e Crescita. I valori sono indicativi, controlla sempre la bustina dei semi.</p></div>
+<div class="card"><h2>Riconosci da foto</h2>
+<p class="sub" style="color:var(--mu);font-size:14px;font-weight:400;margin:0 0 10px">Fotografa una foglia: Pl@ntNet riconosce la specie e, se è in archivio, ti propone la sua scheda con la posizione consigliata in torre.</p>
+<input type="file" id="rcFoto" accept="image/*" capture="environment" class="rc-file">
+<label class="bt f rc-btn" for="rcFoto"><svg class="ic" aria-hidden="true"><use href="#i-leaf"/></svg>Scatta o scegli una foto</label>
+<div id="rcOut" aria-live="polite"></div>
+<details id="rcKeyBox"><summary>Chiave Pl@ntNet</summary>
+<p style="font-size:14px;color:var(--mu);margin:0 0 6px">Serve una chiave gratuita (fino a 500 foto al giorno): registrati su my.plantnet.org, crea una chiave e incollala qui. Resta salvata solo su questo telefono.</p>
+<label for="rcKey">Chiave API</label><input id="rcKey" autocomplete="off" spellcheck="false"></details></div>
 <div id="plL"></div>
 <div class="card"><h2>Aggiungi una pianta</h2>
-<label>Nome</label><input id="xN" maxlength="40">
+<label>Nome</label><input id="xN" maxlength="40"><input type="hidden" id="xS">
 <div class="row"><div><label>Categoria</label><select id="xC"><option>Foglia</option><option>Aromatica</option><option>Frutto</option><option>Altro</option></select></div><div><label>Livello torre</label><select id="xV"><option>Alto</option><option selected>Medio</option><option>Basso</option></select></div>
 <div><label>Germinazione min (giorni)</label><input type="number" id="xG0" value="3"></div><div><label>Germinazione max (giorni)</label><input type="number" id="xG1" value="7"></div>
 <div><label>EC min</label><input type="number" id="xE0" value="1.2" step="0.1"></div><div><label>EC max</label><input type="number" id="xE1" value="1.8" step="0.1"></div>
@@ -391,7 +413,7 @@ $('plL').onchange=e=>{const k=e.target.dataset.k;if(k===undefined)return;const a
 $('plL').onclick=e=>{const k=e.target.dataset.del;if(k===undefined)return;if(!confirm('Eliminare "'+k+'" dall’archivio?'))return;delete SP[k];const c=JSON.parse(ld('cust','{}'));delete c[k];sv('cust',JSON.stringify(c));setAct(act().filter(x=>x!==k));plR();lvR();spOpt();gerR()};
 function addPl(){const n=$('xN').value.trim(),m=$('xM'),v=id=>+$(id).value,r=(a,b)=>a<=b?[a,b]:[b,a];
 if(!n){m.textContent='Inserisci un nome.';return}if(SP[n]){m.textContent='Esiste già una pianta con questo nome.';return}
-const d=$('xD').value.trim(),s={cat:$('xC').value,ger:r(v('xG0')||0,v('xG1')||0),t:$('xT').value.trim()||'—',ec:r(v('xE0')||0,v('xE1')||0),ph:r(v('xP0')||0,v('xP1')||0),lv:$('xV').value,d:d?d+' giorni':'—',sem:'Secondo la bustina',note:'Pianta personalizzata: verifica i valori sulla bustina dei semi.',um:'90–95% iniziale',lvn:'',c:1};
+const d=$('xD').value.trim(),s={cat:$('xC').value,ger:r(v('xG0')||0,v('xG1')||0),t:$('xT').value.trim()||'—',ec:r(v('xE0')||0,v('xE1')||0),ph:r(v('xP0')||0,v('xP1')||0),lv:$('xV').value,d:d?d+' giorni':'—',sem:'Secondo la bustina',note:'Pianta personalizzata: verifica i valori sulla bustina dei semi.',um:'90–95% iniziale',lvn:'',c:1};if($('xS').value)s.sci=$('xS').value;$('xS').value='';
 SP[n]=s;const c=JSON.parse(ld('cust','{}'));c[n]=s;sv('cust',JSON.stringify(c));setAct(act().concat(n));m.textContent='';$('xN').value='';plR();lvR();spOpt();gerR()}
 let ST=(()=>{try{const v=JSON.parse(ld('serra','null'));if(v&&v.s)return v;if(v&&v.rows&&v.r)return{n:1,i:0,s:[v]}}catch(e){}const a=act().filter(k=>SP[k]);return{n:1,i:0,s:[{rows:3,cols:6,r:[0,1,2].map(i=>({p:a[i]||'',d:today()}))}]}})(),SR;
 function serraR(){
@@ -548,4 +570,5 @@ new MutationObserver(navSync).observe($('nav'),{subtree:true,attributes:true,att
 <script src="notifiche.js"></script>
 <script src="indietro.js"></script>
 <script src="gruppi.js"></script>
+<script src="riconoscimento.js"></script>
 </body></html>
