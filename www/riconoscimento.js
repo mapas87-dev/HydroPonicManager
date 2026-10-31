@@ -56,9 +56,11 @@ async function identifica(blob, chiave) {
   try { r = await fetch(`${PN_URL}?lang=it&nb-results=3&api-key=${encodeURIComponent(chiave)}`, { method: 'POST', body: fd }); }
   catch (e) { throw new Error('Nessuna connessione: il riconoscimento richiede internet.'); }
   if (r.status === 404) return [];
-  if (r.status === 401 || r.status === 403) throw new Error('Chiave Pl@ntNet non valida: controllala qui sotto.');
+  // Il testo esatto di Pl@ntNet distingue una chiave sbagliata da un dominio non autorizzato.
+  const dettaglio = async () => { try { const j = await r.json(); return j.message ? ` (Pl@ntNet: “${j.message}”)` : ''; } catch (e) { return ''; } };
+  if (r.status === 401 || r.status === 403) throw new Error('Chiave Pl@ntNet rifiutata: controlla di averla copiata intera qui sotto' + await dettaglio() + '.');
   if (r.status === 429) throw new Error('Hai superato il limite giornaliero di Pl@ntNet (500 foto). Riprova domani.');
-  if (!r.ok) throw new Error(`Pl@ntNet non risponde (errore ${r.status}). Riprova più tardi.`);
+  if (!r.ok) throw new Error(`Pl@ntNet non risponde (errore ${r.status}${await dettaglio()}). Riprova più tardi.`);
   const j = await r.json();
   return (j.results || []).slice(0, 3).map(x => ({
     score: x.score || 0,

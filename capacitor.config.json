@@ -5,6 +5,9 @@
   "plugins": {
     "LocalNotifications": {
       "iconColor": "#2f8f5b"
+    },
+    "CapacitorHttp": {
+      "enabled": true
     }
   }
 }

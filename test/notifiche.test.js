@@ -209,7 +209,8 @@ const torre = (pianta, d) => JSON.stringify({ p: Array.from({ length: 10 }, (_, 
   // risultato incerto, nessun risultato, chiave sbagliata, limite giornaliero
   assert.ok((await scatta(pn('Spinacia oleracea', 0.08))).includes('incerto'));
   assert.ok((await scatta({ status: 404 })).includes('Nessuna pianta riconosciuta'));
-  assert.ok((await scatta({ status: 401 })).includes('Chiave Pl@ntNet non valida'));
+  t = await scatta({ status: 401, json: { statusCode: 401, error: 'Unauthorized', message: 'Invalid API key' } });
+  assert.ok(t.includes('Chiave Pl@ntNet rifiutata') && t.includes('Invalid API key'), t);
   assert.ok((await scatta({ status: 429 })).includes('limite giornaliero'));
   await rc.close();
   console.log('OK riconoscimento da foto: archivio, varietà, genere, nuova scheda, errori');
